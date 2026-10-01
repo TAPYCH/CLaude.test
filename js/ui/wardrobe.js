@@ -102,7 +102,7 @@ export function openWardrobe({ shop = false, tab = null } = {}) {
           <div class="spot"></div><div class="model"></div>
         </div>
         <div class="panel">
-          <div class="w-head"><h3>${shop ? '🛍️ Бутик «Мандарин»' : '👗 Гардероб'}</h3>
+          <div class="w-head"><h3>${shop ? (['hairStyle', 'hairColor', 'lips'].includes(tab) ? '💇‍♀️ Салон' : '🛍️ Бутик') : '👗 Гардероб'}</h3>
             <span class="chip orange" data-money></span>
             <button class="icon-btn" data-close aria-label="Закрыть">✕</button></div>
           <div class="tabs"></div>

@@ -4,7 +4,7 @@ import { renderPet } from '../art/pets.js';
 import { SCENES } from '../data/scenes.js';
 import { S, mood } from '../core/state.js';
 import { currentQuest } from '../core/progress.js';
-import { dayPhase, season } from '../core/time.js';
+import { dayPhase, season, weatherOf } from '../core/time.js';
 import { el, $ } from './dom.js';
 import { sfx } from '../audio.js';
 
@@ -92,7 +92,19 @@ function buildWeather() {
   box.innerHTML = '';
   const se = season(S.day);
   if (world.scene.indoor !== false) return;
-  if (world.scene.city === 'moscow' && se === 'winter') {
+  const wx = weatherOf(S.day, world.scene.city);
+  world.weatherKey = S.day;
+  if (wx === 'rain') {
+    for (let i = 0; i < 70; i++) {
+      const f = document.createElement('u');
+      Object.assign(f.style, { left: Math.random() * 110 - 5 + '%', animationDuration: 0.5 + Math.random() * 0.35 + 's', animationDelay: -Math.random() * 2 + 's', opacity: 0.4 + Math.random() * 0.5 });
+      box.appendChild(f);
+    }
+    box.style.background = 'rgba(60,70,110,.18)';
+    return;
+  }
+  box.style.background = '';
+  if (wx === 'snow') {
     for (let i = 0; i < 50; i++) {
       const f = document.createElement('i');
       const s = 3 + Math.random() * 6;
@@ -401,6 +413,7 @@ export function updateWorld(dt) {
   }
   paintBackground();
   updateTint();
+  if (world.weatherKey !== S.day) buildWeather();
   refreshLana();
   markQuestTarget();
 }

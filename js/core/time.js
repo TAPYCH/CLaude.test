@@ -65,3 +65,17 @@ export function plural(n, one, few, many) {
 export function money(n) {
   return `${Math.round(n).toLocaleString('ru-RU')} ₽`;
 }
+
+/** Deterministic daily weather: 'snow' | 'rain' | 'clear'. */
+export function weatherOf(day, city) {
+  const se = season(day);
+  const x = Math.sin((day + 3) * 12.9898 + (city === 'moscow' ? 0 : 7.13)) * 43758.5453;
+  const r = Math.floor((x - Math.floor(x)) * 100);
+  if (city === 'moscow') {
+    if (se === 'winter') return r < 70 ? 'snow' : 'clear';
+    if (se === 'autumn') return r < 40 ? 'rain' : 'clear';
+    if (se === 'spring') return r < 25 ? 'rain' : 'clear';
+    return r < 15 ? 'rain' : 'clear';
+  }
+  return se === 'summer' ? 'clear' : r < 18 ? 'rain' : 'clear';
+}

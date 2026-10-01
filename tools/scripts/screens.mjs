@@ -1,0 +1,37 @@
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+export default async ({ page, shot }) => {
+  const tap = async (sel) => { await page.waitForSelector(sel, { timeout: 8000 }); await page.$eval(sel, (el) => el.click()); await sleep(500); };
+  await page.goto('http://localhost:8080/index.html');
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await sleep(1400);
+  await tap('.title-actions .btn');
+  await tap('.story .skip');
+  await sleep(800);
+  await page.evaluate(async () => {
+    const g = await import('/js/game.js');
+    const { SCENES } = await import('/js/data/scenes.js');
+    __lana.S.money = 50000;
+    await g.doAction('selfie', SCENES.dorm.hotspots[1]);
+    __lana.S.postcards.push('ritsa', 'redsquare');
+  });
+  await sleep(500);
+  await tap('.phone-btn');
+  await tap('[data-app="album"]');
+  await sleep(500);
+  await shot('90-album');
+  await tap('[data-t="cards"]');
+  await shot('91-postcards');
+  await tap('.app-view .back');
+  await tap('[data-app="quests"]');
+  await shot('92-quests');
+  await page.evaluate(() => document.querySelector('.phone-close').click());
+  await sleep(500);
+  await page.evaluate(async () => { const w = await import('/js/ui/wardrobe.js'); w.openWardrobe({ shop: true, tab: 'hairStyle' }); });
+  await sleep(1200);
+  await shot('93-salon');
+  await tap('.wardrobe .tab[data-cat="hairColor"]');
+  await shot('94-colors');
+  await tap('.wardrobe .tab[data-cat="acc"]');
+  await shot('95-acc');
+};

@@ -13,7 +13,7 @@ import { updateHud } from './ui/hud.js';
 import { toast, floatText, confetti } from './ui/fx.js';
 import { dialog } from './ui/modal.js';
 import { sfx, playMusic } from './audio.js';
-import { money, weekday, formatClock } from './core/time.js';
+import { money, weekday, formatClock, weatherOf } from './core/time.js';
 import { playMinigame } from './minigames/index.js';
 import { el, app, wait } from './ui/dom.js';
 import { renderLanaHead } from './art/character.js';
@@ -141,18 +141,34 @@ export function tick(dt) {
     if (p >= 1) finishTimed();
   } else if (S.settings.speed > 0 && S.started) {
     advanceMinutes(dt * S.settings.speed);
+    if (isCold()) {
+      changeNeed('fun', (-2.5 * dt * S.settings.speed) / 60);
+      if (!game.coldWarned) {
+        game.coldWarned = true;
+        setTimeout(() => toast({ icon: '🥶', title: 'Брр, холодно!', text: 'Надень что-нибудь тёплое: пуховик, тренч, шапку или угги' }), 1500);
+      }
+    }
     if (S.needs.energy <= 0 && !game.busy) passOut();
     // ambient thought bubbles for low needs
     game.thoughtTimer -= dt;
     if (game.thoughtTimer <= 0) {
       game.thoughtTimer = 6;
       const low = NEEDS.filter((n) => S.needs[n.id] < 22).sort((a, b) => S.needs[a.id] - S.needs[b.id])[0];
-      if (low && !game.busy) {
-        setOverhead({ thought: low.icon });
+      const cold = isCold() ? { icon: '🥶' } : null;
+      if ((cold || low) && !game.busy) {
+        setOverhead({ thought: (cold || low).icon });
         setTimeout(() => !game.running && setOverhead({}), 2500);
       }
     }
   }
+}
+
+const WARM = new Set(['trench', 'puffer', 'beanie', 'uggs', 'boots', 'sweater_pink', 'hoodie_msk', 'scarf', 'cardigan']);
+export function isCold() {
+  const sc = SCENES[S.scene];
+  if (!sc || sc.indoor !== false || weatherOf(S.day, sc.city) !== 'snow') return false;
+  const worn = [S.outfit.top, S.outfit.shoes, ...(S.outfit.acc || [])];
+  return !worn.some((id) => WARM.has(id));
 }
 
 // ---------------------------------------------------------------- actions
@@ -531,6 +547,7 @@ export async function goScene(id, { transition = true } = {}) {
   S.city = sc.city;
   S.x = sc.spawn;
   loadScene(id, sc.spawn);
+  game.coldWarned = false;
   resumeTime();
   playMusic(sc.music);
   showBanner(sc);

@@ -138,6 +138,8 @@ svg { display: block; }
 .weather { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 .weather i { position: absolute; top: -10px; border-radius: 50%; background: #fff; animation: snow linear infinite; opacity: 0.9; }
 @keyframes snow { to { transform: translate(var(--dx, 20px), 110vh); } }
+.weather u { position: absolute; top: -40px; width: 2px; height: 30px; border-radius: 2px; background: linear-gradient(rgba(255,255,255,0), rgba(220,235,255,.95)); transform: rotate(12deg); animation: rain linear infinite; }
+@keyframes rain { to { transform: translate(-90px, 110vh) rotate(12deg); } }
 .weather b { position: absolute; top: -20px; width: 18px; height: 12px; border-radius: 0 60% 0 60%; animation: leaf linear infinite; }
 @keyframes leaf { 0% { transform: translate(0, 0) rotate(0); } 100% { transform: translate(var(--dx, -60px), 110vh) rotate(720deg); } }
 

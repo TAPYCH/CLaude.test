@@ -1,6 +1,6 @@
 // Heads-up display: clock, speed, money, quest tracker, needs, phone button.
 import { S, NEEDS } from '../core/state.js';
-import { formatClock, formatDate, dayPhase, season } from '../core/time.js';
+import { formatClock, formatDate, dayPhase, season, weatherOf } from '../core/time.js';
 import { currentQuest } from '../core/progress.js';
 import { el, $ } from './dom.js';
 import { sfx } from '../audio.js';
@@ -80,7 +80,8 @@ export function updateHud() {
   if (!root) return;
   const ph = dayPhase(S.minutes);
   $('[data-clock]', root).textContent = formatClock(S.minutes);
-  $('[data-date]', root).textContent = `${formatDate(S.day)} ${SEASON_ICON[season(S.day)]}`;
+  const wx = weatherOf(S.day, S.city);
+  $('[data-date]', root).textContent = `${formatDate(S.day)} ${wx === 'rain' ? '🌧️' : wx === 'snow' ? '❄️' : SEASON_ICON[season(S.day)]}`;
   $('[data-phase]', root).textContent = PHASE_ICON[ph.name];
   root.querySelectorAll('[data-speed]').forEach((b) => b.classList.toggle('on', +b.dataset.speed === S.settings.speed));
 
