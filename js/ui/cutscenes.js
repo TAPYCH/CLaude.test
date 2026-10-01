@@ -5,7 +5,7 @@ import { SCENES } from '../data/scenes.js';
 import { postcardArt } from '../data/places.js';
 import { CONFIG } from '../config.js';
 import { mountains, palm, moscowSkyline, cloud, sun } from '../art/scenes/common.js';
-import { el, app, esc, wait } from './dom.js';
+import { el, app, esc } from './dom.js';
 import { sfx, playMusic, unlockAudio } from '../audio.js';
 import { confetti, toast } from './fx.js';
 import { dialog } from './modal.js';
@@ -97,7 +97,10 @@ export function playIntro() {
     const show = () => {
       const s = STORY[i];
       const sc = SCENES[s.scene];
-      const vb = sc ? `${Math.max(0, sc.spawn - 520)} 0 1040 1000` : '0 0 1000 1000';
+      const ratio = Math.max(0.5, window.innerWidth / Math.max(1, window.innerHeight));
+      const vw = sc ? Math.min(sc.width, Math.max(1040, 1000 * ratio)) : 1000;
+      const vx = sc ? Math.max(0, Math.min(sc.width - vw, sc.spawn - vw / 2)) : 0;
+      const vb = `${vx} 0 ${vw} 1000`;
       art.innerHTML = `<svg viewBox="${vb}" preserveAspectRatio="xMidYMax slice">${sc ? sc.paint({ phase: 'day', season: 'autumn', S }) : ''}
         ${renderLana({ outfit: S.outfit, expr: s.expr }).replace('<svg ', `<svg x="${(sc ? sc.spawn : 500) - 125}" y="${(sc ? sc.floor : 900) - 560}" width="250" height="563" `)}</svg>`;
       who.textContent = s.who;
@@ -156,9 +159,10 @@ export function travelCutscene(to, mode) {
     const node = el(`<div class="fullscreen travel-scene">
         <style>@keyframes tc-move{from{transform:translateX(-200px)}to{transform:translateX(1500px)}}@keyframes tc-fly{0%{transform:translate(-260px,120px) rotate(-6deg)}50%{transform:translate(400px,-40px) rotate(-2deg)}100%{transform:translate(1200px,60px) rotate(4deg)}}
         @keyframes tc-bg{from{transform:translateX(0)}to{transform:translateX(-500px)}}</style>
-        <div class="tt"><b>${toAbh ? 'Домой, в Абхазию!' : 'Снова в Москву!'}</b><span>${mode === 'train' ? '🚆 Москва — Сухум' : '✈️ Москва — Сочи — Псоу — Сухум'}</span></div>
-        <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;position:absolute;inset:0">
-          <rect width="1000" height="700" fill="${mode === 'plane' ? '#9fdcff' : '#bfe6ff'}"/>
+        <div class="tt" style="z-index:2"><b>${toAbh ? 'Домой, в Абхазию!' : 'Снова в Москву!'}</b><span>${mode === 'train' ? '🚆 Москва — Сухум' : '✈️ Москва — Сочи — Псоу — Сухум'}</span></div>
+        <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;position:absolute;inset:0;overflow:visible">
+          <rect x="-2000" y="-2000" width="5000" height="2700" fill="${mode === 'plane' ? '#9fdcff' : '#bfe6ff'}"/>
+          <rect x="-2000" y="600" width="5000" height="2000" fill="${mode === 'plane' ? '#ffffff' : toAbh ? '#9fd88a' : '#c9d9a9'}"/>
           <g style="animation:tc-bg 4.6s linear forwards">${cloud(150, 120, 1)}${cloud(520, 90, 0.8)}${cloud(900, 160, 1.1)}${cloud(1300, 100, 0.9)}
           ${mode === 'train' ? `${mountains(1500, 520, toAbh ? ['#8fc28a', '#bcd6ea'] : ['#a9b9d9', '#c9d6ea'])}<rect y="520" width="1500" height="200" fill="${toAbh ? '#9fd88a' : '#c9d9a9'}"/>
           <rect y="600" width="1500" height="10" fill="#8a6a5a"/>${Array.from({ length: 40 }, (_, i) => `<rect x="${i * 40}" y="596" width="8" height="18" fill="#6a4a3a"/>`).join('')}

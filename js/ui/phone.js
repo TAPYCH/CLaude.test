@@ -1,6 +1,6 @@
 // Lana's phone — the main menu of the game.
 import { S, NEEDS, SKILLS, levelOf, levelProgress, MAX_LEVEL, save, reset, exportSave, importSave, addMoney, changeNeed } from '../core/state.js';
-import { formatClock, formatDate, money, plural } from '../core/time.js';
+import { formatClock, formatDate, money } from '../core/time.js';
 import { QUESTS, DAILY_POOL } from '../data/quests.js';
 import { ACHIEVEMENTS } from '../data/achievements.js';
 import { CONTACTS, REPLIES } from '../data/contacts.js';
@@ -9,14 +9,14 @@ import { SCENES } from '../data/scenes.js';
 import { PET_TYPES, renderPet } from '../art/pets.js';
 import { renderLanaHead, renderLana } from '../art/character.js';
 import { currentQuest, sendReply, markRead, unreadFor } from '../core/progress.js';
-import { goScene, travel, excursion, TRAVEL, adoptPet, feedPet, pauseTime, resumeTime, playPetGame, ui as gameUi } from '../game.js';
+import { goScene, travel, excursion, TRAVEL, adoptPet, feedPet, pauseTime, resumeTime, playPetGame } from '../game.js';
 import { openWardrobe } from './wardrobe.js';
 import { el, app, esc, wait } from './dom.js';
 import { sfx, setAudio } from '../audio.js';
 import { dialog, prompt } from './modal.js';
-import { toast, confetti } from './fx.js';
+import { toast } from './fx.js';
 import { updateHud } from './hud.js';
-import { rebuildPet, setExpression, lanaAnim } from './world.js';
+import { rebuildPet, setExpression } from './world.js';
 import { bus } from '../core/bus.js';
 import { install, canInstall } from '../pwa.js';
 

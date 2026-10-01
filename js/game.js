@@ -13,10 +13,11 @@ import { updateHud } from './ui/hud.js';
 import { toast, floatText, confetti } from './ui/fx.js';
 import { dialog } from './ui/modal.js';
 import { sfx, playMusic } from './audio.js';
-import { durationLabel, money, isWeekend, weekday, formatClock } from './core/time.js';
+import { money, weekday, formatClock } from './core/time.js';
 import { playMinigame } from './minigames/index.js';
 import { el, app, wait } from './ui/dom.js';
 import { renderLanaHead } from './art/character.js';
+import { stars, moon } from './art/scenes/common.js';
 
 export const ui = {}; // filled by main.js: openWardrobe, openShop, openPhone, showPostcard, finale
 
@@ -422,6 +423,7 @@ export async function sleep(passedOut = false) {
   playMusic('night');
   const sleepBonus = 1 + outfitBonus('sleep');
   const node = el(`<div class="fullscreen sleep-scene">
+      <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">${stars(1000, 1000, 90, 11)}${moon(800, 220, 46)}</svg>
       <div class="clock-big"><span data-c>${formatClock(S.minutes)}</span><small>${passedOut ? 'Лана уснула от усталости…' : 'Сладких снов, Лана'}</small></div>
       <div style="position:relative;width:min(70vw,360px)">
         <svg viewBox="0 0 360 240" style="width:100%">
@@ -430,7 +432,7 @@ export async function sleep(passedOut = false) {
           <path d="M150,150 C200,100 360,110 350,170 L350,210 L150,210 Z" fill="#ff9ebd"/>
           ${[[220, 160], [280, 150], [320, 180], [250, 190]].map(([x, y]) => `<path d="M${x},${y} c-4,-6 -12,-1 0,9 c12,-10 4,-15 0,-9 Z" fill="#fff" opacity=".7"/>`).join('')}
         </svg>
-        <div style="position:absolute;left:4%;top:-8%;width:46%;transform:rotate(-74deg)">${renderLanaHead({ outfit: S.outfit, expr: 'sleep' })}</div>
+        <div style="position:absolute;left:0%;top:-14%;width:52%;transform:rotate(-72deg)">${renderLanaHead({ outfit: S.outfit, expr: 'sleep', viewBox: '30 8 140 175' })}</div>
         <div class="zz" style="left:52%;top:0">Z</div><div class="zz" style="left:58%;top:-10%;animation-delay:.8s;font-size:28px">z</div><div class="zz" style="left:62%;top:-4%;animation-delay:1.6s;font-size:22px">z</div>
       </div>
     </div>`);

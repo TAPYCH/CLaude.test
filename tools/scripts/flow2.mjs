@@ -1,0 +1,88 @@
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+export default async ({ page, shot }) => {
+  const tap = async (sel) => { await page.waitForSelector(sel, { timeout: 8000 }); await page.$eval(sel, (el) => el.click()); await sleep(450); };
+  const closeDialogs = async () => { for (let i = 0; i < 4; i++) { const b = await page.$('.overlay .dialog .btn'); if (!b) break; await b.click(); await sleep(400); } };
+  await page.goto('http://localhost:8080/index.html');
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await sleep(1400);
+  await tap('.title-actions .btn');
+  await tap('.story .skip');
+  await sleep(1000);
+  await page.evaluate(() => { __lana.S.money = 30000; });
+  // wardrobe
+  await tap('.hotspot[data-id="wardrobe"]');
+  await tap('.action-menu .act');
+  await sleep(2500);
+  await shot('20-wardrobe');
+  await tap('.wardrobe .tab[data-cat="dress"]');
+  await sleep(400);
+  await shot('21-wardrobe-dress');
+  await tap('[data-close]');
+  await sleep(500);
+  // shop via phone → boutique
+  await tap('.phone-btn');
+  await tap('[data-app="shop"]');
+  await shot('22-shop');
+  await tap('[data-open]');
+  await sleep(600);
+  await tap('.wardrobe .item-grid .item:nth-child(3)');
+  await sleep(500);
+  await shot('23-buy-dialog');
+  await closeDialogs();
+  await tap('[data-save]');
+  await sleep(600);
+  await closeDialogs();
+  // pets
+  await tap('.phone-btn');
+  await tap('[data-app="shop"]');
+  await tap('.tab[data-tab="pets"]');
+  await sleep(300);
+  await shot('24-petshop');
+  await tap('.pet-card .btn');
+  await sleep(500);
+  await tap('.overlay .btn');
+  await sleep(1500);
+  await page.evaluate(() => document.querySelector('.phone-close').click());
+  await sleep(800);
+  await closeDialogs();
+  await sleep(500);
+  await shot('25-with-pet');
+  // messages
+  await tap('.phone-btn');
+  await tap('[data-app="messages"]');
+  await shot('26-chats');
+  await tap('.chat-row');
+  await sleep(300);
+  await tap('.replies button');
+  await sleep(1800);
+  await shot('27-chat');
+  await page.evaluate(() => document.querySelector('.phone-close').click());
+  await sleep(600);
+  await closeDialogs();
+  // travel to Abkhazia
+  await tap('.phone-btn');
+  await tap('[data-app="map"]');
+  await tap('[data-city="abkhazia"]');
+  await shot('28-map-abh');
+  await tap('[data-travel="train"]');
+  await tap('.overlay .btn.mint');
+  await sleep(2000);
+  await shot('29-travel');
+  await sleep(4500);
+  await closeDialogs();
+  await sleep(2500);
+  await closeDialogs();
+  await shot('30-home');
+  // go to beach
+  await tap('.phone-btn');
+  await tap('[data-app="map"]');
+  await tap('.pin:nth-of-type(2)');
+  await sleep(3200);
+  await closeDialogs();
+  await shot('31-beach');
+  await page.evaluate(() => { __lana.S.minutes = 21 * 60 + 30; });
+  await sleep(1500);
+  await shot('32-beach-night');
+  console.log(await page.evaluate(() => JSON.stringify({ q: __lana.S.quest, money: __lana.S.money, scene: __lana.S.scene, pets: __lana.S.pets.length, ach: Object.keys(__lana.S.achievements) })));
+};

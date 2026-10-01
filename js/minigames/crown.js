@@ -53,7 +53,7 @@ export default {
     // layout
     let cx = 0, cy = 0, R = 100;
     const wax = document.createElement('canvas');
-    const wctx = wax.getContext('2d');
+    const wctx = wax.getContext('2d', { willReadFrequently: true });
     let samples = [];
     let doneBtn = null;
 
@@ -79,20 +79,34 @@ export default {
       wax.width = Math.round(api.W * api.dpr);
       wax.height = Math.round(api.H * api.dpr);
       wctx.setTransform(api.dpr, 0, 0, api.dpr, 0, 0);
-      wctx.fillStyle = '#e8b04a';
-      wctx.beginPath();
-      // lumpy wax blob larger than the tooth
-      const n = 14;
-      for (let i = 0; i <= n; i++) {
+      const pts = [];
+      const n = 12;
+      for (let i = 0; i < n; i++) {
         const a = (i / n) * Math.PI * 2;
-        const r = R * (1.32 + Math.sin(i * 2.3) * 0.08 + Math.cos(i * 1.7) * 0.06);
-        const x = cx + Math.cos(a) * r;
-        const y = cy + Math.sin(a) * r * 1.08;
-        if (i === 0) wctx.moveTo(x, y);
-        else wctx.lineTo(x, y);
+        const r = R * (1.36 + Math.sin(i * 2.3) * 0.07 + Math.cos(i * 1.7) * 0.05);
+        pts.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r * 1.08]);
+      }
+      wctx.beginPath();
+      const mid = (p, q) => [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2];
+      let m0 = mid(pts[n - 1], pts[0]);
+      wctx.moveTo(m0[0], m0[1]);
+      for (let i = 0; i < n; i++) {
+        const m = mid(pts[i], pts[(i + 1) % n]);
+        wctx.quadraticCurveTo(pts[i][0], pts[i][1], m[0], m[1]);
       }
       wctx.closePath();
+      const wg = wctx.createRadialGradient(cx - R * 0.5, cy - R * 0.6, R * 0.1, cx, cy, R * 1.5);
+      wg.addColorStop(0, '#ffd98a');
+      wg.addColorStop(0.5, '#f0b450');
+      wg.addColorStop(1, '#d9952e');
+      wctx.fillStyle = wg;
       wctx.fill();
+      wctx.fillStyle = 'rgba(255,255,255,.18)';
+      for (let i = 0; i < 18; i++) {
+        wctx.beginPath();
+        wctx.arc(cx + Math.cos(i * 2.4) * R * (0.3 + (i % 5) * 0.2), cy + Math.sin(i * 1.9) * R * (0.3 + (i % 4) * 0.22), 3 + (i % 3) * 2, 0, Math.PI * 2);
+        wctx.fill();
+      }
       // sample grid for IoU
       samples = [];
       const step = R / 16;
@@ -225,33 +239,6 @@ export default {
       }
     }
 
-    function drawTooth(fill, gloss = 0) {
-      toothPath(ctx);
-      const g = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.4, R * 0.1, cx, cy, R * 1.2);
-      g.addColorStop(0, '#ffffff');
-      g.addColorStop(0.5, fill);
-      g.addColorStop(1, shade(fill, -18));
-      ctx.fillStyle = g;
-      ctx.fill();
-      ctx.strokeStyle = shade(fill, -40);
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      if (gloss > 0) {
-        ctx.save();
-        toothPath(ctx);
-        ctx.clip();
-        ctx.globalAlpha = gloss;
-        ctx.fillStyle = '#fff';
-        ctx.beginPath();
-        ctx.ellipse(cx - R * 0.3, cy - R * 0.35, R * 0.18, R * 0.5, -0.4, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.ellipse(cx + R * 0.25, cy - R * 0.1, R * 0.07, R * 0.25, -0.4, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
-    }
-
     return {
       resize() {
         layout();
@@ -288,37 +275,50 @@ export default {
       draw() {
         drawBg();
         if (phase === 'shade') {
-          // patient's smile: neighbour tooth + gap for the crown
+          const sc = 0.55;
           const y = cy - R * 0.1;
+          const gap = R * 0.82;
+          // upper gum with a scalloped edge
           ctx.fillStyle = '#f59cb0';
-          roundRect(ctx, cx - R * 1.9, y - R * 1.25, R * 3.8, R * 0.7, R * 0.3);
+          ctx.beginPath();
+          ctx.moveTo(cx - gap * 2.2, y - R * 1.15);
+          ctx.lineTo(cx + gap * 2.2, y - R * 1.15);
+          ctx.lineTo(cx + gap * 2.2, y - R * 0.5);
+          for (let k = 2; k >= -2; k--) ctx.quadraticCurveTo(cx + (k + 0.5) * gap, y - R * 0.2, cx + (k - 0.5) * gap, y - R * 0.5);
+          ctx.closePath();
           ctx.fill();
-          for (const dx of [-1.4, 1.4]) {
-            ctx.save();
-            const oldR = R;
-            R = oldR * 0.8;
-            toothPath(ctx, 1, cx + dx * oldR, y);
-            ctx.fillStyle = target.c;
+          for (const dx of [-2, 2]) {
+            toothPath(ctx, sc, cx + dx * gap, y);
+            ctx.fillStyle = shade(target.c, -6);
+            ctx.fill();
+          }
+          for (const dx of [-1, 1]) {
+            toothPath(ctx, sc, cx + dx * gap, y);
+            const g = ctx.createLinearGradient(0, y - R * 0.6, 0, y + R * 0.6);
+            g.addColorStop(0, '#ffffff');
+            g.addColorStop(0.35, target.c);
+            g.addColorStop(1, target.c);
+            ctx.fillStyle = g;
             ctx.fill();
             ctx.strokeStyle = shade(target.c, -40);
             ctx.lineWidth = 2;
             ctx.stroke();
-            R = oldR;
-            ctx.restore();
           }
           ctx.setLineDash([8, 8]);
           ctx.strokeStyle = '#ff6f9c';
           ctx.lineWidth = 3;
-          const oldR = R;
-          R = oldR * 0.8;
-          toothPath(ctx, 1, cx, y);
-          R = oldR;
+          toothPath(ctx, sc, cx, y);
           ctx.stroke();
           ctx.setLineDash([]);
+          ctx.fillStyle = '#ff6f9c';
+          ctx.font = '900 34px Nunito, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('?', cx, y + 12);
           ctx.fillStyle = '#7d6078';
           ctx.font = '900 18px Nunito, sans-serif';
-          ctx.textAlign = 'center';
-          ctx.fillText('Пациент ждёт коронку', cx, api.H * 0.22);
+          ctx.fillText('Пациент ждёт коронку', cx, y - R * 1.35);
+          ctx.font = '700 14px Nunito, sans-serif';
+          ctx.fillText('Подбери цвет под соседние зубы', cx, y - R * 1.35 + 22);
         }
         if (phase === 'carve' || phase === 'polish' || phase === 'end') {
           if (phase === 'carve') {
@@ -384,7 +384,11 @@ export default {
         lastPt = null;
         if (phase === 'carve') carve(x, y);
       },
-      pointermove(x, y) {
+      pointermove(x, y, e) {
+        if (!drag && e && e.buttons & 1) {
+          drag = true;
+          lastPt = null;
+        }
         if (!drag) return;
         if (phase === 'carve') carve(x, y);
         else if (phase === 'polish') {

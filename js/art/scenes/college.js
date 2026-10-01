@@ -1,5 +1,5 @@
 // Medical college — dental technician lab. World 2000 × 1000.
-import { skyDefs, isDark, stars, moon, cloud, moscowSkyline, pottedPlant, shadowEllipse } from './common.js';
+import { skyDefs, isDark, moon, cloud, moscowSkyline, pottedPlant, shadowEllipse } from './common.js';
 
 export const W = 2000;
 

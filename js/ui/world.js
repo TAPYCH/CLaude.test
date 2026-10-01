@@ -3,6 +3,7 @@ import { renderLana } from '../art/character.js';
 import { renderPet } from '../art/pets.js';
 import { SCENES } from '../data/scenes.js';
 import { S, mood } from '../core/state.js';
+import { currentQuest } from '../core/progress.js';
 import { dayPhase, season } from '../core/time.js';
 import { el, $ } from './dom.js';
 import { sfx } from '../audio.js';
@@ -401,6 +402,20 @@ export function updateWorld(dt) {
   paintBackground();
   updateTint();
   refreshLana();
+  markQuestTarget();
+}
+
+let questKey = '';
+function markQuestTarget() {
+  const q = currentQuest();
+  const key = (q ? q.id : '') + world.scene.id;
+  if (key === questKey) return;
+  questKey = key;
+  world.inner.querySelectorAll('.hotspot.quest-target').forEach((h) => h.classList.remove('quest-target'));
+  if (q && q.target && q.target.scene === world.scene.id) {
+    const h = world.inner.querySelector(`.hotspot[data-id="${q.target.hotspot}"]`);
+    if (h) h.classList.add('quest-target');
+  }
 }
 
 export function setOverhead({ thought = null, progress = null } = {}) {

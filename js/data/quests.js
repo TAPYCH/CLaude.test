@@ -3,7 +3,7 @@
 
 export const QUESTS = [
   {
-    id: 'breakfast', icon: '🥪', title: 'Доброе утро, Лана!',
+    id: 'breakfast', target: { scene: 'dorm', hotspot: 'fridge' }, icon: '🥪', title: 'Доброе утро, Лана!',
     desc: 'Позавтракай: нажми на холодильник и выбери «Перекусить».',
     hint: 'Холодильник — справа в комнате',
     goal: { type: 'action', ids: ['snack', 'eatMeal', 'cook', 'mamaFood', 'coffeeDessert', 'foodcourt'], count: 1 },
@@ -11,7 +11,7 @@ export const QUESTS = [
     from: { who: 'mom', text: 'Доченька, ты покушала? Не забывай завтракать! 💛' },
   },
   {
-    id: 'lecture', icon: '🎓', title: 'Новая глава',
+    id: 'lecture', target: { scene: 'college', hotspot: 'board' }, icon: '🎓', title: 'Новая глава',
     desc: 'Первая неделя семестра! Сходи на пары в медколледж (будни, 9:00–15:00).',
     hint: 'Телефон → Карта → Медколледж',
     goal: { type: 'action', ids: ['lecture'], count: 1 },
@@ -19,7 +19,7 @@ export const QUESTS = [
     from: { who: 'katya', text: 'Лан, ты где? Пара по материаловедению через 10 минут! 🏃‍♀️' },
   },
   {
-    id: 'crown', icon: '🦷', title: 'Первая коронка',
+    id: 'crown', target: { scene: 'college', hotspot: 'bench' }, icon: '🦷', title: 'Первая коронка',
     desc: 'Сделай коронку в зуботехнической лаборатории колледжа.',
     hint: 'Медколледж → Лабораторный стол',
     goal: { type: 'minigame', id: 'crown', stars: 1, count: 1 },
@@ -27,7 +27,7 @@ export const QUESTS = [
     from: { who: 'teacher', text: 'Лана, сегодня практика по моделированию коронок. Жду в лаборатории!' },
   },
   {
-    id: 'barista', icon: '☕', title: 'Кофе и копеечка',
+    id: 'barista', target: { scene: 'cafe', hotspot: 'counter' }, icon: '☕', title: 'Кофе и копеечка',
     desc: 'Студенческая жизнь требует денег. Отработай смену бариста в кофейне «Пенка».',
     hint: 'Карта → Кофейня «Пенка» → Стойка',
     goal: { type: 'minigame', id: 'barista', stars: 0, count: 1 },
@@ -59,7 +59,7 @@ export const QUESTS = [
     from: { who: 'mom', text: 'Лана, приезжай домой! Я уже наготовила хачапури 🫓❤️' },
   },
   {
-    id: 'mandarins', icon: '🍊', title: 'Мандариновый сезон',
+    id: 'mandarins', target: { scene: 'garden', hotspot: 'trees' }, icon: '🍊', title: 'Мандариновый сезон',
     desc: 'Помоги бабушке в саду: поймай 30 мандаринов за один сбор.',
     hint: 'Абхазия → Мандариновый сад',
     goal: { type: 'minigame', id: 'mandarins', score: 30, count: 1 },
@@ -67,7 +67,7 @@ export const QUESTS = [
     from: { who: 'mom', text: 'Бабушка зовёт в сад — мандарины поспели! 🍊' },
   },
   {
-    id: 'sea', icon: '🐚', title: 'Море зовёт',
+    id: 'sea', target: { scene: 'beach', hotspot: 'sea' }, icon: '🐚', title: 'Море зовёт',
     desc: 'Понырять за ракушками в Чёрном море.',
     hint: 'Абхазия → Пляж → Море',
     goal: { type: 'minigame', id: 'shells', stars: 0, count: 1 },
@@ -91,7 +91,7 @@ export const QUESTS = [
     from: { who: 'teacher', text: 'Лана, у вас отличный потенциал. Скоро экзамен — готовьтесь!' },
   },
   {
-    id: 'exam', icon: '📜', title: 'Диплом',
+    id: 'exam', target: { scene: 'college', hotspot: 'teacher' }, icon: '📜', title: 'Диплом',
     desc: 'Сдай финальный экзамен у Ирины Петровны: коронка на 3 звезды.',
     hint: 'Медколледж → Преподаватель',
     goal: { type: 'exam', count: 1 },
@@ -99,7 +99,7 @@ export const QUESTS = [
     from: { who: 'teacher', text: 'Экзамен открыт. Приходите, когда будете готовы. Удачи! 🍀' },
   },
   {
-    id: 'lab', icon: '💼', title: 'Своя лаборатория',
+    id: 'lab', target: { scene: 'dorm', hotspot: 'desk' }, icon: '💼', title: 'Своя лаборатория',
     desc: 'Теперь ты дипломированный зубной техник! Выполни 3 заказа.',
     hint: 'Стол в общежитии → Заказы лаборатории',
     goal: { type: 'action', ids: ['orders'], count: 3 },

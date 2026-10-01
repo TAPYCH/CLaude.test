@@ -1,5 +1,5 @@
 // Shopping mall «Галерея». World 2000 × 1000.
-import { isDark, pottedPlant, shadowEllipse } from './common.js';
+import { isDark, pottedPlant } from './common.js';
 
 export const W = 2000;
 

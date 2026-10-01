@@ -16,7 +16,6 @@ function basketSvg() {
   </svg>`;
 }
 
-let bgCache = null;
 function background(ctx, W, H, t) {
   const g = ctx.createLinearGradient(0, 0, 0, H);
   g.addColorStop(0, '#8fd3ff');

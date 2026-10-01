@@ -2,11 +2,10 @@
 import { S, load, save, reset, SKILLS } from './core/state.js';
 import { bus } from './core/bus.js';
 import { initProgress, ensureDailies, checkAchievements, sendMessage, currentQuest } from './core/progress.js';
-import { CONTACTS } from './data/contacts.js';
 import { SCENES } from './data/scenes.js';
 import { CONFIG } from './config.js';
 import { tick, ui, isBusy, showBanner, game } from './game.js';
-import { mountWorld, loadScene, updateWorld, walkTo, layout, setExpression, lanaAnim } from './ui/world.js';
+import { mountWorld, loadScene, updateWorld, walkTo, setExpression, lanaAnim } from './ui/world.js';
 import { mountHud, updateHud, flashQuestChip } from './ui/hud.js';
 import { showActionMenu, showPetMenu, closeMenu } from './ui/menu.js';
 import { openPhone, openShopTab, phoneOpen } from './ui/phone.js';
@@ -187,5 +186,5 @@ async function boot() {
 
 window.addEventListener('error', (e) => console.error('Ошибка игры:', e.message));
 // handy for debugging from the browser console
-window.__lana = { get S() { return S; }, game, save };
+window.__lana = { get S() { return S; }, game, save, bus };
 boot();

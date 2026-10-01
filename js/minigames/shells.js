@@ -134,7 +134,7 @@ export default {
       const y = api.H * (0.18 + Math.random() * 0.66);
       const x = fromRight ? api.W + 30 : -30;
       const vx = (fromRight ? -1 : 1) * (50 + Math.random() * 60 + t * 2);
-      if (r < 0.18) things.push({ k: 'jelly', x, y, vx: vx * 0.7, r: 22, ph: Math.random() * 6 });
+      if (r < 0.1 + Math.min(0.1, t * 0.004)) things.push({ k: 'jelly', x, y, vx: vx * 0.7, r: 22, ph: Math.random() * 6 });
       else if (r < 0.28) things.push({ k: 'pearl', x, y, vx, r: 14, ph: 0 });
       else things.push({ k: 'shell', x, y, vx, r: 16, c: SHELL_COLORS[Math.floor(Math.random() * 4)], ph: Math.random() * 6 });
     }

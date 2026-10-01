@@ -219,6 +219,9 @@ svg { display: block; }
   position: absolute; top: 100%; margin-top: 6px; white-space: nowrap; font-size: 12px; font-weight: 900; color: var(--ink);
   background: rgba(255, 255, 255, 0.92); padding: 2px 9px; border-radius: 999px; box-shadow: var(--shadow-s);
 }
+.hotspot.quest-target { background: #fff; box-shadow: 0 0 0 5px rgba(154, 123, 255, 0.55), 0 0 26px rgba(154, 123, 255, 0.8); }
+.hotspot.quest-target::before { content: '👇'; position: absolute; bottom: 100%; margin-bottom: 4px; font-size: 26px; animation: point 0.8s ease-in-out infinite alternate; }
+@keyframes point { from { transform: translateY(-6px); } to { transform: translateY(2px); } }
 .hotspot.npc-hs { width: 46px; height: 46px; font-size: 21px; }
 .hotspots-hidden .hotspot { opacity: 0; pointer-events: none; }
 .hotspots { position: absolute; inset: 0; z-index: 7; pointer-events: none; }
@@ -541,7 +544,7 @@ svg { display: block; }
 .sleep-scene .clock-big { position: absolute; top: calc(40px + var(--safe-t)); left: 0; right: 0; text-align: center; color: #fff; font-weight: 900; font-size: 46px; letter-spacing: 2px; }
 .sleep-scene .clock-big small { display: block; font-size: 15px; letter-spacing: 0; opacity: 0.7; }
 
-.minigame { position: absolute; inset: 0; z-index: 65; background: #1d1424; display: flex; flex-direction: column; animation: fade-in 0.3s both; }
+.minigame { position: absolute; inset: 0; z-index: 65; background: radial-gradient(120% 80% at 50% 0%, #ffe3ee, #ffd0c2 60%, #ffb98f); display: flex; flex-direction: column; animation: fade-in 0.3s both; }
 .mg-top { position: absolute; top: calc(10px + var(--safe-t)); left: 10px; right: 10px; display: flex; justify-content: space-between; align-items: center; z-index: 3; pointer-events: none; }
 .mg-top > * { pointer-events: auto; }
 .mg-stat { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; background: rgba(255, 255, 255, 0.92); font-weight: 900; font-size: 18px; box-shadow: var(--shadow-m); }
@@ -555,7 +558,7 @@ svg { display: block; }
 
 .travel-scene { background: linear-gradient(180deg, #8fd0ff, #ffe1ec); display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .travel-scene svg { width: 100%; max-width: 900px; height: auto; }
-.travel-scene .tt { position: absolute; top: calc(40px + var(--safe-t)); left: 0; right: 0; text-align: center; }
+.travel-scene .tt { z-index: 2; position: absolute; top: calc(40px + var(--safe-t)); left: 0; right: 0; text-align: center; }
 .travel-scene .tt b { display: block; font-family: var(--script); font-weight: 400; font-size: 44px; color: #fff; text-shadow: 0 3px 0 var(--pink), 0 6px 20px rgba(160, 40, 90, 0.3); }
 .travel-scene .tt span { font-weight: 900; color: var(--ink); background: rgba(255, 255, 255, 0.85); padding: 4px 14px; border-radius: 999px; font-size: 14px; }
 
