@@ -181,7 +181,7 @@ export function setExpression(expr, ms = 2200) {
 
 export function lanaAnim(cls, ms = 0) {
   if (!world.lana) return;
-  world.lana.classList.remove('busy', 'joy', 'wave', 'rest');
+  world.lana.classList.remove('busy', 'joy', 'wave', 'rest', 'away');
   if (cls) world.lana.classList.add(cls);
   if (ms) setTimeout(() => world.lana && world.lana.classList.remove(cls), ms);
 }

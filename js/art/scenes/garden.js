@@ -66,7 +66,7 @@ export const SCENE = {
     { id: 'chickens', x: 920, y: 800, stand: 980, label: 'Курочки', icon: '🐔', actions: ['feedChickens'] },
     { id: 'swing', x: 1300, y: 580, stand: 1300, label: 'Качели', icon: '🌳', actions: ['swing', 'walkPet'] },
     { id: 'porch', x: 1640, y: 560, stand: 1590, label: 'Чай на веранде', icon: '🫖', actions: ['grandmaTea', 'nap'] },
-    { id: 'grandma', x: 1860, y: 420, stand: 1760, label: 'Бабуля', icon: '👵', npc: true, actions: ['grandmaTalk'] },
+    { id: 'grandma', x: 1860, y: 420, stand: 1690, label: 'Бабуля', icon: '👵', npc: true, actions: ['grandmaTalk'] },
   ],
   npcs: [{ id: 'grandma', x: 1860, outfit: GRANDMA, hotspot: 'grandma', h: 0.9, flip: true }],
 };

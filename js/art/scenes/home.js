@@ -108,7 +108,7 @@ export const SCENE = {
     { id: 'wardrobe', x: 575, y: 260, stand: 575, label: 'Шкаф', icon: '👗', actions: ['wardrobe', 'makeup'] },
     { id: 'balcony', x: 900, y: 260, stand: 900, label: 'Балкон', icon: '🌊', actions: ['balcony', 'selfie'] },
     { id: 'table', x: 1360, y: 520, stand: 1330, label: 'Мамин стол', icon: '🥘', actions: ['mamaFood', 'helpCook', 'tea'] },
-    { id: 'mom', x: 1720, y: 420, stand: 1600, label: 'Мама', icon: '🤗', npc: true, actions: ['momTalk'] },
+    { id: 'mom', x: 1720, y: 420, stand: 1550, label: 'Мама', icon: '🤗', npc: true, actions: ['momTalk'] },
     { id: 'bath', x: 1940, y: 460, stand: 1900, label: 'Ванная', icon: '🛁', actions: ['shower', 'brushTeeth'] },
   ],
   npcs: [{ id: 'mom', x: 1720, outfit: MOM, hotspot: 'mom', h: 0.97, flip: true }],

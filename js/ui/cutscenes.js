@@ -10,6 +10,7 @@ import { sfx, playMusic, unlockAudio } from '../audio.js';
 import { confetti, toast } from './fx.js';
 import { dialog } from './modal.js';
 import { DEFAULT_OUTFIT } from '../data/items.js';
+import { isStandalone, canInstall, install } from '../pwa.js';
 
 function petals(node, n = 14) {
   const set = ['🌸', '🍊', '✨', '🤍'];
@@ -48,6 +49,7 @@ export function showTitle({ hasSave }) {
         <div class="title-hero">${renderLana({ outfit: hasSave ? S.outfit : DEFAULT_OUTFIT, expr: 'happy' })}</div>
         <div class="title-actions">
           ${hasSave ? '<button class="btn" data-v="continue">▶ Продолжить</button><button class="btn ghost" data-v="new">Новая игра</button>' : '<button class="btn" data-v="new">▶ Играть</button>'}
+          ${isStandalone() ? '' : '<button class="install-hint" data-install>📲 Установить на телефон</button>'}
           <div class="title-footer">Москва · Сухум · 🍊</div>
         </div>
       </div>`);
@@ -58,6 +60,21 @@ export function showTitle({ hasSave }) {
       hero.classList.add('blink');
       setTimeout(() => hero.classList.remove('blink'), 200);
     }, 3200);
+    const ins = node.querySelector('[data-install]');
+    if (ins)
+      ins.addEventListener('click', async () => {
+        sfx('click');
+        if (canInstall() && (await install())) return;
+        const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+        dialog({
+          icon: '📲',
+          title: 'Игра как приложение',
+          text: ios
+            ? 'В Safari нажми «Поделиться» (квадрат со стрелкой) → «На экран Домой».\n\nПосле этого игра будет открываться с иконки и работать без интернета.'
+            : 'В Chrome открой меню ⋮ → «Установить приложение» или «Добавить на главный экран».\n\nПосле этого игра будет открываться с иконки и работать без интернета.',
+          buttons: [{ label: 'Понятно', value: true }],
+        });
+      });
     node.querySelectorAll('[data-v]').forEach((b) =>
       b.addEventListener('click', async () => {
         unlockAudio();

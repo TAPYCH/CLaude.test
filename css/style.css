@@ -109,7 +109,7 @@ svg { display: block; }
   display: inline-block; margin-top: 10px; padding: 6px 16px; border-radius: 999px; background: rgba(255, 255, 255, 0.85);
   font-weight: 900; font-size: 15px; color: var(--pink); letter-spacing: 1.5px; text-transform: uppercase; box-shadow: var(--shadow-s);
 }
-.title-hero { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); height: 62%; z-index: 1; animation: rise 1s 0.2s var(--ease-out) both; }
+.title-hero { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); height: 62%; z-index: 2; animation: rise 1s 0.2s var(--ease-out) both; }
 .title-hero svg { height: 100%; width: auto; }
 .title-actions {
   position: absolute; left: 0; right: 0; bottom: calc(26px + var(--safe-b)); z-index: 3;
@@ -125,7 +125,7 @@ svg { display: block; }
 .title-actions { animation-name: rise-plain; }
 
 /* floating petals / sparkles */
-.petal { position: absolute; top: -20px; font-size: 18px; animation: fall linear infinite; opacity: 0.85; pointer-events: none; z-index: 2; }
+.petal { position: absolute; top: -20px; font-size: 18px; animation: fall linear infinite; opacity: 0.85; pointer-events: none; z-index: 1; }
 @keyframes fall { to { transform: translate(var(--dx, 40px), 110vh) rotate(540deg); } }
 
 /* ---------------------------------------------------------------- world */
@@ -634,6 +634,11 @@ svg { display: block; }
 @keyframes npc-idle-left { 0%, 100% { transform: scaleX(-1) rotate(0); } 50% { transform: scaleX(-1) rotate(1deg); } }
 .actor.lana.fresh .actor-flip { filter: drop-shadow(0 0 10px rgba(160, 220, 255, 0.9)); transition: filter 1s; }
 
-.thought.npc-say { left: 50%; transform: translateX(-50%); bottom: calc(100% + 6px); height: auto; min-height: 0; width: max-content; max-width: min(240px, 70vw); padding: 10px 14px; font-size: 14px; font-weight: 800; line-height: 1.3; color: var(--ink); white-space: normal; text-align: center; border-radius: 18px; animation: pop-in 0.35s var(--ease-bounce) both; }
+.thought.npc-say { left: 50%; transform: translateX(-50%); bottom: calc(100% + 6px); height: auto; min-height: 0; width: max-content; max-width: min(240px, 70vw); padding: 10px 14px; font-size: 14px; font-weight: 800; line-height: 1.3; color: var(--ink); white-space: normal; text-align: center; border-radius: 18px; animation: say-in 0.35s var(--ease-bounce) both; }
+@keyframes say-in { from { transform: translateX(calc(-50% + var(--dx, 0px))) scale(0.3); opacity: 0; } to { transform: translateX(calc(-50% + var(--dx, 0px))) scale(1); opacity: 1; } }
 .thought.npc-say::before { left: 50%; margin-left: -7px; }
 .thought.npc-say::after { left: 50%; margin-left: -4px; }
+
+.actor.lana .actor-flip { transition: transform 0.25s, opacity 0.5s; }
+.actor.lana.away .actor-flip { opacity: 0; transform: scale(0.92) translateY(10px); }
+.install-hint { font-size: 13px; font-weight: 900; color: #fff; background: rgba(74, 46, 69, 0.35); padding: 6px 14px; border-radius: 999px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }

@@ -70,7 +70,7 @@ export const SCENE = {
     { id: 'sea', x: 1100, y: 470, stand: 1100, label: 'Море', icon: '🌊', actions: ['swim', 'promenade'] },
     { id: 'kiosk', x: 700, y: 520, stand: 700, label: 'Кофе на песке', icon: '☕', actions: ['sandCoffee', 'icecream'] },
     { id: 'sunbed', x: 1500, y: 440, stand: 1500, label: 'Шезлонг', icon: '🏖️', actions: ['sunbathe', 'selfie', 'nap'] },
-    { id: 'amra', x: 340, y: 450, stand: 460, label: 'Амра', icon: '👯‍♀️', npc: true, actions: ['amraChat'] },
+    { id: 'amra', x: 340, y: 450, stand: 510, label: 'Амра', icon: '👯‍♀️', npc: true, actions: ['amraChat'] },
   ],
   npcs: [{ id: 'amra', x: 340, outfit: AMRA, hotspot: 'amra', h: 0.95 }],
 };

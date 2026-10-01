@@ -113,11 +113,11 @@ export const SCENE = {
   music: 'moscow',
   hotspots: [
     { id: 'board', x: 280, y: 110, stand: 230, label: 'Лекция', icon: '🎓', actions: ['lecture'] },
-    { id: 'teacher', x: 420, y: 430, stand: 300, label: 'Ирина Петровна', icon: '👩‍🏫', npc: true, actions: ['consult', 'exam'] },
+    { id: 'teacher', x: 420, y: 430, stand: 250, label: 'Ирина Петровна', icon: '👩‍🏫', npc: true, actions: ['consult', 'exam'] },
     { id: 'bench', x: 760, y: 470, stand: 760, label: 'Лабораторный стол', icon: '🦷', actions: ['practice', 'memory'] },
     { id: 'shelf', x: 1520, y: 140, stand: 1520, label: 'Стенд с моделями', icon: '🃏', actions: ['memory', 'selfie'] },
     { id: 'vending', x: 1780, y: 340, stand: 1760, label: 'Кофейный автомат', icon: '☕', actions: ['vending'] },
-    { id: 'katya', x: 1250, y: 430, stand: 1130, label: 'Катя', icon: '💬', npc: true, actions: ['friendChat'] },
+    { id: 'katya', x: 1250, y: 430, stand: 1080, label: 'Катя', icon: '💬', npc: true, actions: ['friendChat'] },
   ],
   npcs: [
     { id: 'teacher', x: 420, outfit: TEACHER, hotspot: 'teacher', h: 0.98 },

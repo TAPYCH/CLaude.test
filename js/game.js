@@ -137,7 +137,7 @@ export function tick(dt) {
     r.p = p;
     advanceMinutes(dMin, r.decayMul ?? 1, r.decayOverride);
     for (const [k, v] of Object.entries(r.effects || {})) changeNeed(k, v * dp);
-    setOverhead({ thought: r.icon, progress: p });
+    setOverhead({ thought: game.talking ? null : r.icon, progress: p });
     if (p >= 1) finishTimed();
   } else if (S.settings.speed > 0 && S.started) {
     advanceMinutes(dt * S.settings.speed);
@@ -196,7 +196,9 @@ export async function doAction(id, hotspot) {
     if (a.cost) addMoney(-a.cost, id);
     if (a.minigame) return void (await minigameAction(id, a));
     const npc = hotspot && hotspot.npc ? npcSay(hotspot.id) : null;
+    game.talking = !!npc;
     await timedAction(id, a);
+    game.talking = false;
     if (npc) npc.remove();
   } finally {
     game.busy = false;
@@ -213,6 +215,17 @@ function npcSay(id) {
   if (!lines || !node) return null;
   const b = el(`<div class="thought npc-say">${lines[Math.floor(Math.random() * lines.length)]}</div>`);
   node.appendChild(b);
+  // keep the bubble on screen once the camera has settled
+  setTimeout(() => {
+    const r = b.getBoundingClientRect();
+    const over = r.right - (window.innerWidth - 12);
+    const under = 12 - r.left;
+    if (over > 0) b.style.setProperty('--dx', `${-over}px`);
+    else if (under > 0) b.style.setProperty('--dx', `${under}px`);
+  }, 700);
+  // frame both speakers
+  const npcX = +node.dataset.x;
+  world.camTarget = (world.lanaX + npcX) / 2 - world.root.clientWidth / world.scale / 2;
   return b;
 }
 

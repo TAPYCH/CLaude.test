@@ -50,7 +50,7 @@ export const ACTIONS = {
   grandmaTea: { name: 'Чай с бабушкой', icon: '🫖', minutes: 45, effects: { social: 30, hunger: 18, fun: 10 } },
 
   // ---------------------------------------------------------------- hygiene
-  shower: { name: 'Принять душ', icon: '🚿', minutes: 20, effects: { hygiene: 75, energy: 3, fun: 3 }, special: 'shower' },
+  shower: { name: 'Принять душ', icon: '🚿', minutes: 20, effects: { hygiene: 75, energy: 3, fun: 3 }, special: 'shower', anim: 'away' },
   brushTeeth: { name: 'Почистить зубы', icon: '🪥', minutes: 5, effects: { hygiene: 12 }, xp: { dental: 3 }, desc: 'Будущий зубной техник!' },
 
   // ---------------------------------------------------------------- study & career
