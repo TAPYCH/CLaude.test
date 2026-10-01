@@ -217,6 +217,9 @@ export function renderLana(o = {}) {
   };
 
   const extraDefs = parts.map((it) => (it.defs ? it.defs(ctx) : '')).join('');
+  // optional static pose (degrees) for sprites rendered to images: { legL, legR, armL, armR }
+  const pose = o.pose || {};
+  const rot = (deg, origin) => (deg ? ` transform="rotate(${deg} ${origin.replace(/px/g, '')})"` : ` style="transform-origin:${origin}"`);
 
   const leg = `<path d="${GEO.leg}" fill="url(#${p}skin)"/>
       <path d="M87,343 q4.5,2.4 9,0" stroke="${SKIN.shade}" stroke-width="1" fill="none" opacity=".8"/>
@@ -234,8 +237,8 @@ export function renderLana(o = {}) {
     <g class="body-root">
       <g class="hair-back">${style.back(ctx)}</g>
       ${collect(parts, 'back', ctx)}
-      <g class="legL" style="transform-origin:${HIP_L}">${leg}</g>
-      <g class="legR" style="transform-origin:${HIP_R}"><g transform="${MIRROR}">${leg}</g></g>
+      <g class="legL"${rot(pose.legL, HIP_L)}>${leg}</g>
+      <g class="legR"${rot(pose.legR, HIP_R)}><g transform="${MIRROR}">${leg}</g></g>
       <g class="torso">
         <path d="${GEO.hips}" fill="url(#${p}skin)"/>
         <path d="${GEO.neck}" fill="url(#${p}skin)"/>
@@ -245,8 +248,8 @@ export function renderLana(o = {}) {
         ${collect(parts, 'hip', ctx)}
         ${collect(parts, 'torso', ctx)}
       </g>
-      <g class="armL" style="transform-origin:${SHOULDER_L}">${arm}</g>
-      <g class="armR" style="transform-origin:${SHOULDER_R}"><g transform="${MIRROR}">${arm}</g></g>
+      <g class="armL"${rot(pose.armL, SHOULDER_L)}>${arm}</g>
+      <g class="armR"${rot(pose.armR, SHOULDER_R)}><g transform="${MIRROR}">${arm}</g></g>
       ${collect(parts, 'front', ctx)}
       <g class="head" style="transform-origin:100px 150px">
         <path d="M92.5,128 Q100,145 107.5,128 Z" fill="${SKIN.shade}" opacity=".9"/>
@@ -274,7 +277,7 @@ export function renderLanaHead(o = {}) {
   const vb = o.viewBox || '44 22 112 140';
   return `<svg class="lana-head" viewBox="${vb}" xmlns="http://www.w3.org/2000/svg">
     ${gradDefs(p, hair)}
-    <g clip-path="${o.clip ? `url(#${p}clip)` : ''}">
+    <g>
     <g class="hair-back">${style.back(ctx)}</g>
     <path d="${GEO.neck}" fill="url(#${p}skin)"/>
     <path d="M60,170 C64,156 80,152 92,150 Q100,156 108,150 C120,152 136,156 140,170 Z" fill="${o.shirt || '#1f1b24'}"/>

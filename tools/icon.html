@@ -1,0 +1,20 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:transparent}#c{width:512px;height:512px}</style></head>
+<body><div id="c"></div>
+<script type="module">
+  import { renderLanaHead } from '../js/art/character.js';
+  import { DEFAULT_OUTFIT } from '../js/data/items.js';
+  const q = new URLSearchParams(location.search);
+  const maskable = q.get('m') === '1';
+  const head = renderLanaHead({ outfit: DEFAULT_OUTFIT, expr: 'happy', viewBox: '40 14 120 150' })
+    .replace('<svg ', `<svg x="${maskable ? 116 : 76}" y="${maskable ? 120 : 86}" width="${maskable ? 280 : 360}" height="${maskable ? 350 : 450}" `);
+  document.getElementById('c').innerHTML = `<svg viewBox="0 0 512 512" width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd1e3"/><stop offset=".55" stop-color="#ffb0ca"/><stop offset="1" stop-color="#ffb57a"/></linearGradient>
+    <clipPath id="r"><rect width="512" height="512" rx="${maskable ? 0 : 112}"/></clipPath></defs>
+    <g clip-path="url(#r)">
+      <rect width="512" height="512" fill="url(#bg)"/>
+      <circle cx="256" cy="300" r="${maskable ? 170 : 210}" fill="#fff" opacity=".35"/>
+      ${head}
+      <g transform="translate(${maskable ? 360 : 400},${maskable ? 150 : 110})"><circle r="${maskable ? 34 : 44}" fill="#ff9a2e"/><circle cx="-12" cy="-12" r="10" fill="#ffc77a"/><path d="M0,-40 q14,-18 32,-12 q-12,16 -32,12 Z" fill="#4caf50"/></g>
+    </g></svg>`;
+</script></body></html>

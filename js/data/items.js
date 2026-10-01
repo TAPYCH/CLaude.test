@@ -467,7 +467,7 @@ export const ITEMS = {
     },
   },
   heart_necklace: {
-    cat: 'acc', slot: 'neck', name: 'Кулон-сердечко', price: 0, rarity: 'legendary', unlock: 'loveLetter', desc: 'Подарок от любимого ❤',
+    cat: 'acc', slot: 'neck', name: 'Кулон-сердечко', price: 0, rarity: 'legendary', unlock: 'love', desc: 'Подарок от любимого ❤',
     draw: {
       front: () => `<path d="M88,150 Q100,166 112,150" fill="none" stroke="#e8c97a" stroke-width=".9"/>
         <path d="M100,165 c-3,-4.5 -9,-1 0,6.5 c9,-7.5 3,-11 0,-6.5 Z" fill="#ff4f7b" stroke="#e8c97a" stroke-width=".7"/>`,
