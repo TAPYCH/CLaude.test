@@ -633,3 +633,7 @@ svg { display: block; }
 @keyframes npc-idle { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(1deg); } }
 @keyframes npc-idle-left { 0%, 100% { transform: scaleX(-1) rotate(0); } 50% { transform: scaleX(-1) rotate(1deg); } }
 .actor.lana.fresh .actor-flip { filter: drop-shadow(0 0 10px rgba(160, 220, 255, 0.9)); transition: filter 1s; }
+
+.thought.npc-say { left: 50%; transform: translateX(-50%); bottom: calc(100% + 6px); height: auto; min-height: 0; width: max-content; max-width: min(240px, 70vw); padding: 10px 14px; font-size: 14px; font-weight: 800; line-height: 1.3; color: var(--ink); white-space: normal; text-align: center; border-radius: 18px; animation: pop-in 0.35s var(--ease-bounce) both; }
+.thought.npc-say::before { left: 50%; margin-left: -7px; }
+.thought.npc-say::after { left: 50%; margin-left: -4px; }

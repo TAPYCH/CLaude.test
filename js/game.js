@@ -6,7 +6,7 @@ import { SCENES, CITIES } from './data/scenes.js';
 import { ITEMS } from './data/items.js';
 import { PET_TYPES } from './art/pets.js';
 import { CONFIG } from './config.js';
-import { AMBIENT } from './data/contacts.js';
+import { AMBIENT, NPC_LINES } from './data/contacts.js';
 import { ensureDailies, sendMessage, currentQuest } from './core/progress.js';
 import { world, loadScene, walkTo, setOverhead, lanaAnim, setExpression, lanaScreenPos, hideHotspots, rebuildPet } from './ui/world.js';
 import { updateHud } from './ui/hud.js';
@@ -195,7 +195,9 @@ export async function doAction(id, hotspot) {
     if (a.special === 'exam') return void (await exam());
     if (a.cost) addMoney(-a.cost, id);
     if (a.minigame) return void (await minigameAction(id, a));
+    const npc = hotspot && hotspot.npc ? npcSay(hotspot.id) : null;
     await timedAction(id, a);
+    if (npc) npc.remove();
   } finally {
     game.busy = false;
     hideHotspots(false);
@@ -203,6 +205,15 @@ export async function doAction(id, hotspot) {
     lanaAnim(null);
     updateHud();
   }
+}
+
+function npcSay(id) {
+  const lines = NPC_LINES[id];
+  const node = document.querySelector(`.actor.npc[data-npc="${id}"]`);
+  if (!lines || !node) return null;
+  const b = el(`<div class="thought npc-say">${lines[Math.floor(Math.random() * lines.length)]}</div>`);
+  node.appendChild(b);
+  return b;
 }
 
 function timedAction(id, a) {
