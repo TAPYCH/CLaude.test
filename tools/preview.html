@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Character preview</title>
+<style>
+  body { margin: 0; background: #fdf2e9; font-family: sans-serif; }
+  .grid { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px; }
+  .cell { width: 220px; background: #fff; border-radius: 12px; text-align: center; font-size: 12px; }
+  .cell svg { width: 220px; height: 495px; display: block; }
+  .big svg { width: 600px; height: auto; }
+  .heads .cell svg { height: 220px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="module">
+  import { renderLana, renderLanaHead } from '../js/art/character.js';
+  import { ITEMS, DEFAULT_OUTFIT } from '../js/data/items.js';
+  const q = new URLSearchParams(location.search);
+  const mode = q.get('mode') || 'outfits';
+  const root = document.getElementById('root');
+  const cell = (label, svg) => `<div class="cell">${svg}<div>${label}</div></div>`;
+  let html = '';
+  if (mode === 'big') {
+    html = `<div class="big">${renderLana({ outfit: DEFAULT_OUTFIT, expr: q.get('expr') || 'neutral' })}</div>`;
+  } else if (mode === 'face') {
+    html = `<div class="big">${renderLana({ outfit: DEFAULT_OUTFIT, expr: q.get('expr') || 'neutral' }).replace('viewBox="0 0 200 450"', 'viewBox="45 15 110 130"')}</div>`;
+  } else if (mode === 'expr') {
+    html = '<div class="grid">' + ['neutral', 'happy', 'excited', 'sad', 'tired', 'surprised', 'kiss', 'sleep']
+      .map((e) => cell(e, renderLana({ outfit: DEFAULT_OUTFIT, expr: e }))).join('') + '</div>';
+  } else if (mode === 'hair') {
+    html = '<div class="grid">' + ['long', 'waves', 'ponytail', 'bun', 'braids', 'bob', 'halfup']
+      .map((h, i) => cell(h, renderLana({ outfit: { ...DEFAULT_OUTFIT, hairStyle: h, hairColor: ['chestnut','honey','black','copper','pink','platinum','chocolate'][i] } }))).join('') + '</div>';
+  } else if (mode === 'heads') {
+    html = '<div class="grid heads">' + ['happy', 'neutral', 'sleep'].map((e) => cell(e, renderLanaHead({ outfit: DEFAULT_OUTFIT, expr: e }))).join('') + '</div>';
+  } else {
+    const cat = q.get('cat');
+    const ids = Object.keys(ITEMS).filter((id) => !cat || ITEMS[id].cat === cat);
+    html = '<div class="grid">' + ids.map((id) => {
+      const it = ITEMS[id];
+      const o = { ...DEFAULT_OUTFIT };
+      if (it.cat === 'acc') o.acc = [id];
+      else if (it.cat === 'dress') o.dress = id;
+      else o[it.cat] = id;
+      return cell(id, renderLana({ outfit: o, expr: 'happy' }));
+    }).join('') + '</div>';
+  }
+  root.innerHTML = html;
+</script>
+</body>
+</html>
