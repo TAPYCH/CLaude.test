@@ -81,6 +81,7 @@ function eyeShape(p, mode) {
         <g class="iris">
           <circle cx=".6" cy="1.8" r="8.9" fill="url(#${p}iris)"/>
           <circle cx=".6" cy="1.8" r="8.9" fill="none" stroke="${EYE.irisDark}" stroke-width="1.1" opacity=".75"/>
+          ${[0, 45, 90, 135, 180, 225, 270, 315].map((a) => `<path d="M${(0.6 + Math.cos((a * Math.PI) / 180) * 5).toFixed(2)},${(1.8 + Math.sin((a * Math.PI) / 180) * 5).toFixed(2)} L${(0.6 + Math.cos((a * Math.PI) / 180) * 8).toFixed(2)},${(1.8 + Math.sin((a * Math.PI) / 180) * 8).toFixed(2)}" stroke="${EYE.irisLight}" stroke-width=".7" opacity=".5"/>`).join('')}
           <circle cx=".6" cy="1.8" r="4.3" fill="#1b0d07"/>
         </g>
         ${lidDrop ? `<rect x="-14" y="-15" width="28" height="${lidDrop + 4}" fill="${SKIN.base}"/>` : ''}
@@ -90,6 +91,7 @@ function eyeShape(p, mode) {
         <path d="M-12.6,-5.6 q-2.6,-.9 -4.4,-.2 M-10,-9.4 q-1.6,-2.4 -3.6,-3" stroke="${EYE.liner}" stroke-width="1.15" fill="none" stroke-linecap="round"/>
       </g>
       <path d="M-11,4.5 Q-5,12.3 1.5,12.2 Q8,11.6 11,5" fill="none" stroke="#8a5446" stroke-width=".9" opacity=".55"/>
+      <path d="M-9.5,${-14.6 + lidDrop} Q0,${-17.4 + lidDrop} 9.5,${-12.6 + lidDrop}" fill="none" stroke="${SKIN.deep}" stroke-width=".8" opacity=".3" stroke-linecap="round"/>
     </g>`;
 }
 
@@ -156,6 +158,7 @@ export function renderFace(p, o) {
   const mode = eyeMode(o.expr);
   const lookX = o.look || 0;
   return `
+    <ellipse cx="100" cy="136.5" rx="6" ry="1.6" fill="${SKIN.shade}" opacity=".5"/>
     <ellipse cx="78" cy="113" rx="10" ry="6" fill="url(#${p}blush)"/>
     <ellipse cx="122" cy="113" rx="10" ry="6" fill="url(#${p}blush)"/>
     <g class="eyes">
