@@ -141,6 +141,7 @@ function startGame(firstRun) {
       const q = currentQuest();
       if (q && q.from) sendMessage(q.from.who, q.from.text);
     }, 6000);
+    setTimeout(() => toast({ icon: '👆', title: 'Подсказка', text: 'Комнату можно листать пальцем, а нажатие на пол отправит Лану туда', time: 5000 }), 14000);
   }
   requestAnimationFrame((t) => {
     lastT = t;
