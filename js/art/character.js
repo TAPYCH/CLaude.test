@@ -15,7 +15,7 @@ export const GEO = {
   arm:
     'M75,161 C65,162 60,172 59,186 C58,202 57,218 58,232 C59,244 60,252 61,259 L69.5,259 C69.5,249 69.5,240 70,232 C71,218 73,204 75,192 L78,170 Z',
   leg:
-    'M80,256 C78.5,280 80,300 82.5,322 C83.5,333 83.8,341 84,349 C83,364 84.4,382 86.6,400 C86.9,408 87.1,413 87.4,419 L95.2,419 C95.4,413 95.8,408 96.4,400 C98.6,382 99.8,364 99.2,349 C99.6,341 100.2,333 100.8,322 C102.2,300 101.6,280 100.6,256 Z',
+    'M80,256 C78.5,280 80,300 82.5,322 C83.5,333 83.8,341 84,349 C81.8,361 83.6,381 86.6,400 C86.9,408 87.1,413 87.4,419 L95.2,419 C95.4,413 95.8,408 96.4,400 C98.6,382 100.6,363 99.2,349 C99.6,341 100.2,333 100.8,322 C102.2,300 101.6,280 100.6,256 Z',
   foot: 'M86.6,413 C85.6,421 84.6,429 85.4,435.5 Q91.2,440 96.8,435.5 C97.6,429 96.8,421 95.8,413 Z',
   neck: 'M92.5,126 L92,153 Q100,158 108,153 L107.5,126 Z',
   face:
@@ -222,13 +222,14 @@ export function renderLana(o = {}) {
   const rot = (deg, origin) => (deg ? ` transform="rotate(${deg} ${origin.replace(/px/g, '')})"` : ` style="transform-origin:${origin}"`);
 
   const leg = `<path d="${GEO.leg}" fill="url(#${p}skin)"/>
-      <path d="M87,343 q4.5,2.4 9,0" stroke="${SKIN.shade}" stroke-width="1" fill="none" opacity=".8"/>
+      <path d="M88,344 q3.5,1.8 7,0" stroke="${SKIN.shade}" stroke-width=".8" fill="none" opacity=".55"/>
       <path d="${GEO.foot}" fill="${SKIN.base}"/>
       ${collect(parts, 'leg', ctx)}`;
 
   const arm = `<path d="${GEO.arm}" fill="url(#${p}skin)"/>
-      <path d="M61,257 C59,262 59.5,268 62,272 C64,275 68,275.5 70,272 C71.6,268 71.4,262 69.8,257 Z" fill="${SKIN.base}"/>
-      <path d="M62.6,265.4 q-1.6,3 .4,5.6" stroke="${SKIN.shade}" stroke-width=".9" fill="none"/>
+      <path d="M60.8,255.5 C58.6,261 58.4,268.5 60.6,274.6 C61.8,278.4 66.2,279.6 68.4,276.6 C70.6,272.8 71.4,264.5 70.2,255.5 Z" fill="${SKIN.base}"/>
+      <path d="M69.8,262 q3.4,2.6 2.4,8.2 q-.8,2.2 -2.6,.8 Z" fill="${SKIN.base}" stroke="${SKIN.shade}" stroke-width=".6"/>
+      <path d="M62.4,268 l.4,8.4 M64.8,268.6 l.2,9 M67.2,268.2 l-.2,8.4" stroke="${SKIN.shade}" stroke-width=".7" fill="none" opacity=".8"/>
       ${collect(parts, 'arm', ctx)}`;
 
   return `<svg class="lana-svg" viewBox="0 0 200 450" xmlns="http://www.w3.org/2000/svg" aria-label="Лана">

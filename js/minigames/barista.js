@@ -70,9 +70,11 @@ export default {
       </div>`;
     api.root.appendChild(ui);
     const pad = ui.querySelector('[data-pad]');
+    const wide = window.innerWidth > window.innerHeight * 1.2;
+    if (wide) pad.style.gridTemplateColumns = 'repeat(6,1fr)';
     for (const [k, v] of Object.entries(ING)) {
       const b = document.createElement('button');
-      b.style.cssText = 'height:64px;border-radius:16px;background:#fff;box-shadow:0 3px 0 #ecd5e1,0 4px 10px rgba(0,0,0,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:24px;line-height:1;transition:transform .1s';
+      b.style.cssText = (wide ? 'height:52px;' : 'height:64px;') + 'border-radius:16px;background:#fff;box-shadow:0 3px 0 #ecd5e1,0 4px 10px rgba(0,0,0,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:24px;line-height:1;transition:transform .1s';
       b.innerHTML = `${v.e}<span style="font-size:11px;font-weight:900;margin-top:4px;color:#7d6078">${v.n}</span>`;
       b.addEventListener('pointerdown', (e) => {
         e.preventDefault();
@@ -145,8 +147,8 @@ export default {
       const W = api.W;
       const H = api.H;
       const cx = W / 2 + (shake > 0 ? Math.sin(t * 60) * 8 : 0);
-      const base = H * 0.66;
-      const cw = Math.min(150, W * 0.36);
+      const base = H * (wide ? 0.55 : 0.66);
+      const cw = Math.min(150, W * 0.36, H * 0.26);
       const ch = cw * 1.05;
       // saucer
       ctx.fillStyle = '#fff';
@@ -272,9 +274,10 @@ export default {
             ctx.fill();
           }
         ctx.fillStyle = '#c98b5a';
-        ctx.fillRect(0, H * 0.66, W, H * 0.34);
+        const ct = H * (wide ? 0.55 : 0.66);
+        ctx.fillRect(0, ct, W, H - ct);
         ctx.fillStyle = '#f3e2d3';
-        ctx.fillRect(0, H * 0.66 - 8, W, 16);
+        ctx.fillRect(0, ct - 8, W, 16);
         drawCup();
       },
       destroy() {

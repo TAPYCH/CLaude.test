@@ -76,11 +76,37 @@ function newDay() {
     addMoney(1500, 'mom');
     sendMessage('mom', 'Доча, скинула тебе 1 500 ₽ на вкусняшки 💛');
   }
+  holidays();
   bus.emit('newDay', { day: S.day });
+}
+
+const HOLIDAYS = {
+  '9-1': [['katya', 'С Днём знаний! 📚 Новый учебный год, держимся вместе 💪']],
+  '10-5': [['teacher', 'С Днём учителя меня поздравлять не обязательно, но коронки сдавать — обязательно 😉']],
+  '12-31': [['mom', 'С Новым годом, доченька! 🎄 Пусть всё-всё сбудется! Мандарины уже на столе 🍊', 3000], ['lover', 'С Новым годом, моя любимая! 🎆 Ты — моё лучшее, что случилось в этом году ❤️']],
+  '1-7': [['grandma', 'С Рождеством, внученька! 🌟 Береги себя.']],
+  '2-9': [['katya', 'День стоматолога! 🦷 Это наш профессиональный праздник, поздравляю, коллега!']],
+  '2-14': [['lover', 'С Днём всех влюблённых! 💘 Если бы можно было, я бы прямо сейчас примчался с цветами. Люблю тебя!', 2000]],
+  '3-8': [['lover', 'С 8 Марта, моя весна! 🌷 Ты самая нежная и самая сильная.', 1500], ['mom', 'С праздником, доченька! 💐 Ты наша гордость!']],
+  '5-9': [['grandma', 'С Днём Победы! 🌸 Помним.']],
+};
+
+function holidays() {
+  const d = new Date(Date.UTC(2025, 8, 1) + S.day * 864e5);
+  const list = HOLIDAYS[`${d.getUTCMonth() + 1}-${d.getUTCDate()}`];
+  if (!list) return;
+  list.forEach(([who, text, gift], i) =>
+    setTimeout(() => {
+      sendMessage(who, gift ? `${text}\n\n🎁 +${money(gift)}` : text);
+      if (gift) addMoney(gift, 'gift');
+    }, 1500 + i * 2500),
+  );
 }
 
 function hourly(h) {
   bus.emit('hour', { h });
+  const hungry = S.pets.find((p) => p.hunger < 20);
+  if (hungry && h % 4 === 0 && S.started) toast({ icon: '🥺', title: `${hungry.name} проголодался`, text: 'Нажми на питомца → «Покормить»' });
   if (h === 3 && !(game.running && game.running.id === 'sleep')) S.flags.owl = true;
   // a love note once a day at a pseudo-random hour between 9 and 22
   const loveHour = 9 + ((S.day * 7) % 13);

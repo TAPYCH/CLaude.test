@@ -1,0 +1,23 @@
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+export default async ({ page, shot }) => {
+  const tap = async (sel) => { await page.waitForSelector(sel, { timeout: 8000 }); await page.$eval(sel, (el) => el.click()); await sleep(450); };
+  await page.goto('http://localhost:8080/index.html');
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await sleep(1400);
+  await shot('60-title-land');
+  await tap('.title-actions .btn');
+  await tap('.story .skip');
+  await sleep(4000);
+  await shot('61-game-land');
+  await tap('.hotspot[data-id="wardrobe"]');
+  await tap('.action-menu .act');
+  await sleep(2500);
+  await shot('62-wardrobe-land');
+  await tap('[data-close]');
+  await page.evaluate(async () => { const m = await import('/js/minigames/index.js'); m.playMinigame('barista', { reward: () => [] }); });
+  await sleep(700);
+  await tap('.mg-intro .btn');
+  await sleep(2600);
+  await shot('63-barista-land');
+};

@@ -532,6 +532,7 @@ function appSettings() {
   const body = v.querySelector('.app-body');
   const render = () => {
     body.innerHTML = `<div class="list">
+      <button class="setting" data-help><span>❓ Как играть</span><span>›</span></button>
       <button class="setting" data-s="sound"><span>🔊 Звуки</span><span class="toggle ${S.settings.sound ? 'on' : ''}"></span></button>
       <button class="setting" data-s="music"><span>🎵 Музыка</span><span class="toggle ${S.settings.music ? 'on' : ''}"></span></button>
       ${canInstall() ? '<button class="setting" data-install><span>📲 Установить на телефон<small>Иконка на главном экране, работает без интернета</small></span><span>›</span></button>' : '<div class="setting"><span>📲 Установка<small>iPhone: «Поделиться» → «На экран Домой»</small></span></div>'}
@@ -548,6 +549,22 @@ function appSettings() {
         sfx('click');
         save();
         render();
+      }),
+    );
+    body.querySelector('[data-help]').addEventListener('click', () =>
+      dialog({
+        icon: '📖',
+        title: 'Как играть',
+        html: `<div style="text-align:left;font-weight:700;font-size:15px;line-height:1.5;color:var(--ink-soft)">
+          <p>👆 <b>Кружочки</b> на предметах и людях открывают меню действий.</p>
+          <p>🚶‍♀️ <b>Нажми на пол</b> — Лана пойдёт туда. Комнату можно листать пальцем.</p>
+          <p>🎀 <b>Потребности</b> внизу экрана падают со временем. Красный кружок — Лане срочно что-то нужно.</p>
+          <p>💎 <b>Кристалл</b> над головой показывает настроение: чем оно лучше, тем быстрее растут навыки.</p>
+          <p>📋 <b>Задание</b> вверху ведёт по сюжету, стрелка 👇 указывает на нужный предмет.</p>
+          <p>💰 <b>Деньги</b>: смены в кофейне, сбор мандаринов, стипендия по понедельникам, мама по пятницам.</p>
+          <p>🎓 <b>Цель</b>: прокачать зуботехнику до 5 уровня, походить на пары и сдать экзамен.</p>
+          <p>⏸ Пробел — пауза, «P» — телефон (на компьютере).</p></div>`,
+        buttons: [{ label: 'Понятно!', value: true }],
       }),
     );
     const ins = body.querySelector('[data-install]');

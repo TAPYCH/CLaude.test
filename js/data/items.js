@@ -31,7 +31,8 @@ function grad(id, a, b, dir = 'v') {
 
 const shoe = (fill, extra = '') => ({
   leg: () =>
-    `<path d="M85.2,423 Q91,427.4 97,423 C98.2,427 98.6,431 98,434.6 Q96.4,440.6 91.1,441.2 Q85.8,440.6 84.2,434.6 C83.6,431 84,427 85.2,423 Z" fill="${fill}"/>
+    `<path d="M89.4,434 L92.8,434 L92.2,444 Q91.1,445 90,444 Z" fill="${fill === '#fbfbfb' ? '#e6e6ea' : fill}" stroke="#000" stroke-opacity=".12" stroke-width=".6"/>
+     <path d="M85.2,423 Q91,427.4 97,423 C98.2,427 98.6,431 98,434.6 Q96.4,440.6 91.1,441.2 Q85.8,440.6 84.2,434.6 C83.6,431 84,427 85.2,423 Z" fill="${fill}"/>
      <path d="M85.2,423 Q91,427.4 97,423" fill="none" stroke="#000" stroke-opacity=".12" stroke-width="1"/>${extra}`,
 });
 
