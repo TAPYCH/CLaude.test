@@ -49,7 +49,7 @@ export default {
         { weight: 8, points: 3, r: 22, sfx: 'coin', draw: (c, x, y, r) => drawEmoji(c, t[2], x, y, r) },
         { weight: 12, points: 0, bad: true, stun: 0.8, r: 22, spin: true, draw: (c, x, y, r) => drawEmoji(c, '🌀', x, y, r) },
       ],
-      hint: `${pet ? pet.name : 'Питомец'} проголодался! Веди влево-вправо`,
+      hint: `${pet ? pet.name : 'Питомец'} хочет вкусняшек! Веди влево-вправо`,
     });
   },
 };

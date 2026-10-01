@@ -243,7 +243,7 @@ function appShop(tab = 'clothes') {
             <button class="btn small ${has ? 'ghost' : 'orange'}" ${S.money < t.price ? 'disabled' : ''}>${has ? 'Ещё одного · ' : 'Завести · '}${money(t.price)}</button></div></div>`);
         card.querySelector('button').addEventListener('click', async () => {
           sfx('click');
-          const name = await prompt({ icon: t.emoji, title: `Как назовём ${t.name.toLowerCase()}а?`.replace('ка?', 'ка?'), value: t.defaultName, ok: 'Забрать домой 💕' });
+          const name = await prompt({ icon: t.emoji, title: `Как назовём ${t.acc}?`, value: t.defaultName, ok: 'Забрать домой 💕' });
           if (!name) return;
           if (adoptPet(type, name)) {
             toast({ icon: t.emoji, title: `${name} теперь живёт с Ланой!`, text: 'Нажми на питомца в комнате' });

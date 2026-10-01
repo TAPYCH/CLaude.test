@@ -106,7 +106,7 @@ function holidays() {
 function hourly(h) {
   bus.emit('hour', { h });
   const hungry = S.pets.find((p) => p.hunger < 20);
-  if (hungry && h % 4 === 0 && S.started) toast({ icon: '🥺', title: `${hungry.name} проголодался`, text: 'Нажми на питомца → «Покормить»' });
+  if (hungry && h % 4 === 0 && S.started) toast({ icon: '🥺', title: `${hungry.name} хочет кушать`, text: 'Нажми на питомца → «Покормить»' });
   if (h === 3 && !(game.running && game.running.id === 'sleep')) S.flags.owl = true;
   // a love note once a day at a pseudo-random hour between 9 and 22
   const loveHour = 9 + ((S.day * 7) % 13);

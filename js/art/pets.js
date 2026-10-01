@@ -11,7 +11,7 @@ const shadow = `<ellipse cx="60" cy="105" rx="34" ry="5" fill="#000" opacity=".1
 
 export const PET_TYPES = {
   cat: {
-    name: 'Котик', price: 2500, food: 1, emoji: '🐱', sound: 'purr',
+    acc: 'котика', name: 'Котик', price: 2500, food: 1, emoji: '🐱', sound: 'purr',
     desc: 'Рыжий мурлыка. Сильно поднимает настроение.',
     bonus: { fun: 1.3 },
     defaultName: 'Персик',
@@ -34,7 +34,7 @@ export const PET_TYPES = {
       </g>`,
   },
   corgi: {
-    name: 'Корги', price: 4000, food: 2, emoji: '🐶', sound: 'woof',
+    acc: 'корги', name: 'Корги', price: 4000, food: 2, emoji: '🐶', sound: 'woof',
     desc: 'Королевская улыбка и короткие лапки. Любит прогулки.',
     bonus: { fitness: 1.3 },
     defaultName: 'Бублик',
@@ -56,7 +56,7 @@ export const PET_TYPES = {
       </g>`,
   },
   hamster: {
-    name: 'Хомячок', price: 900, food: 0.5, emoji: '🐹', sound: 'pop',
+    acc: 'хомячка', name: 'Хомячок', price: 900, food: 0.5, emoji: '🐹', sound: 'pop',
     desc: 'Круглый пушистый комочек. Ест совсем чуть-чуть.',
     bonus: {},
     defaultName: 'Пончик',
@@ -74,7 +74,7 @@ export const PET_TYPES = {
       </g>`,
   },
   bunny: {
-    name: 'Кролик', price: 1800, food: 1, emoji: '🐰', sound: 'pop',
+    acc: 'кролика', name: 'Кролик', price: 1800, food: 1, emoji: '🐰', sound: 'pop',
     desc: 'Белоснежный пушистик. Делает дом уютнее.',
     bonus: { energy: 1.15 },
     defaultName: 'Зефирка',
@@ -93,7 +93,7 @@ export const PET_TYPES = {
       </g>`,
   },
   parrot: {
-    name: 'Неразлучник', price: 1500, food: 0.5, emoji: '🦜', sound: 'catch',
+    acc: 'попугайчика', name: 'Неразлучник', price: 1500, food: 0.5, emoji: '🦜', sound: 'catch',
     desc: 'Яркий попугайчик. Учит слова и болтает с Ланой.',
     bonus: { social: 1.3 },
     defaultName: 'Кеша',
