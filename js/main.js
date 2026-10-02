@@ -261,7 +261,7 @@ function startGame(firstRun) {
       const q = currentQuest();
       if (q && q.from) sendMessage(q.from.who, q.from.text);
     }, 6000);
-    setTimeout(() => toast({ icon: '👆', title: 'Подсказка', text: 'Комнату можно листать пальцем, а нажатие на пол отправит Лану туда', time: 5000 }), 16000);
+    setTimeout(() => toast({ icon: '👆', title: 'Подсказка', text: 'Нажми в любое место — Лана пойдёт туда. Держи палец — она идёт следом. Стрелки по краям ведут дальше', time: 6000 }), 16000);
     setTimeout(() => toast({ icon: '🧭', title: 'Не знаешь, что делать?', text: 'Телефон → «Мой путь»: глава, советы и цели', time: 5000, onClick: () => openPhone('path') }), 30000);
     setTimeout(() => offerSideQuest(true), 60000);
   }

@@ -149,13 +149,45 @@ function hourly(h) {
     const notes = CONFIG.loveNotes;
     sendMessage('lover', notes[(S.day + (S.stats.replies_lover || 0)) % notes.length]);
   }
-  // ambient chatter
+  // ambient chatter: mostly about what is actually going on in Lana's life
   if (h >= 10 && h <= 21 && Math.random() < 0.12 && S.started) {
-    const keys = Object.keys(AMBIENT);
-    const who = keys[Math.floor(Math.random() * keys.length)];
-    const list = AMBIENT[who];
-    sendMessage(who, list[Math.floor(Math.random() * list.length)]);
+    const ctx = contextMessages();
+    let msg;
+    if (ctx.length && Math.random() < 0.65) msg = ctx[Math.floor(Math.random() * ctx.length)];
+    else {
+      const keys = Object.keys(AMBIENT);
+      const who = keys[Math.floor(Math.random() * keys.length)];
+      const list = AMBIENT[who];
+      msg = [who, list[Math.floor(Math.random() * list.length)]];
+    }
+    if (msg && msg[1] !== S.flags.lastAmbient) {
+      S.flags.lastAmbient = msg[1];
+      sendMessage(msg[0], msg[1]);
+    }
   }
+}
+
+/** Messages that react to Lana's current situation. */
+function contextMessages() {
+  const out = [];
+  const wx = weatherOf(S.day, S.city);
+  const pet = S.pets[0];
+  if (S.needs.hunger < 30) out.push(['mom', 'Ты сегодня нормально ела? Я по сообщениям чувствую, что голодная 😤 Иди покушай!']);
+  if (S.needs.energy < 25) out.push(['lover', 'Ты совсем устала, я вижу 🥺 Ложись пораньше, ладно?']);
+  if (S.needs.social < 30) out.push(['amra', 'Ты куда пропала?! Напиши хоть смайлик, я скучаю 😭']);
+  if (S.debt > 0) out.push(['mom', 'Доча, если с деньгами туго — не стесняйся, скажи. Мы с папой поможем 💛']);
+  if (!S.flags.diploma && S.grades < 50) out.push(['katya', 'Лан, у тебя успеваемость проседает 😬 Пошли вместе на пары, я буду будить!']);
+  if (!S.flags.diploma && S.grades >= 80) out.push(['teacher', 'Лана, приятно видеть ваши успехи. Так держать.']);
+  if (S.city === 'moscow' && wx === 'rain') out.push(['mom', 'В Москве дождь? Возьми зонтик и не промочи ноги ☔']);
+  if (S.city === 'moscow' && wx === 'snow') out.push(['grandma', 'Внученька, говорят, у вас снег! Шапку надень обязательно 🧣']);
+  if (S.city === 'abkhazia') out.push(['katya', 'Ты на море, а мы тут на парах 😭 Пришли фоточку!']);
+  if (S.city === 'abkhazia') out.push(['lover', 'Как там Сухум? Обними маму от меня 🌴']);
+  if (pet) out.push(['lover', `Как там ${pet.name}? Погладь от меня 🐾`]);
+  if (pet && pet.hunger < 30) out.push(['mom', `А ${pet.name} у тебя покушал? Не забывай про малыша 🥣`]);
+  if (S.decor && S.decor.length >= 3) out.push(['katya', 'Зашла к тебе — комната как с Пинтереста! 😍']);
+  if (S.lab && S.lab.owned) out.push(['mom', 'Тётя Мадина хвастается всем, что у неё арендует лучший зубной техник Сухума 😄']);
+  if (weekday(S.day) >= 5) out.push(['amra', 'Выходные!!! Какие планы? 💃']);
+  return out;
 }
 
 // ---------------------------------------------------------------- main tick
@@ -503,6 +535,7 @@ async function minigameAction(id, a, mode = null) {
   advanceMinutes(a.minutes || 30, 0.6);
   stat('mg_' + mg + '_played');
   stat('starsTotal', res.stars || 0);
+  if (res.stars >= 3) stat('mg3_' + mg);
   if (id === 'labOrders') S.lab.orders = (S.lab.orders || 0) + 1;
   if (res.score != null) record(mg, res.score);
   if (mg === 'barista') {
