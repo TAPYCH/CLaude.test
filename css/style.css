@@ -440,7 +440,7 @@ svg { display: block; }
 @keyframes fade-in { from { opacity: 0; } }
 @keyframes fade-out { to { opacity: 0; } }
 .dialog {
-  position: relative; width: min(400px, calc(100vw - 32px)); max-height: calc(100vh - 40px); overflow: auto; padding: 26px 22px 22px;
+  position: relative; width: min(400px, calc(100vw - 32px)); max-height: calc(100vh - 40px); max-height: calc(100dvh - 40px); overflow: auto; padding: 26px 22px 22px;
   border-radius: var(--r-l); background: var(--paper); box-shadow: var(--shadow-l); text-align: center;
   animation: dialog-in 0.45s var(--ease-bounce) both;
 }

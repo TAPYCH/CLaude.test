@@ -1,0 +1,23 @@
+// Measures frame rate on a throttled phone: node tools/fps.mjs [scene] [lite]
+import { chromium } from 'playwright';
+const [, , scene = 'beach', lite = '0'] = process.argv;
+const b = await chromium.launch();
+const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+const p = await ctx.newPage();
+const cdp = await ctx.newCDPSession(p);
+await p.goto('http://localhost:8080/index.html');
+await p.evaluate(() => localStorage.clear());
+await p.reload();
+await p.waitForTimeout(1400);
+await p.$eval('.title-actions .btn', (e) => e.click());
+await p.waitForTimeout(400);
+await p.$eval('.story .skip', (e) => e.click());
+await p.waitForTimeout(2000);
+await p.evaluate(() => setInterval(() => { const cc = document.querySelector('.chapter-card:not(.closing)'); if (cc) cc.click(); const d = document.querySelector('.dlg:not(.closing) .dlg-skip'); if (d) d.click(); document.querySelectorAll('.toast').forEach((t) => t.remove()); }, 300));
+await p.waitForTimeout(1500);
+await p.evaluate(async ({ scene, lite }) => { const g = await import('/js/game.js'); const S = __lana.S; S.settings.lite = lite === '1'; window.dispatchEvent(new window.Event('lite-change')); S.city = ['home', 'beach', 'garden', 'mylab'].includes(scene) ? 'abkhazia' : 'moscow'; await g.goScene(scene, { transition: false }); }, { scene, lite });
+await p.waitForTimeout(1000);
+await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
+const fps = await p.evaluate(() => new Promise((res) => { let n = 0; const t0 = performance.now(); let worst = 0; let last = t0; const f = (t) => { n++; worst = Math.max(worst, t - last); last = t; if (t - t0 < 4000) requestAnimationFrame(f); else res({ fps: Math.round((n * 1000) / (t - t0)), worstMs: Math.round(worst) }); }; requestAnimationFrame(f); }));
+console.log(scene, lite === '1' ? 'lite' : 'full', JSON.stringify(fps));
+await b.close();

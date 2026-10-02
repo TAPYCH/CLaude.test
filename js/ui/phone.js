@@ -13,7 +13,7 @@ import { currentQuest, currentChapter, questProgressText, questFraction, sideDef
 import { goScene, travel, excursion, TRAVEL, adoptPet, feedPet, pauseTime, resumeTime, playPetGame, rentLab, buyEquipment, buyDecor, baristaRank, labBonus } from '../game.js';
 import { DECOR } from '../data/decor.js';
 import { openWardrobe } from './wardrobe.js';
-import { el, app, esc, wait } from './dom.js';
+import { el, app, esc, wait, vibrate, setHaptics } from './dom.js';
 import { sfx, setAudio } from '../audio.js';
 import { dialog, prompt } from './modal.js';
 import { toast } from './fx.js';
@@ -873,6 +873,7 @@ function appSettings() {
       <button class="setting" data-help><span>❓ Как играть</span><span>›</span></button>
       <button class="setting" data-s="sound"><span>🔊 Звуки</span><span class="toggle ${S.settings.sound ? 'on' : ''}"></span></button>
       <button class="setting" data-s="music"><span>🎵 Музыка</span><span class="toggle ${S.settings.music ? 'on' : ''}"></span></button>
+      <button class="setting" data-hap><span>📳 Вибрация<small>Лёгкий отклик на касания и награды (Android)</small></span><span class="toggle ${S.settings.haptics !== false ? 'on' : ''}"></span></button>
       <button class="setting" data-lite><span>🔋 Экономный режим<small>Меньше анимаций фона — плавнее на слабых телефонах${S.settings.lite == null ? ' (выбрано автоматически)' : ''}</small></span><span class="toggle ${document.body.classList.contains('lite') ? 'on' : ''}"></span></button>
       ${canInstall() ? '<button class="setting" data-install><span>📲 Установить на телефон<small>Иконка на главном экране, работает без интернета</small></span><span>›</span></button>' : '<div class="setting"><span>📲 Установка<small>iPhone: «Поделиться» → «На экран Домой»</small></span></div>'}
       <button class="setting" data-export><span>💾 Сохранение<small>Скопировать код сохранения</small></span><span>›</span></button>
@@ -890,6 +891,14 @@ function appSettings() {
         render();
       }),
     );
+    body.querySelector('[data-hap]').addEventListener('click', () => {
+      S.settings.haptics = S.settings.haptics === false;
+      setHaptics(S.settings.haptics);
+      if (S.settings.haptics) vibrate(20);
+      sfx('click');
+      save();
+      render();
+    });
     body.querySelector('[data-lite]').addEventListener('click', () => {
       S.settings.lite = !document.body.classList.contains('lite');
       window.dispatchEvent(new window.Event('lite-change'));

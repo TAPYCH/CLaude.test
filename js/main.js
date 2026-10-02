@@ -18,7 +18,7 @@ import { dialog } from './ui/modal.js';
 import { setAudio, playMusic, sfx, unlockAudio } from './audio.js';
 import { initPwa } from './pwa.js';
 import { startBlinking } from './ui/blink.js';
-import { wait } from './ui/dom.js';
+import { wait, vibrate, setHaptics } from './ui/dom.js';
 
 const appEl = document.getElementById('app');
 
@@ -91,6 +91,7 @@ function wireNotifications() {
   });
   async function questDoneDialog(q) {
     confetti(70);
+    vibrate([20, 60, 30]);
     sfx('fanfare');
     const rw = [];
     if (q.reward.money) rw.push(`💰 +${q.reward.money} ₽`);
@@ -112,6 +113,7 @@ function wireNotifications() {
   }
   bus.on('dailyDone', (d) => {
     sfx('coin');
+    vibrate(15);
     toast({ icon: '✅', title: `Задание дня: ${d.text}`, text: `+${d.money} ₽` });
   });
   bus.on('achievement', async (a) => {
@@ -228,6 +230,7 @@ function startGame(firstRun) {
   mountWorld(appEl, {
     onHotspot: (h, rect) => {
       if (isBusy()) return;
+      vibrate(8);
       showActionMenu(h, rect);
     },
     onPet: (p, rect) => {
@@ -304,6 +307,7 @@ async function boot() {
   const hasSave = load() && S.started;
   setAudio({ sound: S.settings.sound, music: S.settings.music });
   applyLite();
+  setHaptics(S.settings.haptics !== false);
   const splash = document.querySelector('.splash');
   if (document.fonts && document.fonts.ready) await Promise.race([document.fonts.ready, wait(1500)]);
   splash.classList.add('hide');

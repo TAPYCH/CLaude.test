@@ -13,7 +13,10 @@ export function esc(s) {
 
 export const app = () => document.getElementById('app');
 
+let haptics = true;
+export const setHaptics = (v) => (haptics = !!v);
 export function vibrate(ms = 12) {
+  if (!haptics) return;
   try {
     if (navigator.vibrate) navigator.vibrate(ms);
   } catch (e) {
