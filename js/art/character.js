@@ -109,7 +109,7 @@ function renderEye(p, mode, side) {
         <path d="${LID_PATH}" fill="${EYE.liner}"/>
         <path d="M-12.6,-5.6 q-2.6,-.9 -4.4,-.2 M-10,-9.4 q-1.6,-2.4 -3.6,-3" stroke="${EYE.liner}" stroke-width="1.15" fill="none" stroke-linecap="round"/>
       </g></g>
-    </g><g class="eye-shut"${mirror}>${closedEye('closed')}</g></g>`;
+    </g><g class="eye-shut" opacity="0"${mirror}>${closedEye('closed')}</g></g>`;
 }
 
 function brows(expr, hair) {

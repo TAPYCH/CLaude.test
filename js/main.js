@@ -1,5 +1,5 @@
 // Boot sequence & main loop.
-import { S, load, save, reset, SKILLS } from './core/state.js';
+import { S, load, save, reset, SKILLS, addMoney, changeNeed } from './core/state.js';
 import { bus } from './core/bus.js';
 import { initProgress, ensureDailies, checkAchievements, sendMessage, currentQuest, offerSideQuest } from './core/progress.js';
 import { CHAPTERS } from './data/quests.js';
@@ -166,6 +166,42 @@ function floatGrade(delta) {
   }, 500);
 }
 
+// ---------------------------------------------------------------- daily login reward (real days)
+const LOGIN_REWARDS = [300, 400, 500, 700, 900, 1200, 2500];
+function todayKey(d = new Date()) {
+  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+}
+async function dailyLogin() {
+  const today = todayKey();
+  const L = S.login || { last: null, streak: 0 };
+  if (L.last === today) return;
+  const y = new Date();
+  y.setDate(y.getDate() - 1);
+  const streak = L.last === todayKey(y) ? (L.streak % 7) + 1 : 1;
+  S.login = { last: today, streak };
+  const reward = LOGIN_REWARDS[streak - 1];
+  save();
+  await enqueue(async () => {
+    sfx('levelup');
+    await dialog({
+      icon: '🎁',
+      title: 'Подарок за вход',
+      html: `<p style="margin:-4px 0 12px">Заходи каждый день — подарки растут!</p>
+        <div class="login-days">${LOGIN_REWARDS.map((r, i) => `<div class="ld ${i + 1 < streak ? 'got' : i + 1 === streak ? 'today' : ''}"><small>День ${i + 1}</small><b>${i === 6 ? '🎀' : '💰'}</b><span>${r >= 1000 ? (r / 1000).toFixed(1).replace('.0', '') + 'к' : r}</span></div>`).join('')}</div>`,
+      buttons: [{ label: `Забрать ${reward.toLocaleString('ru-RU')} ₽`, value: true, cls: 'mint' }],
+      dismissable: false,
+    });
+    addMoney(reward, 'login');
+    if (streak === 7) {
+      changeNeed('fun', 30);
+      confetti(80);
+    }
+    sfx('coin');
+    updateHud();
+    save();
+  });
+}
+
 // ---------------------------------------------------------------- loop
 let lastT = performance.now();
 let hudT = 0;
@@ -214,6 +250,7 @@ function startGame(firstRun) {
   game.lastHour = Math.floor(S.minutes / 60);
   playMusic(SCENES[S.scene].music);
   setTimeout(() => showBanner(SCENES[S.scene]), 400);
+  setTimeout(dailyLogin, firstRun ? 40000 : 1500);
   if (S.chapterSeen < 1) {
     S.chapterSeen = 1;
     setTimeout(() => enqueue(() => showChapter(CHAPTERS[0])), 1200);
@@ -248,11 +285,20 @@ function startGame(firstRun) {
   });
 }
 
+/** Economy mode for weaker phones: no ambient scene animation, no glass blur. */
+export function applyLite() {
+  let lite = S.settings.lite;
+  if (lite == null) lite = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 3;
+  document.body.classList.toggle('lite', !!lite);
+}
+window.addEventListener('lite-change', applyLite);
+
 async function boot() {
   initPwa();
   startBlinking();
   const hasSave = load() && S.started;
   setAudio({ sound: S.settings.sound, music: S.settings.music });
+  applyLite();
   const splash = document.querySelector('.splash');
   if (document.fonts && document.fonts.ready) await Promise.race([document.fonts.ready, wait(1500)]);
   splash.classList.add('hide');

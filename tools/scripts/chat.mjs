@@ -1,0 +1,51 @@
+// Opens the messenger and a chat, sends a quick reply.
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+export default async ({ page, shot }) => {
+  await page.goto('http://localhost:8080/index.html');
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await sleep(1400);
+  await page.$eval('.title-actions .btn', (e) => e.click());
+  await sleep(400);
+  await page.$eval('.story .skip', (e) => e.click());
+  await sleep(800);
+  await page.evaluate(() => setInterval(() => {
+    const cc = document.querySelector('.chapter-card:not(.closing)'); if (cc) return cc.click();
+    const d = document.querySelector('.dlg:not(.closing) .dlg-skip'); if (d) d.click();
+  }, 200));
+  await sleep(7000);
+  await page.evaluate(async () => {
+    const p = await import('/js/core/progress.js');
+    p.sendMessage('lover', 'Как прошёл день? Расскажешь вечером? 🥰');
+    p.sendMessage('amra', 'Смотри, какой закат в Сухуме сегодня 🌅');
+    p.sendMessage('katya', 'Лан, скинь конспект по материаловедению? Я проспала 🙈\n\n📌 Просьба: Позанимайся конспектами (до 2 дн.)');
+  });
+  await sleep(500);
+  await page.click('.phone-btn');
+  await sleep(600);
+  await page.click('[data-app="messages"]');
+  await sleep(600);
+  await shot('chat1-list');
+  await page.click('.chat-row >> nth=0');
+  await sleep(700);
+  await shot('chat2-open');
+  await page.click('.reply-chips button >> nth=0');
+  await sleep(300);
+  await shot('chat3-sent');
+  await sleep(2600);
+  await shot('chat4-answer');
+  await page.evaluate(() => { const S = __lana.S; S.album.unshift({ outfit: JSON.parse(JSON.stringify(S.outfit)), scene: 'dorm', day: S.day, min: 600 }); });
+  await page.click('[data-panel="stickers"]');
+  await sleep(300);
+  await shot('chat5-stickers');
+  await page.click('[data-st] >> nth=0');
+  await sleep(3000);
+  await page.click('[data-panel="photos"]');
+  await sleep(300);
+  await page.click('[data-ph] >> nth=0');
+  await sleep(3500);
+  await shot('chat6-photo');
+  await page.click('.chat-head .back');
+  await sleep(400);
+  await shot('chat7-list');
+};

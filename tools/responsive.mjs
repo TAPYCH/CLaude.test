@@ -2,7 +2,7 @@
 import { chromium } from 'playwright';
 const OUT = process.argv[2] || '/tmp';
 const DEVICES = [
-  ['se', 375, 667, true], ['a360', 360, 740, true], ['promax', 430, 932, true],
+  ['se1', 320, 568, true], ['s360', 360, 640, true], ['se', 375, 667, true], ['a360', 360, 740, true], ['promax', 430, 932, true],
   ['ipadP', 820, 1180, true], ['ipadL', 1180, 820, true], ['land', 844, 390, true],
 ];
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

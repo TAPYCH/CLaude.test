@@ -33,6 +33,11 @@ export const world = {
   onPet: null,
   onFloor: null,
   dragging: false,
+  follow: true,
+  camV: 0,
+  walkV: 0,
+  holdWalk: false,
+  pointerX: 0,
 };
 
 export function mountWorld(container, handlers) {
@@ -40,6 +45,7 @@ export function mountWorld(container, handlers) {
   world.root = el('<div id="world"></div>');
   container.appendChild(world.root);
   setupDrag();
+  buildEdges();
   window.addEventListener('resize', layout);
 }
 
@@ -65,6 +71,8 @@ export function loadScene(id, x = null) {
   buildWeather();
   layout();
   centerCamera(true);
+  world.follow = false;
+  world.camV = 0;
 }
 
 function paintBackground(force = false) {
@@ -293,6 +301,8 @@ export function layout() {
   };
   if (world.lana) {
     place(world.lana, world.lanaX, LANA_H, LANA_W);
+    world.lana.style.left = '0px';
+    world.lana.style.transform = `translate3d(${(world.lanaX - LANA_W / 2) * s}px,0,0)`;
     world.lana.style.setProperty('--s', ((LANA_H * s) / 420).toFixed(3));
   }
   for (const n of world.inner.querySelectorAll('.actor.npc')) {
@@ -300,7 +310,11 @@ export function layout() {
     place(n, +n.dataset.x, h, (h * 200) / 450);
     n.style.top = (floor - 20 - h) * s + 'px';
   }
-  if (world.pet) place(world.pet, world.petX, 135, 148);
+  if (world.pet) {
+    place(world.pet, world.petX, 135, 148);
+    world.pet.style.left = '0px';
+    world.pet.style.transform = `translate3d(${(world.petX - 74) * s}px,0,0)`;
+  }
   applyCamera();
 }
 
@@ -326,6 +340,27 @@ export function centerCamera(instant = false) {
 function applyCamera() {
   world.camX = clampCam(world.camX);
   world.inner.style.transform = `translate3d(${-world.camX * world.scale}px,0,0)`;
+  if (world.edges) {
+    const max = world.scene.width - viewWidthUnits();
+    world.edges[0].classList.toggle('on', world.camX > 20);
+    world.edges[1].classList.toggle('on', world.camX < max - 20);
+  }
+}
+
+/** Edge chevrons: show there is more room and walk Lana that way. */
+function buildEdges() {
+  world.edges = [-1, 1].map((dir) => {
+    const b = el(`<button class="world-edge ${dir < 0 ? 'l' : 'r'}" aria-label="${dir < 0 ? 'Идти влево' : 'Идти вправо'}"><span>${dir < 0 ? '‹' : '›'}</span></button>`);
+    b.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const vw = viewWidthUnits();
+      const x = Math.max(90, Math.min(world.scene.width - 90, world.lanaX + dir * vw * 0.7));
+      world.onFloor && world.onFloor(x);
+    });
+    b.addEventListener('pointerdown', (e) => e.stopPropagation());
+    world.root.parentNode.appendChild(b);
+    return b;
+  });
 }
 
 export function worldToScreen(x, y) {
@@ -337,90 +372,161 @@ export function lanaScreenPos() {
 }
 
 function setupDrag() {
+  // Gestures: drag = look around (with inertia) · tap = walk there · hold = keep walking towards the finger.
   let startX = 0;
   let startCam = 0;
   let moved = false;
   let down = false;
+  let lastX = 0;
+  let lastT = 0;
+  let vel = 0;
+  let holdTimer = 0;
+  const destAt = (clientX) => {
+    const rect = world.root.getBoundingClientRect();
+    return Math.max(90, Math.min(world.scene.width - 90, world.camX + (clientX - rect.left) / world.scale));
+  };
   world.root.addEventListener('pointerdown', (e) => {
     if (e.target.closest('.hotspot, .actor.pet, .actor.npc')) return;
+    if (e.button != null && e.button > 0) return;
     down = true;
     moved = false;
-    startX = e.clientX;
+    startX = lastX = e.clientX;
+    lastT = performance.now();
+    vel = 0;
     startCam = world.camX;
+    world.camV = 0;
+    world.pointerX = e.clientX;
+    clearTimeout(holdTimer);
+    holdTimer = setTimeout(() => {
+      if (!down || moved) return;
+      world.holdWalk = true;
+      world.onFloor && world.onFloor(destAt(world.pointerX));
+    }, 280);
   });
   window.addEventListener('pointermove', (e) => {
     if (!down) return;
+    world.pointerX = e.clientX;
+    if (world.holdWalk) return;
     const dx = e.clientX - startX;
-    if (Math.abs(dx) > 8) {
+    if (!moved && Math.abs(dx) > 9) {
       moved = true;
+      clearTimeout(holdTimer);
       world.dragging = true;
+      world.follow = false;
       world.root.classList.add('dragging');
       world.camTarget = null;
+    }
+    if (moved) {
+      const now = performance.now();
+      const dt = Math.max(1, now - lastT);
+      vel = vel * 0.6 + ((-(e.clientX - lastX) / world.scale) / dt) * 1000 * 0.4;
+      lastX = e.clientX;
+      lastT = now;
       world.camX = startCam - dx / world.scale;
       applyCamera();
     }
   });
-  window.addEventListener('pointerup', (e) => {
+  const end = (e) => {
     if (!down) return;
     down = false;
+    clearTimeout(holdTimer);
     world.root.classList.remove('dragging');
-    setTimeout(() => (world.dragging = false), 50);
-    if (!moved && e.target.closest && e.target.closest('#world') && !e.target.closest('.hotspot, .actor.pet, .actor.npc')) {
-      const rect = world.root.getBoundingClientRect();
-      const wx = world.camX + (e.clientX - rect.left) / world.scale;
-      const wy = (e.clientY - rect.top) / world.scale;
-      if (wy > 760) {
-        const ripple = el('<div class="tap-ripple"></div>');
-        ripple.style.left = wx * world.scale + 'px';
-        ripple.style.top = Math.max(wy, 790) * world.scale + 'px';
-        world.inner.appendChild(ripple);
-        setTimeout(() => ripple.remove(), 650);
-        world.onFloor && world.onFloor(Math.max(90, Math.min(world.scene.width - 90, wx)));
-      }
+    if (world.holdWalk) {
+      world.holdWalk = false;
+      // ease to a stop just ahead instead of freezing mid-step
+      if (world.walking && world.walking.retarget) world.walking.retarget(world.lanaX + world.facing * 50);
+      return;
     }
-  });
+    if (moved) {
+      world.camV = performance.now() - lastT < 80 ? Math.max(-2600, Math.min(2600, vel)) : 0;
+      setTimeout(() => (world.dragging = false), 30);
+      return;
+    }
+    world.dragging = false;
+    if (e.type === 'pointerup' && e.target.closest && e.target.closest('#world') && !e.target.closest('.hotspot, .actor.pet, .actor.npc')) {
+      const x = destAt(e.clientX);
+      const ripple = el('<div class="tap-ripple"></div>');
+      ripple.style.left = x * world.scale + 'px';
+      ripple.style.top = (world.scene.floor - 40) * world.scale + 'px';
+      world.inner.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 650);
+      world.onFloor && world.onFloor(x);
+    }
+  };
+  window.addEventListener('pointerup', end);
+  window.addEventListener('pointercancel', end);
 }
 
 // ---------------------------------------------------------------- walking
+/** Walk to x with smooth acceleration/braking. A floor walk can be re-targeted while moving. */
 export function walkTo(x) {
+  if (world.walking && world.walking.retarget && world.walking.free && world.holdWalk) {
+    world.walking.retarget(x);
+    return world.walking.promise;
+  }
   if (world.walking) world.walking.cancel();
-  const from = world.lanaX;
-  const dist = Math.abs(x - from);
-  if (dist < 8) return Promise.resolve(true);
-  world.facing = x < from ? -1 : 1;
-  world.lana.classList.toggle('face-left', world.facing < 0);
+  if (Math.abs(x - world.lanaX) < 8) return Promise.resolve(true);
+  let dest = x;
+  const face = () => {
+    const f = dest < world.lanaX ? -1 : 1;
+    if (f !== world.facing) {
+      world.facing = f;
+      world.lana.classList.toggle('face-left', f < 0);
+    }
+  };
+  face();
   world.lana.classList.add('walking');
+  world.follow = true;
+  world.camTarget = null;
   lanaAnim(null);
-  return new Promise((resolve) => {
-    let cancelled = false;
-    let stepAcc = 0;
-    world.walking = {
-      cancel() {
-        cancelled = true;
-        resolve(false);
-      },
-      update(dt) {
-        if (cancelled) return true;
-        const d = WALK_SPEED * dt;
-        stepAcc += d;
-        if (stepAcc > 120) {
-          stepAcc = 0;
-          sfx('step');
-          if (world.scene.indoor === false) dustPuff(world.lanaX);
-        }
-        const remaining = x - world.lanaX;
-        if (Math.abs(remaining) <= d) {
-          world.lanaX = x;
-          world.lana.classList.remove('walking');
-          S.x = x;
-          resolve(true);
-          return true;
-        }
-        world.lanaX += Math.sign(remaining) * d;
-        return false;
-      },
-    };
-  }).finally(() => {
+  let resolveFn;
+  const promise = new Promise((resolve) => (resolveFn = resolve));
+  let cancelled = false;
+  let stepAcc = 0;
+  let v = world.walkV || 0;
+  const w = {
+    free: true,
+    promise,
+    cancel() {
+      cancelled = true;
+      world.walkV = 0;
+      resolveFn(false);
+    },
+    retarget(nx) {
+      dest = Math.max(90, Math.min(world.scene.width - 90, nx));
+      if (Math.abs(dest - world.lanaX) > 4) face();
+    },
+    update(dt) {
+      if (cancelled) return true;
+      const remaining = dest - world.lanaX;
+      const dir = Math.sign(remaining);
+      if (dir && dir !== world.facing) face();
+      // accelerate, then brake so she stops exactly on the spot
+      v = Math.min(WALK_SPEED, v + WALK_SPEED * 6 * dt);
+      v = Math.min(v, Math.sqrt(2 * WALK_SPEED * 5 * Math.abs(remaining)) + 40);
+      const d = v * dt;
+      stepAcc += d;
+      if (stepAcc > 120) {
+        stepAcc = 0;
+        sfx('step');
+        if (world.scene.indoor === false) dustPuff(world.lanaX);
+      }
+      if (Math.abs(remaining) <= Math.max(d, 1.5)) {
+        if (world.holdWalk) return false; // finger still down: wait for a new target
+        world.lanaX = dest;
+        world.walkV = 0;
+        world.lana.classList.remove('walking');
+        S.x = dest;
+        resolveFn(true);
+        return true;
+      }
+      world.lanaX += dir * d;
+      return false;
+    },
+  };
+  world.walking = w;
+  return promise.finally(() => {
+    if (world.lana && world.walking !== w) return;
     if (world.lana) world.lana.classList.remove('walking');
   });
 }
@@ -428,20 +534,35 @@ export function walkTo(x) {
 export function updateWorld(dt) {
   if (!world.scene) return;
   if (world.walking && world.walking.update(dt)) world.walking = null;
-  // camera follow
+  // hold-to-walk: keep steering towards the finger as the camera moves
+  if (world.holdWalk && world.walking && world.walking.retarget) {
+    const rect = world.root.getBoundingClientRect();
+    world.walking.retarget(world.camX + (world.pointerX - rect.left) / world.scale);
+  }
+  // camera: explicit target → follow Lana while she walks (looking ahead) → inertia after a swipe
   if (!world.dragging) {
     const vw = viewWidthUnits();
-    const margin = vw * 0.28;
     let target = world.camTarget;
-    if (world.walking || target == null) {
-      if (world.lanaX - world.camX < margin) target = world.lanaX - margin;
-      else if (world.lanaX - world.camX > vw - margin) target = world.lanaX - (vw - margin);
+    if (target == null && world.follow) {
+      // keep settling after she stops; a user swipe (follow=false) is never fought
+      const lead = world.facing * vw * (vw < 700 ? 0.16 : 0.1);
+      target = world.lanaX - vw / 2 + lead;
     }
     if (target != null) {
       target = clampCam(target);
-      world.camX += (target - world.camX) * Math.min(1, dt * 5);
-      if (Math.abs(target - world.camX) < 0.5) world.camTarget = null;
+      const k = 1 - Math.exp(-dt * (world.camTarget != null ? 6 : 3.2));
+      world.camX += (target - world.camX) * k;
+      if (world.camTarget != null && Math.abs(target - world.camX) < 0.5) world.camTarget = null;
+      world.camV = 0;
+      if (!world.walking && Math.abs(target - world.camX) < 0.3) world.follow = false;
       applyCamera();
+    } else if (world.camV) {
+      world.camX += world.camV * dt;
+      world.camV *= Math.exp(-dt * 4.5);
+      if (Math.abs(world.camV) < 8) world.camV = 0;
+      const before = world.camX;
+      applyCamera();
+      if (world.camX !== before) world.camV = 0; // hit the edge
     }
   }
   // pet follows
@@ -456,8 +577,9 @@ export function updateWorld(dt) {
   }
   // positions
   const s = world.scale;
-  if (world.lana) world.lana.style.left = (world.lanaX - LANA_W / 2) * s + 'px';
-  if (world.pet) world.pet.style.left = (world.petX - 74) * s + 'px';
+  // compositor-only movement (no layout per frame)
+  if (world.lana) world.lana.style.transform = `translate3d(${((world.lanaX - LANA_W / 2) * s).toFixed(1)}px,0,0)`;
+  if (world.pet) world.pet.style.transform = `translate3d(${((world.petX - 74) * s).toFixed(1)}px,0,0)`;
   // mood colour of the plumbob
   if (world.lana) {
     const m = mood();
@@ -475,6 +597,20 @@ export function updateWorld(dt) {
 let questKey = '';
 function markQuestTarget() {
   const q = currentQuest();
+  // point the edge chevron towards an off-screen quest target
+  if (world.edges) {
+    let dir = 0;
+    if (q && q.target && q.target.scene === world.scene.id) {
+      const hs = world.scene.hotspots.find((h) => h.id === q.target.hotspot);
+      if (hs) {
+        const vw = viewWidthUnits();
+        if (hs.x < world.camX + 40) dir = -1;
+        else if (hs.x > world.camX + vw - 40) dir = 1;
+      }
+    }
+    world.edges[0].classList.toggle('quest', dir < 0);
+    world.edges[1].classList.toggle('quest', dir > 0);
+  }
   const key = (q ? q.id : '') + world.scene.id;
   if (key === questKey) return;
   questKey = key;

@@ -231,7 +231,7 @@ export const LEGACY_ORDER = ['breakfast', 'lecture', 'crown', 'barista', 'fashio
 export const SIDE_QUESTS = [
   { id: 's_notes', who: 'katya', icon: '📒', title: 'Конспект для Кати', text: 'Лан, скинь конспект по материаловедению? Я проспала 🙈', desc: 'Позанимайся конспектами', goal: { type: 'action', ids: ['study'], count: 1 }, days: 2, reward: { money: 300, social: 15 }, when: (S) => S.city === 'moscow' },
   { id: 's_sweets', who: 'mom', icon: '🍬', title: 'Московские конфеты', text: 'Привези бабушке московских конфет, она их обожает 🍬', desc: 'Купи «Конфеты Москва» в продуктах и привези в Абхазию', goal: { type: 'flag', flag: 'sweetsDelivered', count: 1 }, days: 14, reward: { money: 1200 }, when: (S) => S.city === 'moscow' && S.quest.index >= 6 },
-  { id: 's_photo', who: 'amra', icon: '🤳', title: 'Фото для Амры', text: 'Сделай селфи в новом образе и скинь мне! 😍', desc: 'Сделай селфи', goal: { type: 'action', ids: ['selfie'], count: 1 }, days: 2, reward: { money: 250, social: 10 }, when: () => true },
+  { id: 's_photo', who: 'amra', icon: '🤳', title: 'Фото для Амры', text: 'Сделай селфи в новом образе и скинь мне! 😍', desc: 'Сделай селфи или пришли ей фото в чат', goal: { type: 'action', ids: ['selfie', 'sendPhoto'], count: 1 }, days: 2, reward: { money: 250, social: 10 }, when: () => true },
   { id: 's_harvest', who: 'grandma', icon: '🍊', title: 'Урожай для бабушки', text: 'Помоги собрать мандарины, внученька, спина уже не та…', desc: 'Набери 20+ мандаринов за сбор', goal: { type: 'minigame', id: 'mandarins', score: 20, count: 1 }, days: 3, reward: { money: 900 }, when: (S) => S.city === 'abkhazia' },
   { id: 's_report', who: 'teacher', icon: '📑', title: 'Доклад', text: 'Лана, подготовьте доклад о керамике к четвергу.', desc: 'Учи конспекты 2 раза', goal: { type: 'action', ids: ['study'], count: 2 }, days: 4, reward: { money: 500, grades: 8 }, when: (S) => S.city === 'moscow' && !S.flags.diploma },
   { id: 's_shift', who: 'vika', icon: '☕', title: 'Выручи на смене', text: 'Лана, выручай! Заболела бариста, выйдешь на смену? Двойная оплата!', desc: 'Отработай смену в «Пенке»', goal: { type: 'minigame', id: 'barista', count: 1 }, days: 2, reward: { money: 1200 }, when: (S) => S.city === 'moscow' && S.quest.index >= 5 },
@@ -248,7 +248,7 @@ export const DAILY_POOL = [
   { id: 'd_star', icon: '⭐', text: 'Получить 3 звезды в мини-игре', goal: { type: 'minigame', stars: 3, count: 1 }, money: 350 },
   { id: 'd_chat', icon: '💬', text: 'Поболтать с кем-нибудь', goal: { type: 'action', ids: ['friendChat', 'chatGuests', 'momTalk', 'amraChat', 'callMom', 'grandmaTea', 'callLover'], count: 1 }, money: 150 },
   { id: 'd_selfie', icon: '🤳', text: 'Сделать селфи', goal: { type: 'action', ids: ['selfie'], count: 1 }, money: 120 },
-  { id: 'd_reply', icon: '💌', text: 'Ответить любимому', goal: { type: 'reply', count: 1 }, money: 150 },
+  { id: 'd_reply', icon: '💌', text: 'Ответить любимому', goal: { type: 'reply', who: 'lover', count: 1 }, money: 150 },
   { id: 'd_study', icon: '📖', text: 'Позаниматься зуботехникой', goal: { type: 'action', ids: ['study', 'lecture', 'practice', 'typodont', 'memory', 'consult', 'quiz'], count: 1 }, money: 200 },
   { id: 'd_fun', icon: '🎀', text: 'Поднять настроение выше 80', goal: { type: 'need', id: 'fun', value: 80, count: 1 }, money: 150 },
   { id: 'd_pet', icon: '🐾', text: 'Поиграть с питомцем', goal: { type: 'pet', count: 1 }, money: 150, needsPet: true },

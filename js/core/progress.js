@@ -30,7 +30,7 @@ function eventMatches(goal, evt, d) {
     case 'travel':
       return evt === 'travel' && (!goal.to || goal.to === d.to);
     case 'reply':
-      return evt === 'reply';
+      return evt === 'reply' && (!goal.who || goal.who === d.who);
     case 'pet':
       return evt === 'petPlay';
     case 'exam':

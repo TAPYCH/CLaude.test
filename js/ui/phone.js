@@ -4,7 +4,7 @@ import { formatClock, formatDate, money, weekday, plural } from '../core/time.js
 import { QUESTS, DAILY_POOL, CHAPTERS, DREAMS } from '../data/quests.js';
 import { BARISTA_RANKS, EQUIPMENT, LAB_RENT, STIPEND, RENT } from '../data/career.js';
 import { ACHIEVEMENTS } from '../data/achievements.js';
-import { CONTACTS, REPLIES } from '../data/contacts.js';
+import { CONTACTS, REPLIES, ANSWERS, PHOTO_ANSWERS, STICKERS, ONLINE } from '../data/contacts.js';
 import { MAP, EXCURSIONS, postcardArt } from '../data/places.js';
 import { SCENES } from '../data/scenes.js';
 import { PET_TYPES, renderPet } from '../art/pets.js';
@@ -50,6 +50,7 @@ export function openPhone(appId = null) {
       <div class="phone-home"></div>
     </div><button class="phone-close" aria-label="Закрыть телефон"><i></i></button></div></div>`);
   app().appendChild(wrap);
+  document.body.classList.add('phone-open');
   phone = { wrap, screen: wrap.querySelector('.phone-screen'), home: wrap.querySelector('.phone-home') };
   wrap.querySelector('[data-time]').textContent = formatClock(S.minutes);
   wrap.addEventListener('click', (e) => {
@@ -65,6 +66,7 @@ export function closePhone() {
   sfx('whoosh');
   const w = phone.wrap;
   phone = null;
+  document.body.classList.remove('phone-open');
   w.classList.add('closing');
   setTimeout(() => w.remove(), 250);
   resumeTime();
@@ -521,30 +523,72 @@ function appPets() {
 }
 
 // ================================================================ MESSAGES
-function avatarFor(who) {
+const hm = (m) => formatClock(m);
+// SVGs drawn as <img> are rasterised once and cached by the browser — far cheaper than inline DOM.
+const urlCache = new Map();
+function svgUrl(svg) {
+  let u = urlCache.get(svg);
+  if (!u) {
+    u = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    if (urlCache.size > 120) urlCache.clear();
+    urlCache.set(svg, u);
+  }
+  return u;
+}
+const sceneSvgCache = {};
+function sceneThumb(id) {
+  if (sceneSvgCache[id]) return sceneSvgCache[id];
+  const sc = SCENES[id] || SCENES.dorm;
+  const x = Math.max(0, Math.min(sc.width - 700, (sc.spawn || 800) - 350));
+  sceneSvgCache[id] = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x} 250 700 700" preserveAspectRatio="xMidYMid slice">${sc.paint({ phase: 'day', season: 'autumn', S })}</svg>`;
+  return sceneSvgCache[id];
+}
+const isOnline = (who) => {
+  const r = ONLINE[who];
+  const h = S.minutes / 60;
+  return !!r && h >= r[0] && h < r[1];
+};
+function avatarFor(who, size = '') {
   const c = CONTACTS[who];
-  return `<div class="cav" style="background:${c.color}">${c.emoji}</div>`;
+  return `<div class="cav ${size}" style="background:${c.color}">${c.emoji}${isOnline(who) ? '<i class="online"></i>' : ''}</div>`;
+}
+const isSticker = (t) => /^(\p{Extended_Pictographic}|\u200d|\ufe0f|\s){1,8}$/u.test(t) && [...t.replace(/\s/g, '')].length <= 3;
+const pick = (arr, avoid) => {
+  const pool = arr.length > 1 ? arr.filter((x) => x !== avoid) : arr;
+  return pool[Math.floor(Math.random() * pool.length)];
+};
+function lastPreview(m) {
+  if (m.photo != null) return '📷 Фото';
+  return m.text.split('\n\n📌')[0].replace(/\n/g, ' ');
+}
+function chatTime(m) {
+  return m.day === S.day ? hm(m.min) : m.day === S.day - 1 ? 'вчера' : formatDate(m.day).split(',')[0];
 }
 
 function appMessages() {
   const v = view('💬 Чаты');
   const body = v.querySelector('.app-body');
-  const order = Object.keys(CONTACTS).filter((k) => (S.chats[k] || []).length).sort((a, b) => {
-    const la = S.chats[a][S.chats[a].length - 1];
-    const lb = S.chats[b][S.chats[b].length - 1];
-    return lb.day * 1440 + lb.min - (la.day * 1440 + la.min);
-  });
+  const order = Object.keys(CONTACTS)
+    .filter((k) => (S.chats[k] || []).length)
+    .sort((a, b) => {
+      if (a === 'lover') return -1; // pinned
+      if (b === 'lover') return 1;
+      const la = S.chats[a][S.chats[a].length - 1];
+      const lb = S.chats[b][S.chats[b].length - 1];
+      return lb.day * 1440 + lb.min - (la.day * 1440 + la.min);
+    });
   if (!order.length) {
-    body.innerHTML = '<p class="muted" style="text-align:center;margin-top:40px">Пока тихо… 📭</p>';
+    body.innerHTML = '<div class="empty-state"><div>📭</div><p>Пока тихо… Сообщения от близких появятся здесь.</p></div>';
     return;
   }
-  body.innerHTML = '<div class="list chat-list"></div>';
+  body.innerHTML = '<div class="chat-list"></div>';
   const list = body.firstChild;
   for (const who of order) {
     const msgs = S.chats[who];
     const last = msgs[msgs.length - 1];
     const u = unreadFor(who);
-    const row = el(`<button class="chat-row">${avatarFor(who)}<div style="min-width:0"><div class="cn">${esc(CONTACTS[who].name)}</div><div class="cl">${last.in ? '' : 'Вы: '}${esc(last.text)}</div></div>${u ? `<span class="cu">${u}</span>` : ''}</button>`);
+    const row = el(`<button class="chat-row ${u ? 'unread' : ''}">${avatarFor(who)}<div class="cmain"><div class="ctop"><span class="cn">${esc(CONTACTS[who].name)}${who === 'lover' ? ' <span class="pin">📌</span>' : ''}</span><time>${chatTime(last)}</time></div>
+      <div class="cbot"><span class="cl">${last.in ? '' : '<b>Вы:</b> '}${esc(lastPreview(last))}</span>${u ? `<span class="cu">${u}</span>` : !last.in ? '<span class="ticks">✓✓</span>' : ''}</div></div></button>`);
     row.addEventListener('click', () => {
       sfx('click');
       openChat(who);
@@ -553,62 +597,148 @@ function appMessages() {
   }
 }
 
+function photoThumb(p) {
+  if (!p) return '<div class="msg-photo missing">📷</div>';
+  return `<div class="msg-photo"><img alt="" src="${svgUrl(sceneThumb(p.scene))}"/><img alt="" class="lana" src="${svgUrl(renderLana({ outfit: p.outfit, expr: 'happy' }))}"/></div>`;
+}
+
 function openChat(who) {
   const c = CONTACTS[who];
-  const v = view(`${c.emoji} ${esc(c.name)}`);
-  v.querySelector('.back').onclick = null;
-  const body = v.querySelector('.app-body');
+  const v = el(`<div class="app-view chat-view"><div class="chat-head"><button class="back" aria-label="Назад">‹</button>${avatarFor(who, 'sm')}
+      <div class="ch-info"><b>${esc(c.name)}</b><small data-status></small></div></div>
+      <div class="app-body chat-body"></div><div class="chat-foot"></div></div>`);
+  phone.screen.appendChild(v);
+  const body = v.querySelector('.chat-body');
+  const foot = v.querySelector('.chat-foot');
+  const status = v.querySelector('[data-status]');
+  let typing = false;
+  let panel = null; // 'stickers' | 'photos'
   markRead(who);
   updateHud();
-  const render = () => {
-    const msgs = S.chats[who] || [];
+  const setStatus = () => {
+    status.textContent = typing ? 'печатает…' : isOnline(who) ? 'в сети' : 'был(а) недавно';
+    status.classList.toggle('on', typing || isOnline(who));
+  };
+
+  const bubble = (m, i, msgs) => {
+    const prev = msgs[i - 1];
+    const next = msgs[i + 1];
+    const grpStart = !prev || prev.in !== m.in || prev.day !== m.day;
+    const grpEnd = !next || next.in !== m.in || next.day !== m.day;
+    const cls = `msg ${m.in ? 'in' : 'out'} ${grpStart ? 'first' : ''} ${grpEnd ? 'last' : ''}`;
+    const meta = `<span class="meta">${hm(m.min)}${m.in ? '' : ' <span class="ticks">✓✓</span>'}</span>`;
+    if (m.photo != null) return `<div class="${cls} photo">${photoThumb(m.photoData)}${meta}</div>`;
+    if (isSticker(m.text)) return `<div class="${cls} sticker"><span>${m.text}</span>${meta}</div>`;
+    const [main, req] = m.text.split('\n\n📌 Просьба: ');
+    return `<div class="${cls}"><span class="t">${esc(main)}</span>${req ? `<div class="req"><b>📌 Просьба</b>${esc(req)}<small>Смотри в «Мой путь»</small></div>` : ''}${meta}</div>`;
+  };
+
+  const render = (scroll = true) => {
+    const msgs = (S.chats[who] || []).slice(-80);
     let lastDay = -1;
     let html = '<div class="messages">';
-    for (const m of msgs.slice(-60)) {
+    msgs.forEach((m, i) => {
       if (m.day !== lastDay) {
         lastDay = m.day;
-        html += `<div class="msg-day">${formatDate(m.day)}</div>`;
+        html += `<div class="msg-day"><span>${m.day === S.day ? 'Сегодня' : m.day === S.day - 1 ? 'Вчера' : formatDate(m.day)}</span></div>`;
       }
-      html += `<div class="msg ${m.in ? 'in' : 'out'}">${esc(m.text)}<time>${formatClock(m.min)}</time></div>`;
-    }
+      html += bubble(m, i, msgs);
+    });
+    if (typing) html += '<div class="msg in first last typing"><i></i><i></i><i></i></div>';
     html += '</div>';
-    const last = msgs[msgs.length - 1];
-    if (last && last.in && REPLIES[who]) html += `<div class="replies">${REPLIES[who].map((r, i) => `<button data-r="${i}">${esc(r)}</button>`).join('')}</div>`;
     body.innerHTML = html;
-    body.scrollTop = body.scrollHeight;
-    body.querySelectorAll('[data-r]').forEach((b) =>
-      b.addEventListener('click', async () => {
-        sfx('message');
-        const text = REPLIES[who][+b.dataset.r];
-        sendReply(who, text);
-        changeNeed('social', who === 'lover' ? 18 : 12);
-        changeNeed('fun', who === 'lover' ? 8 : 4);
-        if (who === 'lover') setExpression('kiss', 2500);
-        render();
-        await wait(1400);
-        if (!phone) return;
-        const answers = {
-          lover: ['И я тебя ❤️❤️❤️', '😍', 'Ты моё солнышко ☀️', 'Мурр 😘', 'Скоро увидимся 🫶'],
-          mom: ['Умница моя 💛', 'Целую, доченька!', 'Береги себя!'],
-          amra: ['Жду!!! 💕', '😘😘', 'Ахахах 😂'],
-          katya: ['👍', 'Скинула!', 'Давай!'],
-          teacher: ['Хорошо, Лана.', 'Жду вас.'],
-          grandma: ['Солнышко моё 💛'],
-        }[who];
-        if (answers) {
-          S.chats[who].push({ in: true, text: answers[Math.floor(Math.random() * answers.length)], day: S.day, min: Math.floor(S.minutes), read: true });
-          sfx('pop');
-          render();
-        }
+    if (scroll) body.scrollTop = body.scrollHeight;
+    renderFoot();
+    setStatus();
+  };
+
+  const canReply = () => {
+    const msgs = S.chats[who] || [];
+    const last = msgs[msgs.length - 1];
+    return !typing && last && last.in && !last.auto && REPLIES[who];
+  };
+  const canMedia = () => !typing && PHOTO_ANSWERS[who];
+
+  function renderFoot() {
+    const msgs = S.chats[who] || [];
+    let chips = '';
+    if (canReply()) {
+      const pool = REPLIES[who];
+      const off = msgs.length % pool.length;
+      const opts = [0, 1, 2].map((k) => pool[(off + k) % pool.length]).filter((x, i, a) => a.indexOf(x) === i);
+      chips = `<div class="reply-chips">${opts.map((r) => `<button data-r="${esc(r)}">${esc(r)}</button>`).join('')}</div>`;
+    }
+    const photoDone = S.flags['photo_' + who] === S.day;
+    let extra = '';
+    if (panel === 'stickers') extra = `<div class="sticker-panel">${STICKERS.map((st) => `<button data-st="${st}">${st}</button>`).join('')}</div>`;
+    if (panel === 'photos')
+      extra = S.album.length
+        ? `<div class="photo-panel">${S.album.slice(0, 12).map((p, i) => `<button data-ph="${i}">${photoThumb(p)}</button>`).join('')}</div>`
+        : '<div class="photo-panel empty">Сначала сделай селфи у зеркала 🤳</div>';
+    foot.innerHTML = `${chips}${extra}<div class="chat-bar">
+        ${canMedia() ? `<button class="cb-btn ${panel === 'photos' ? 'on' : ''}" data-panel="photos" aria-label="Фото" ${photoDone ? 'title="Сегодня фото уже отправлено"' : ''}>📷</button><button class="cb-btn ${panel === 'stickers' ? 'on' : ''}" data-panel="stickers" aria-label="Стикеры">😊</button>` : ''}
+        <div class="cb-field">${typing ? `${esc(c.name.split(' ')[0])} печатает…` : canReply() ? 'Выбери ответ ↑' : 'Нет новых сообщений'}</div></div>`;
+    foot.querySelectorAll('[data-r]').forEach((b) => b.addEventListener('click', () => send({ text: b.dataset.r }, true)));
+    foot.querySelectorAll('[data-st]').forEach((b) => b.addEventListener('click', () => send({ text: b.dataset.st }, canReply())));
+    foot.querySelectorAll('[data-ph]').forEach((b) => b.addEventListener('click', () => send({ photo: +b.dataset.ph }, canReply())));
+    foot.querySelectorAll('[data-panel]').forEach((b) =>
+      b.addEventListener('click', () => {
+        sfx('tap');
+        panel = panel === b.dataset.panel ? null : b.dataset.panel;
+        renderFoot();
+        body.scrollTop = body.scrollHeight;
       }),
     );
-  };
+  }
+
+  async function send(msg, isReply) {
+    if (typing) return;
+    panel = null;
+    sfx('message');
+    const isPhoto = msg.photo != null;
+    if (isPhoto) {
+      const p = S.album[msg.photo];
+      S.chats[who].push({ in: false, text: '📷', photo: 1, photoData: p, day: S.day, min: Math.floor(S.minutes) });
+      if (S.flags['photo_' + who] !== S.day) {
+        S.flags['photo_' + who] = S.day;
+        changeNeed('social', 15);
+        changeNeed('fun', 10);
+      }
+      bus.emit('action', { id: 'sendPhoto' });
+    } else if (isReply) {
+      sendReply(who, msg.text);
+      changeNeed('social', who === 'lover' ? 18 : 12);
+      changeNeed('fun', who === 'lover' ? 8 : 4);
+    } else S.chats[who].push({ in: false, text: msg.text, day: S.day, min: Math.floor(S.minutes) });
+    if (who === 'lover') setExpression('kiss', 2500);
+    render();
+    // the contact reads it and types an answer
+    await wait(600);
+    if (!phone || !v.isConnected) return finishAnswer();
+    typing = true;
+    render();
+    const msgs = S.chats[who];
+    const prevAns = [...msgs].reverse().find((m) => m.in);
+    const pool = isPhoto ? PHOTO_ANSWERS[who] : isSticker(msg.text || '') ? ['😄', '❤️', '🥰', '😂'] : ANSWERS[who];
+    const ans = pool ? pick(pool, prevAns && prevAns.text) : null;
+    await wait(900 + Math.min(1600, (ans || '').length * 35));
+    finishAnswer();
+    function finishAnswer() {
+      typing = false;
+      if (ans) {
+        S.chats[who].push({ in: true, text: ans, day: S.day, min: Math.floor(S.minutes), read: true, auto: true });
+        if (v.isConnected) sfx('pop');
+      }
+      if (v.isConnected) render();
+    }
+  }
+
   render();
-  v.querySelector('.back').addEventListener('click', (e) => {
-    e.stopImmediatePropagation();
+  v.querySelector('.back').addEventListener('click', () => {
+    sfx('click');
     v.remove();
     appMessages();
-  }, { capture: true });
+  });
 }
 
 // ================================================================ QUESTS
@@ -695,9 +825,7 @@ function appAlbum() {
       }
       body.innerHTML = `<div class="polaroids">${S.album
         .map((p) => {
-          const sc = SCENES[p.scene];
-          const bg = sc ? `<svg viewBox="${Math.max(0, Math.min(sc.width - 700, (sc.spawn || 800) - 350))} 250 700 700" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0">${sc.paint({ phase: 'day', season: 'autumn', S })}</svg>` : '';
-          return `<figure class="polaroid" style="margin:0"><div class="ph">${bg}<div style="position:absolute;left:18%;right:18%;top:6%;bottom:-40%">${renderLana({ outfit: p.outfit, expr: 'happy' })}</div></div><figcaption>${formatDate(p.day)}</figcaption></figure>`;
+          return `<figure class="polaroid" style="margin:0"><div class="ph"><img alt="" loading="lazy" src="${svgUrl(sceneThumb(p.scene))}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"/><img alt="" loading="lazy" src="${svgUrl(renderLana({ outfit: p.outfit, expr: 'happy' }).replace(/class="lana-svg[^"]*"/, ''))}" style="position:absolute;left:18%;width:64%;top:6%;height:140%;object-fit:contain;object-position:top"/></div><figcaption>${formatDate(p.day)}</figcaption></figure>`;
         })
         .join('')}</div>`;
     } else {
@@ -726,6 +854,7 @@ function appSettings() {
       <button class="setting" data-help><span>❓ Как играть</span><span>›</span></button>
       <button class="setting" data-s="sound"><span>🔊 Звуки</span><span class="toggle ${S.settings.sound ? 'on' : ''}"></span></button>
       <button class="setting" data-s="music"><span>🎵 Музыка</span><span class="toggle ${S.settings.music ? 'on' : ''}"></span></button>
+      <button class="setting" data-lite><span>🔋 Экономный режим<small>Меньше анимаций фона — плавнее на слабых телефонах${S.settings.lite == null ? ' (выбрано автоматически)' : ''}</small></span><span class="toggle ${document.body.classList.contains('lite') ? 'on' : ''}"></span></button>
       ${canInstall() ? '<button class="setting" data-install><span>📲 Установить на телефон<small>Иконка на главном экране, работает без интернета</small></span><span>›</span></button>' : '<div class="setting"><span>📲 Установка<small>iPhone: «Поделиться» → «На экран Домой»</small></span></div>'}
       <button class="setting" data-export><span>💾 Сохранение<small>Скопировать код сохранения</small></span><span>›</span></button>
       <button class="setting" data-import><span>📥 Загрузить сохранение<small>Вставить код</small></span><span>›</span></button>
@@ -742,13 +871,20 @@ function appSettings() {
         render();
       }),
     );
+    body.querySelector('[data-lite]').addEventListener('click', () => {
+      S.settings.lite = !document.body.classList.contains('lite');
+      window.dispatchEvent(new window.Event('lite-change'));
+      sfx('click');
+      save();
+      render();
+    });
     body.querySelector('[data-help]').addEventListener('click', () =>
       dialog({
         icon: '📖',
         title: 'Как играть',
         html: `<div style="text-align:left;font-weight:700;font-size:15px;line-height:1.5;color:var(--ink-soft)">
           <p>👆 <b>Кружочки</b> на предметах и людях открывают меню действий.</p>
-          <p>🚶‍♀️ <b>Нажми на пол</b> — Лана пойдёт туда. Комнату можно листать пальцем.</p>
+          <p>🚶‍♀️ <b>Нажми куда угодно</b> — Лана пойдёт туда, а камера поедет за ней. <b>Удерживай палец</b> — Лана будет идти за ним. Листай комнату свайпом, стрелки ‹ › по краям ведут дальше.</p>
           <p>🎀 <b>Потребности</b> внизу экрана падают со временем. Красный кружок — Лане срочно что-то нужно.</p>
           <p>💎 <b>Кристалл</b> над головой показывает настроение: чем оно лучше, тем быстрее растут навыки.</p>
           <p>📋 <b>Задание</b> вверху ведёт по сюжету, стрелка 👇 указывает на нужный предмет.</p>
