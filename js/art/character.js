@@ -62,43 +62,54 @@ function gradDefs(p, hair, extra = '') {
 }
 
 // --- Face ----------------------------------------------------------------------
-function eyeShape(p, mode) {
-  // Drawn for the LEFT eye in local coords (outer corner = negative x); mirrored for the right.
-  if (mode === 'closed' || mode === 'joy') {
-    const d =
-      mode === 'joy'
-        ? 'M-11,3 Q0,-9 11,3' // happy ^ arc
-        : 'M-11,-1 Q0,8 11,-1'; // sleeping arc
-    return `<path d="${d}" fill="none" stroke="${EYE.liner}" stroke-width="2.6" stroke-linecap="round"/>
-      <path d="M-11,${mode === 'joy' ? 3 : -1} L-16.5,${mode === 'joy' ? -1.5 : -4.5}" stroke="${EYE.liner}" stroke-width="2.2" stroke-linecap="round"/>
-      <path d="M-6,${mode === 'joy' ? -3 : 5} l-1.5,${mode === 'joy' ? -3 : 3.2} M-1,${mode === 'joy' ? -4.6 : 6} l-.6,${mode === 'joy' ? -3.2 : 3.2}" stroke="${EYE.liner}" stroke-width="1.3" stroke-linecap="round"/>`;
-  }
+// Each eye = outer positioning group (SVG transform) → inner ".eye" group that CSS may scale
+// for blinking. Never put CSS-animated classes on an element that also has a transform
+// attribute: the CSS transform would replace it and the eye would jump away.
+const LID_PATH =
+  'M12,-1 C10.5,-10.5 4.5,-13.4 -.6,-13.4 C-6.6,-13.4 -10.8,-10.2 -12.4,-4.4 Q-14.4,-5.6 -16.4,-6.4 Q-14.8,-3 -12.2,1.4 C-11.2,-6.6 -6.4,-10.9 -.6,-10.9 C5,-10.9 9.6,-7.4 12,-1 Z';
+
+function closedEye(mode) {
+  const joy = mode === 'joy';
+  const d = joy ? 'M-11,3 Q0,-9 11,3' : 'M-11,-1 Q0,8 11,-1';
+  return `<path d="${d}" fill="none" stroke="${EYE.liner}" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M-11,${joy ? 3 : -1} L-16.5,${joy ? -1.5 : -4.5}" stroke="${EYE.liner}" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M-6,${joy ? -3 : 5} l-1.5,${joy ? -3 : 3.2} M-1,${joy ? -4.6 : 6} l-.6,${joy ? -3.2 : 3.2}" stroke="${EYE.liner}" stroke-width="1.3" stroke-linecap="round"/>`;
+}
+
+function irisSvg(p) {
+  const rays = [0, 45, 90, 135, 180, 225, 270, 315]
+    .map((a) => {
+      const c = Math.cos((a * Math.PI) / 180);
+      const s = Math.sin((a * Math.PI) / 180);
+      return `<path d="M${(0.6 + c * 5).toFixed(2)},${(1.8 + s * 5).toFixed(2)} L${(0.6 + c * 8).toFixed(2)},${(1.8 + s * 8).toFixed(2)}" stroke="${EYE.irisLight}" stroke-width=".7" opacity=".5"/>`;
+    })
+    .join('');
+  return `<circle cx=".6" cy="1.8" r="8.9" fill="url(#${p}iris)"/>
+          <circle cx=".6" cy="1.8" r="8.9" fill="none" stroke="${EYE.irisDark}" stroke-width="1.1" opacity=".75"/>
+          ${rays}<circle cx=".6" cy="1.8" r="4.3" fill="#1b0d07"/>`;
+}
+
+function renderEye(p, mode, side) {
+  const x = side === 'L' ? 83 : 117;
+  const mirror = side === 'R' ? ' transform="scale(-1,1)"' : '';
+  if (mode === 'closed' || mode === 'joy') return `<g transform="translate(${x},96)"><g${mirror}>${closedEye(mode)}</g></g>`;
   const lidDrop = mode === 'tired' ? 6.5 : mode === 'sad' ? 2 : 0;
-  return `<g class="eyeball">
+  const hy = mode === 'tired' ? 4 : 0;
+  return `<g transform="translate(${x},96)"><g class="eye">
       <ellipse cx="0" cy="0" rx="11.2" ry="12.4" fill="#fff"/>
       <g clip-path="url(#${p}eyeClip)">
         <ellipse cx="0" cy="-9" rx="13" ry="5" fill="#e9d6d6" opacity=".7"/>
-        <g class="iris">
-          <circle cx=".6" cy="1.8" r="8.9" fill="url(#${p}iris)"/>
-          <circle cx=".6" cy="1.8" r="8.9" fill="none" stroke="${EYE.irisDark}" stroke-width="1.1" opacity=".75"/>
-          ${[0, 45, 90, 135, 180, 225, 270, 315].map((a) => `<path d="M${(0.6 + Math.cos((a * Math.PI) / 180) * 5).toFixed(2)},${(1.8 + Math.sin((a * Math.PI) / 180) * 5).toFixed(2)} L${(0.6 + Math.cos((a * Math.PI) / 180) * 8).toFixed(2)},${(1.8 + Math.sin((a * Math.PI) / 180) * 8).toFixed(2)}" stroke="${EYE.irisLight}" stroke-width=".7" opacity=".5"/>`).join('')}
-          <circle cx=".6" cy="1.8" r="4.3" fill="#1b0d07"/>
-        </g>
+        <g class="look">${irisSvg(p)}</g>
         ${lidDrop ? `<rect x="-14" y="-15" width="28" height="${lidDrop + 4}" fill="${SKIN.base}"/>` : ''}
       </g>
-      <g transform="translate(0,${lidDrop})">
-        <path d="M12,-1 C10.5,-10.5 4.5,-13.4 -.6,-13.4 C-6.6,-13.4 -10.8,-10.2 -12.4,-4.4 Q-14.4,-5.6 -16.4,-6.4 Q-14.8,-3 -12.2,1.4 C-11.2,-6.6 -6.4,-10.9 -.6,-10.9 C5,-10.9 9.6,-7.4 12,-1 Z" fill="${EYE.liner}"/>
-        <path d="M-12.6,-5.6 q-2.6,-.9 -4.4,-.2 M-10,-9.4 q-1.6,-2.4 -3.6,-3" stroke="${EYE.liner}" stroke-width="1.15" fill="none" stroke-linecap="round"/>
-      </g>
+      <g class="look"><circle cx="-2.6" cy="${-2.6 + hy}" r="3.1" fill="#fff"/><circle cx="3.6" cy="5.2" r="1.5" fill="#fff" opacity=".9"/></g>
       <path d="M-11,4.5 Q-5,12.3 1.5,12.2 Q8,11.6 11,5" fill="none" stroke="#8a5446" stroke-width=".9" opacity=".55"/>
       <path d="M-9.5,${-14.6 + lidDrop} Q0,${-17.4 + lidDrop} 9.5,${-12.6 + lidDrop}" fill="none" stroke="${SKIN.deep}" stroke-width=".8" opacity=".3" stroke-linecap="round"/>
-    </g>`;
-}
-
-function eyeHighlights(mode) {
-  if (mode === 'closed' || mode === 'joy') return '';
-  const dy = mode === 'tired' ? 4 : 0;
-  return `<circle cx="-2.6" cy="${-2.6 + dy}" r="3.1" fill="#fff"/><circle cx="3.6" cy="${5.2}" r="1.5" fill="#fff" opacity=".9"/>`;
+      <g${mirror}><g transform="translate(0,${lidDrop})">
+        <path d="${LID_PATH}" fill="${EYE.liner}"/>
+        <path d="M-12.6,-5.6 q-2.6,-.9 -4.4,-.2 M-10,-9.4 q-1.6,-2.4 -3.6,-3" stroke="${EYE.liner}" stroke-width="1.15" fill="none" stroke-linecap="round"/>
+      </g></g>
+    </g><g class="eye-shut"${mirror}>${closedEye('closed')}</g></g>`;
 }
 
 function brows(expr, hair) {
@@ -156,15 +167,11 @@ function eyeMode(expr) {
 export function renderFace(p, o) {
   const hair = HAIR_COLORS[o.hairColor] || HAIR_COLORS.chestnut;
   const mode = eyeMode(o.expr);
-  const lookX = o.look || 0;
   return `
     <ellipse cx="100" cy="136.5" rx="6" ry="1.6" fill="${SKIN.shade}" opacity=".5"/>
     <ellipse cx="78" cy="113" rx="10" ry="6" fill="url(#${p}blush)"/>
     <ellipse cx="122" cy="113" rx="10" ry="6" fill="url(#${p}blush)"/>
-    <g class="eyes">
-      <g class="eye eyeL" transform="translate(83,96)">${eyeShape(p, mode)}<g transform="translate(${lookX},0)">${eyeHighlights(mode)}</g></g>
-      <g class="eye eyeR" transform="translate(117,96)"><g transform="scale(-1,1)">${eyeShape(p, mode)}</g><g transform="translate(${lookX},0)">${eyeHighlights(mode)}</g></g>
-    </g>
+    <g class="eyes">${renderEye(p, mode, 'L')}${renderEye(p, mode, 'R')}</g>
     ${brows(o.expr, hair)}
     <path d="M100.8,104 Q99.2,111 97.2,114.6" fill="none" stroke="${SKIN.shade}" stroke-width="1.3" stroke-linecap="round" opacity=".8"/>
     <path d="M96.6,116.2 Q100,118.4 103.6,116.2" fill="none" stroke="${SKIN.deep}" stroke-width="1.5" stroke-linecap="round"/>

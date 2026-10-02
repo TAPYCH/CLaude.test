@@ -41,7 +41,6 @@ export function mountWorld(container, handlers) {
   container.appendChild(world.root);
   setupDrag();
   window.addEventListener('resize', layout);
-  requestAnimationFrame(blinkLoop);
 }
 
 export function loadScene(id, x = null) {
@@ -191,11 +190,72 @@ export function setExpression(expr, ms = 2200) {
     }, ms);
 }
 
+const ANIM_CLASSES = ['busy', 'joy', 'wave', 'rest', 'away'];
 export function lanaAnim(cls, ms = 0) {
   if (!world.lana) return;
-  world.lana.classList.remove('busy', 'joy', 'wave', 'rest', 'away');
-  if (cls) world.lana.classList.add(cls);
-  if (ms) setTimeout(() => world.lana && world.lana.classList.remove(cls), ms);
+  const node = world.lana;
+  for (const c of [...node.classList]) if (ANIM_CLASSES.includes(c) || c.startsWith('pose-') || c.startsWith('idle-')) node.classList.remove(c);
+  if (cls) node.classList.add(cls);
+  world.idleT = 0;
+  if (ms) setTimeout(() => node.classList.remove(cls), ms);
+}
+
+/** Show an item in Lana's hands during an action (emoji prop + motion style). */
+export function setProp(emoji, kind = 'phone') {
+  if (!world.lana) return;
+  const old = world.lana.querySelector('.prop');
+  if (old) old.remove();
+  if (!emoji) return;
+  world.lana.appendChild(el(`<div class="prop p-${kind}">${emoji}</div>`));
+}
+
+export function cameraFlash() {
+  const f = el('<div class="flash"></div>');
+  document.getElementById('app').appendChild(f);
+  setTimeout(() => f.remove(), 500);
+}
+
+export function heartsAt(x, y, n = 4, icon = '❤️') {
+  if (!world.inner) return;
+  for (let i = 0; i < n; i++) {
+    const h = el(`<div class="heart-pop">${icon}</div>`);
+    h.style.left = x * world.scale + (Math.random() - 0.5) * 30 + 'px';
+    h.style.top = y * world.scale + 'px';
+    h.style.animationDelay = i * 0.12 + 's';
+    h.style.setProperty('--dx', (Math.random() - 0.5) * 60 + 'px');
+    world.inner.appendChild(h);
+    setTimeout(() => h.remove(), 1600);
+  }
+}
+
+const IDLE = ['idle-stretch', 'idle-look', 'idle-sway', 'idle-wave', 'idle-heel', 'idle-look', 'idle-sway'];
+const IDLE_MS = { 'idle-stretch': 1900, 'idle-look': 2700, 'idle-sway': 2500, 'idle-wave': 2200, 'idle-heel': 1300 };
+function idleVariety(dt) {
+  const node = world.lana;
+  if (!node || world.walking) return;
+  if ([...node.classList].some((c) => c.startsWith('pose-') || ANIM_CLASSES.includes(c) || c.startsWith('idle-'))) {
+    world.idleT = 0;
+    return;
+  }
+  world.idleT = (world.idleT || 0) + dt;
+  if (world.idleT > 7 + Math.random() * 6) {
+    world.idleT = 0;
+    const c = IDLE[Math.floor(Math.random() * IDLE.length)];
+    node.classList.add(c);
+    setTimeout(() => node.classList.remove(c), IDLE_MS[c]);
+  }
+}
+
+function dustPuff(x) {
+  if (!world.inner) return;
+  for (const dx of [-14, 14]) {
+    const d = el('<div class="dust"></div>');
+    d.style.left = (x + dx * 2) * world.scale + 'px';
+    d.style.top = (world.scene.floor - 4) * world.scale + 'px';
+    d.style.setProperty('--dx', (world.facing > 0 ? -12 : 12) + 'px');
+    world.inner.appendChild(d);
+    setTimeout(() => d.remove(), 650);
+  }
 }
 
 function buildPet() {
@@ -216,17 +276,6 @@ export function rebuildPet() {
   layout();
 }
 
-function blinkLoop() {
-  const doBlink = () => {
-    if (world.lana) {
-      world.lana.classList.add('blink');
-      setTimeout(() => world.lana && world.lana.classList.remove('blink'), 200);
-    }
-    setTimeout(doBlink, 2200 + Math.random() * 3800);
-  };
-  setTimeout(doBlink, 1500);
-}
-
 // ---------------------------------------------------------------- layout & camera
 export function layout() {
   if (!world.inner || !world.scene) return;
@@ -242,7 +291,10 @@ export function layout() {
     node.style.top = (floor - hUnits) * s + 'px';
     node.style.bottom = 'auto';
   };
-  if (world.lana) place(world.lana, world.lanaX, LANA_H, LANA_W);
+  if (world.lana) {
+    place(world.lana, world.lanaX, LANA_H, LANA_W);
+    world.lana.style.setProperty('--s', ((LANA_H * s) / 420).toFixed(3));
+  }
   for (const n of world.inner.querySelectorAll('.actor.npc')) {
     const h = +n.dataset.h;
     place(n, +n.dataset.x, h, (h * 200) / 450);
@@ -351,9 +403,10 @@ export function walkTo(x) {
         if (cancelled) return true;
         const d = WALK_SPEED * dt;
         stepAcc += d;
-        if (stepAcc > 115) {
+        if (stepAcc > 120) {
           stepAcc = 0;
           sfx('step');
+          if (world.scene.indoor === false) dustPuff(world.lanaX);
         }
         const remaining = x - world.lanaX;
         if (Math.abs(remaining) <= d) {
@@ -411,6 +464,7 @@ export function updateWorld(dt) {
     const col = m > 66 ? '#5ee08a' : m > 40 ? '#ffd23d' : m > 22 ? '#ff9a3c' : '#ff4f6a';
     world.lana.style.setProperty('--plumb', col);
   }
+  idleVariety(dt);
   paintBackground();
   updateTint();
   if (world.weatherKey !== S.day) buildWeather();

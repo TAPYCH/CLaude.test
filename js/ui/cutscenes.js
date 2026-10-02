@@ -55,11 +55,6 @@ export function showTitle({ hasSave }) {
       </div>`);
     petals(node);
     app().appendChild(node);
-    const hero = node.querySelector('.title-hero');
-    let blink = setInterval(() => {
-      hero.classList.add('blink');
-      setTimeout(() => hero.classList.remove('blink'), 200);
-    }, 3200);
     const ins = node.querySelector('[data-install]');
     if (ins)
       ins.addEventListener('click', async () => {
@@ -83,7 +78,6 @@ export function showTitle({ hasSave }) {
           const ok = await dialog({ icon: '🌱', title: 'Новая игра?', text: 'Текущий прогресс будет удалён.', buttons: [{ label: 'Начать заново', value: true }, { label: 'Отмена', value: false, cls: 'ghost' }] });
           if (!ok) return;
         }
-        clearInterval(blink);
         node.style.transition = 'opacity .5s';
         node.style.opacity = '0';
         setTimeout(() => node.remove(), 500);

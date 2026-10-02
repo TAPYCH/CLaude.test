@@ -8,7 +8,7 @@ import { PET_TYPES } from './art/pets.js';
 import { CONFIG } from './config.js';
 import { AMBIENT, NPC_LINES } from './data/contacts.js';
 import { ensureDailies, sendMessage, currentQuest } from './core/progress.js';
-import { world, loadScene, walkTo, setOverhead, lanaAnim, setExpression, lanaScreenPos, hideHotspots, rebuildPet } from './ui/world.js';
+import { world, loadScene, walkTo, setOverhead, lanaAnim, setExpression, lanaScreenPos, hideHotspots, rebuildPet, setProp, cameraFlash, heartsAt } from './ui/world.js';
 import { updateHud } from './ui/hud.js';
 import { toast, floatText, confetti } from './ui/fx.js';
 import { dialog } from './ui/modal.js';
@@ -221,6 +221,7 @@ export async function doAction(id, hotspot) {
     hideHotspots(false);
     setOverhead({});
     lanaAnim(null);
+    setProp(null);
     updateHud();
   }
 }
@@ -245,6 +246,22 @@ function npcSay(id) {
   return b;
 }
 
+// Body pose + prop shown while an action runs.
+const POSES = {
+  snack: ['eat', '🥪'], eatMeal: ['eat', '🍲'], mamaFood: ['eat', '🥘'], foodcourt: ['eat', '🍜'], coffeeDessert: ['eat', '🥐'], icecream: ['eat', '🍦'],
+  tea: ['drink', '🍵'], vending: ['drink', '☕'], sandCoffee: ['drink', '☕'], grandmaTea: ['drink', '🫖'],
+  phoneScroll: ['phone', '📱'], callMom: ['phone', '📱'],
+  study: ['read', '📖'], lecture: ['read', '📒'],
+  cook: ['cook', '🥄'], helpCook: ['cook', '🥄'],
+  makeup: ['groom', '💄'], brushTeeth: ['groom', '🪥'],
+  selfie: ['selfie', '📱'],
+  consult: ['talk'], friendChat: ['talk'], chatGuests: ['talk'], momTalk: ['talk'], amraChat: ['talk'], grandmaTalk: ['talk'], walkPet: ['talk'],
+  ducks: ['feed', '🍞'], feedChickens: ['feed', '🌾'],
+  swing: ['dance'], promenade: ['dance'],
+  bench: ['rest'], window: ['rest'], balcony: ['rest'], sunbathe: ['rest'], nap: ['away'], shower: ['away'],
+};
+const POSE_EXPR = { eat: 'happy', drink: 'happy', talk: 'happy', dance: 'excited', selfie: 'kiss', rest: 'happy', read: 'neutral', phone: 'happy', feed: 'happy', cook: 'happy' };
+
 function timedAction(id, a) {
   return new Promise((resolve) => {
     let effects = { ...(a.effects || {}) };
@@ -261,8 +278,14 @@ function timedAction(id, a) {
       done: () => resolve(),
       action: a,
     };
-    lanaAnim(a.anim === 'rest' ? null : a.anim || 'busy');
-    if (id === 'selfie') sfx('camera');
+    const [pose, prop] = POSES[id] || [a.anim === 'rest' ? 'rest' : a.anim === 'away' ? 'away' : 'work'];
+    lanaAnim(pose === 'away' ? 'away' : `pose-${pose}`);
+    if (prop) setProp(prop, pose);
+    if (POSE_EXPR[pose]) setExpression(POSE_EXPR[pose], 0);
+    if (id === 'selfie') setTimeout(() => {
+      sfx('camera');
+      cameraFlash();
+    }, 900);
     if (id === 'shower') sfx('splash');
   });
 }
@@ -558,15 +581,22 @@ export async function goScene(id, { transition = true } = {}) {
 function fadeTransition(icon, label) {
   return new Promise((resolve) => {
     sfx('whoosh');
-    const node = el(`<div class="fullscreen" style="background:linear-gradient(160deg,#ffb3cb,#ffcf9e);display:grid;place-items:center">
-        <div style="text-align:center;color:#fff"><div style="font-size:84px;animation:wiggle 1s ease-in-out infinite">${icon}</div>
-        <div style="font-weight:900;font-size:22px;margin-top:6px;text-shadow:0 2px 6px rgba(0,0,0,.15)">${label}</div></div></div>`);
+    const node = el(`<div class="iris-wipe"><div><div class="iw-ico">${icon}</div><div class="iw-t">${label}</div></div></div>`);
+    try {
+      const pos = lanaScreenPos();
+      node.style.setProperty('--cx', `${Math.round(pos.x)}px`);
+      node.style.setProperty('--cy', `${Math.round(pos.y + 200)}px`);
+    } catch (e) {
+      /* no scene yet */
+    }
     app().appendChild(node);
     setTimeout(() => {
       resolve();
-      node.classList.add('closing');
-      setTimeout(() => node.remove(), 500);
-    }, 900);
+      setTimeout(() => {
+        node.classList.add('open');
+        setTimeout(() => node.remove(), 600);
+      }, 60);
+    }, 850);
   });
 }
 
@@ -703,8 +733,8 @@ export function petPet(p) {
   changeNeed('fun', 8);
   sfx(PET_TYPES[p.type].sound);
   bus.emit('petPlay', {});
-  const pos = lanaScreenPos();
-  floatText(pos.x - 60, pos.y + 200, '+8 🎀 ❤️');
+  heartsAt(world.petX, world.scene.floor - 140, 5);
+  setExpression('excited', 1500);
 }
 
 export function equipOutfit(newOutfit) {

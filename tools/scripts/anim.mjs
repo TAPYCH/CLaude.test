@@ -1,0 +1,30 @@
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+export default async ({ page, shot }) => {
+  await page.goto('http://localhost:8080/index.html');
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await sleep(1400);
+  await page.$eval('.title-actions .btn', (e) => e.click());
+  await sleep(400);
+  await page.$eval('.story .skip', (e) => e.click());
+  await sleep(1500);
+  const run = (id, hs) => page.evaluate(async ([id, hs]) => { const g = await import('/js/game.js'); const { SCENES } = await import('/js/data/scenes.js'); g.doAction(id, SCENES.dorm.hotspots.find((h) => h.id === hs)); }, [id, hs]);
+  await run('snack', 'fridge');
+  await sleep(700);
+  await shot('an1-walk');
+  await sleep(1600);
+  await shot('an2-eat');
+  await sleep(2500);
+  for (let i = 0; i < 3; i++) { const b = await page.$('.overlay .dialog .btn'); if (b) { await b.click(); await sleep(400); } }
+  await run('selfie', 'wardrobe');
+  await sleep(3200);
+  await shot('an3-selfie');
+  await sleep(2000);
+  await run('study', 'desk');
+  await sleep(3000);
+  await shot('an4-read');
+  await sleep(6000);
+  await page.evaluate(async () => { const g = await import('/js/game.js'); g.goScene('park'); });
+  await sleep(450);
+  await shot('an5-iris');
+};

@@ -15,6 +15,7 @@ import { toast, confetti } from './ui/fx.js';
 import { dialog } from './ui/modal.js';
 import { setAudio, playMusic, sfx, unlockAudio } from './audio.js';
 import { initPwa } from './pwa.js';
+import { startBlinking } from './ui/blink.js';
 import { wait } from './ui/dom.js';
 
 const appEl = document.getElementById('app');
@@ -165,6 +166,7 @@ function startGame(firstRun) {
 
 async function boot() {
   initPwa();
+  startBlinking();
   const hasSave = load() && S.started;
   setAudio({ sound: S.settings.sound, music: S.settings.music });
   const splash = document.querySelector('.splash');
