@@ -71,7 +71,15 @@ export default {
     api.root.appendChild(ui);
     const pad = ui.querySelector('[data-pad]');
     const wide = window.innerWidth > window.innerHeight * 1.2;
-    if (wide) pad.style.gridTemplateColumns = 'repeat(6,1fr)';
+    if (wide) {
+      // landscape: ingredients become a side panel, guest + cup stay on the left
+      pad.style.cssText += ';position:absolute;right:0;top:0;bottom:calc(58px + var(--safe-b));width:52%;grid-template-columns:repeat(4,1fr);align-content:center;border-radius:24px 0 0 0;padding:calc(64px + var(--safe-t)) calc(12px + var(--safe-r)) 10px 12px';
+      const trash = ui.querySelector('[data-trash]').parentElement;
+      trash.style.cssText += ';position:absolute;right:0;bottom:0;width:52%;padding-top:8px';
+      const guest = ui.querySelector('[data-guest]');
+      guest.style.margin = 'calc(60px + var(--safe-t)) 0 0 calc(14px + var(--safe-l))';
+      guest.style.maxWidth = '46%';
+    }
     for (const [k, v] of Object.entries(ING)) {
       const b = document.createElement('button');
       b.style.cssText = (wide ? 'height:52px;' : 'height:64px;') + 'border-radius:16px;background:#fff;box-shadow:0 3px 0 #ecd5e1,0 4px 10px rgba(0,0,0,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:24px;line-height:1;transition:transform .1s';
@@ -146,8 +154,8 @@ export default {
     function drawCup() {
       const W = api.W;
       const H = api.H;
-      const cx = W / 2 + (shake > 0 ? Math.sin(t * 60) * 8 : 0);
-      const base = H * (wide ? 0.55 : 0.66);
+      const cx = (wide ? W * 0.24 : W / 2) + (shake > 0 ? Math.sin(t * 60) * 8 : 0);
+      const base = H * (wide ? 0.86 : 0.66);
       const cw = Math.min(150, W * 0.36, H * 0.26);
       const ch = cw * 1.05;
       // saucer
@@ -274,7 +282,7 @@ export default {
             ctx.fill();
           }
         ctx.fillStyle = '#c98b5a';
-        const ct = H * (wide ? 0.55 : 0.66);
+        const ct = H * (wide ? 0.86 : 0.66);
         ctx.fillRect(0, ct, W, H - ct);
         ctx.fillStyle = '#f3e2d3';
         ctx.fillRect(0, ct - 8, W, 16);

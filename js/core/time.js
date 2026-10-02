@@ -21,6 +21,12 @@ export function season(day) {
   return 'autumn';
 }
 
+const MONTHS_SHORT = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+export function formatDateShort(day) {
+  const d = dateOf(day);
+  return `${WEEKDAYS[weekday(day)]}, ${d.getUTCDate()} ${MONTHS_SHORT[d.getUTCMonth()]}`;
+}
+
 export function formatDate(day, long = false) {
   const d = dateOf(day);
   const wd = weekday(day);
