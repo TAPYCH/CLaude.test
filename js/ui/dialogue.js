@@ -10,7 +10,7 @@ import { sfx } from '../audio.js';
 
 function portrait(who, expr) {
   if (who === 'lover')
-    return `<div class="dlg-lover"><div class="dlg-lover-ico">${CONFIG.loverEmoji}</div></div>`;
+    return `<div class="dlg-lover"><div class="dlg-lover-ico">${CONFIG.loverEmoji}</div><b>${esc(CONFIG.loverName)}</b><small>🎙️ только голос</small></div>`;
   const outfit = who === 'lana' ? S.outfit : NPC_OUTFITS[who];
   if (!outfit) return '';
   return renderLana({ outfit, expr: expr || 'happy' }).replace('viewBox="0 0 200 450"', 'viewBox="22 4 156 300"');
@@ -28,7 +28,7 @@ export function playDialogue(id) {
     const vw = Math.min(sc.width, Math.max(1000, 1000 * ratio));
     const vx = Math.max(0, Math.min(sc.width - vw, sc.spawn - vw / 2));
     const node = el(`<div class="dlg ${d.call ? 'is-call' : ''}">
-        <div class="dlg-bg"><svg viewBox="${vx} 0 ${vw} 1000" preserveAspectRatio="xMidYMid slice">${sc.paint({ phase: 'day', season: 'autumn', S })}</svg></div>
+        <div class="dlg-bg"><svg viewBox="${vx} 0 ${vw} 1000" preserveAspectRatio="xMidYMid slice">${sc.paint({ phase: 'day', season: 'autumn', S, story: true })}</svg></div>
         <div class="dlg-shade"></div>
         <div class="dlg-p left"></div><div class="dlg-p right"></div>
         <button class="btn ghost small dlg-skip">Пропустить »</button>

@@ -5,12 +5,15 @@ export const W = 1900;
 
 const has = (S, id) => !!(S && S.lab && S.lab.upgrades.includes(id));
 
+let clean = false; // story scenes show the room without "buy here" placeholders
 function placeholder(x, y, w, h, label) {
+  if (clean) return '';
   return `<g opacity=".55"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14" fill="none" stroke="#9fc8bc" stroke-width="4" stroke-dasharray="14 10"/>
     <text x="${x + w / 2}" y="${y + h / 2 + 8}" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="22" fill="#7fb3a6">${label}</text></g>`;
 }
 
-export function paint({ phase, S }) {
+export function paint({ phase, S, story = false }) {
+  clean = story;
   const dark = isDark(phase);
   return `
   <defs>${skyDefs('mlSky', phase)}

@@ -1089,3 +1089,8 @@ svg { display: block; }
 .ld.got b { filter: grayscale(1); }
 .ld.today { background: linear-gradient(160deg, #fff1b8, #ffd36b); box-shadow: 0 0 0 3px #ffc23d; animation: bump 0.6s var(--ease-bounce) 0.3s both; }
 .ld:last-child:not(.got) { background: linear-gradient(160deg, #ffe0ec, #ffc1d6); }
+.dlg-lover { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; overflow: hidden; }
+.dlg-lover b { color: #fff; font-size: 20px; text-shadow: 0 2px 8px rgba(160, 40, 90, 0.35); }
+.dlg-lover small { color: rgba(255, 255, 255, 0.9); font-weight: 800; font-size: 12px; }
+.dlg-lover::before { content: ''; position: absolute; top: 50%; left: 50%; margin: -110px 0 0 -75px; width: 150px; height: 150px; border-radius: 50%; background: rgba(255, 255, 255, 0.25); animation: amb-pulse 2.2s ease-in-out infinite; }
+.dlg-lover { position: relative; }
