@@ -85,3 +85,11 @@ export function weatherOf(day, city) {
   }
   return se === 'summer' ? 'clear' : r < 18 ? 'rain' : 'clear';
 }
+
+/** College holidays: winter break 28 Dec – 8 Jan, summer July–August. */
+export function isHoliday(day) {
+  const d = dateOf(day);
+  const m = d.getUTCMonth();
+  const dd = d.getUTCDate();
+  return m === 6 || m === 7 || (m === 11 && dd >= 28) || (m === 0 && dd <= 8);
+}

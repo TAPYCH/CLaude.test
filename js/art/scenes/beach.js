@@ -1,5 +1,6 @@
 // Black Sea pebble beach, Sukhum. World 2200 × 1000.
 import { skyDefs, isDark, stars, moon, sun, cloud, mountains, palm, shadowEllipse } from './common.js';
+import { NPC_OUTFITS } from '../../data/npcs.js';
 
 export const W = 2200;
 
@@ -23,11 +24,11 @@ export function paint({ phase }) {
   <rect y="540" width="${W}" height="240" fill="url(#bSea)"/>
   ${sunset && !dark ? `<path d="M1440,545 L1560,545 L1620,780 L1380,780 Z" fill="#ffcf7a" opacity=".35"/>` : ''}
   ${dark ? '<path d="M1670,545 L1730,545 L1780,780 L1620,780 Z" fill="#fff6d6" opacity=".18"/>' : ''}
-  ${Array.from({ length: 16 }, (_, i) => `<path d="M${(i * 173) % W},${570 + ((i * 47) % 180)} q30,-8 60,0" stroke="#fff" stroke-width="3" opacity=".5" fill="none"/>`).join('')}
+  ${Array.from({ length: 16 }, (_, i) => `<path class="amb-wave" style="animation-delay:-${((i * 1.7) % 4.5).toFixed(1)}s" d="M${(i * 173) % W},${570 + ((i * 47) % 180)} q30,-8 60,0" stroke="#fff" stroke-width="3" opacity=".5" fill="none"/>`).join('')}
   <!-- pier -->
   <rect x="200" y="600" width="520" height="22" fill="#a8703f"/>${[230, 330, 430, 530, 630, 700].map((x) => `<rect x="${x}" y="620" width="14" height="80" fill="#8a5a33"/>`).join('')}
   <!-- sailboat -->
-  <g transform="translate(1100,600)" class="boat"><path d="M-50,0 L50,0 L36,22 L-36,22 Z" fill="#fff"/><path d="M0,0 L0,-90 L46,-6 Z" fill="#ff8fab"/><path d="M-4,-6 L-4,-80 L-40,-6 Z" fill="#fff"/></g>
+  <g class="amb-bob"><g transform="translate(1100,600)"><path d="M-50,0 L50,0 L36,22 L-36,22 Z" fill="#fff"/><path d="M0,0 L0,-90 L46,-6 Z" fill="#ff8fab"/><path d="M-4,-6 L-4,-80 L-40,-6 Z" fill="#fff"/></g></g>
   <!-- shore -->
   <path d="M0,760 C300,740 600,770 900,750 C1200,730 1500,770 1800,748 C2000,736 2100,750 ${W},745 L${W},1000 L0,1000 Z" fill="url(#bSand)"/>
   <path d="M0,760 C300,740 600,770 900,750 C1200,730 1500,770 1800,748 C2000,736 2100,750 ${W},745" stroke="#fff" stroke-width="10" fill="none" opacity=".75"/>
@@ -54,7 +55,7 @@ export function paint({ phase }) {
   ${[[400, 920], [980, 960], [1260, 900], [1800, 950]].map(([x, y]) => `<g transform="translate(${x},${y})"><path d="M-14,6 Q0,-22 14,6 Z" fill="#ffd1dc"/><path d="M-8,4 L-3,-10 M0,4 L0,-14 M8,4 L3,-10" stroke="#f3a6bb" stroke-width="2"/></g>`).join('')}`;
 }
 
-const AMRA = { top: 'tee_mandarin', bottom: 'shorts_denim', shoes: 'slides', acc: ['sunglasses', 'hoops'], hairStyle: 'braids', hairColor: 'black', lips: 'peach' };
+const AMRA = NPC_OUTFITS.amra;
 
 export const SCENE = {
   id: 'beach',
@@ -69,8 +70,8 @@ export const SCENE = {
   hotspots: [
     { id: 'sea', x: 1100, y: 470, stand: 1100, label: 'Море', icon: '🌊', actions: ['swim', 'promenade'] },
     { id: 'kiosk', x: 700, y: 520, stand: 700, label: 'Кофе на песке', icon: '☕', actions: ['sandCoffee', 'icecream'] },
-    { id: 'sunbed', x: 1500, y: 440, stand: 1500, label: 'Шезлонг', icon: '🏖️', actions: ['sunbathe', 'selfie', 'nap'] },
-    { id: 'amra', x: 340, y: 450, stand: 510, label: 'Амра', icon: '👯‍♀️', npc: true, actions: ['amraChat'] },
+    { id: 'sunbed', x: 1500, y: 440, stand: 1500, label: 'Шезлонг', icon: '🏖️', actions: ['sunbathe', 'callLover', 'selfie', 'nap'] },
+    { id: 'amra', x: 340, y: 450, stand: 510, label: 'Амра', icon: '👯‍♀️', npc: true, actions: ['amraChat', 'dance'] },
   ],
   npcs: [{ id: 'amra', x: 340, outfit: AMRA, hotspot: 'amra', h: 0.95 }],
 };

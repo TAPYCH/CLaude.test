@@ -22,7 +22,14 @@ for (const [name, w, h, touch] of DEVICES) {
   await shot('1title');
   await tap('.title-actions .btn');
   await tap('.story .skip');
-  await sleep(2500);
+  await sleep(1800);
+  await tap('.chapter-card');
+  await sleep(900);
+  await page.$eval('.dlg', (e) => e.click());
+  await sleep(1500);
+  await shot('1bdialogue');
+  await tap('.dlg:not(.closing) .dlg-skip');
+  await sleep(800);
   await page.evaluate(() => document.querySelectorAll('.toast').forEach((t) => t.remove()));
   await tap('.hotspot[data-id="desk"]');
   await shot('2menu');
@@ -33,6 +40,10 @@ for (const [name, w, h, touch] of DEVICES) {
   await shot('3phone');
   await tap('[data-app="map"]');
   await shot('4map');
+  await page.evaluate(() => document.querySelector('.app-view .back').click());
+  await sleep(300);
+  await tap('[data-app="path"]');
+  await shot('4bpath');
   await page.evaluate(() => document.querySelector('.phone-close').click());
   await sleep(500);
   await page.evaluate(async () => { const w = await import('/js/ui/wardrobe.js'); w.openWardrobe({ shop: true }); });
@@ -44,6 +55,15 @@ for (const [name, w, h, touch] of DEVICES) {
   await tap('.mg-intro .btn');
   await sleep(2700);
   await shot('6barista');
+  for (const mg of ['quiz', 'fashion', 'dance']) {
+    await page.evaluate(() => { const q = document.querySelector('.minigame'); if (q) q.remove(); });
+    await page.evaluate(async (mg) => { const m = await import('/js/minigames/index.js'); m.playMinigame(mg, { reward: () => [] }); }, mg);
+    await sleep(800);
+    await tap('.mg-intro .btn');
+    await sleep(mg === 'quiz' ? 2600 : 1500);
+    if (mg === 'dance') await sleep(2500);
+    await shot('7' + mg);
+  }
   console.log(name, errors.length ? errors.join(' | ') : 'ok');
   await ctx.close();
 }

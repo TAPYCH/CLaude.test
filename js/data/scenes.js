@@ -7,10 +7,11 @@ import * as mall from '../art/scenes/mall.js';
 import * as home from '../art/scenes/home.js';
 import * as beach from '../art/scenes/beach.js';
 import * as garden from '../art/scenes/garden.js';
+import * as mylab from '../art/scenes/mylab.js';
 
 const mk = (m) => ({ ...m.SCENE, paint: m.paint });
 
-export const SCENES = Object.fromEntries([dorm, college, cafe, park, mall, home, beach, garden].map((m) => [m.SCENE.id, mk(m)]));
+export const SCENES = Object.fromEntries([dorm, college, cafe, park, mall, home, beach, garden, mylab].map((m) => [m.SCENE.id, mk(m)]));
 
 export const CITIES = {
   moscow: { name: 'Москва', emoji: '🏙️', home: 'dorm' },

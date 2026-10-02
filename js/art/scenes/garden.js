@@ -1,5 +1,6 @@
 // Grandma's mandarin garden near Sukhum. World 2000 × 1000.
 import { skyDefs, isDark, stars, moon, sun, cloud, mountains, mandarinTree, shadowEllipse } from './common.js';
+import { NPC_OUTFITS } from '../../data/npcs.js';
 
 export const W = 2000;
 
@@ -49,7 +50,7 @@ export function paint({ phase }) {
   ${dark ? '<rect width="2000" height="1000" fill="#0d1433" opacity=".08"/>' : ''}`;
 }
 
-const GRANDMA = { top: 'cardigan', bottom: 'skirt_satin', shoes: 'flats_pink', acc: ['glasses'], hairStyle: 'bun', hairColor: 'platinum', lips: 'nude' };
+const GRANDMA = NPC_OUTFITS.grandma;
 
 export const SCENE = {
   id: 'garden',

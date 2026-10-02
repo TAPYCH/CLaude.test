@@ -46,7 +46,7 @@ export function paint({ phase, season }) {
   <!-- pond -->
   <ellipse cx="560" cy="860" rx="330" ry="70" fill="${grass2}"/>
   <ellipse cx="560" cy="856" rx="310" ry="60" fill="url(#pPond)"/>
-  ${se !== 'winter' ? `<path d="M380,850 q30,-6 60,0 M620,870 q40,-6 80,0" stroke="#fff" stroke-width="3" opacity=".6" fill="none"/>
+  ${se !== 'winter' ? `<path class="amb-wave" d="M380,850 q30,-6 60,0 M620,870 q40,-6 80,0" stroke="#fff" stroke-width="3" opacity=".6" fill="none"/>
   ${[[470, 846, 1], [560, 864, -1], [660, 842, 1]].map(([x, y, d]) => `<g transform="translate(${x},${y}) scale(${d},1)"><ellipse rx="22" ry="12" fill="#fff"/><circle cx="16" cy="-12" r="9" fill="#fff"/><path d="M24,-12 l10,3 l-10,3 Z" fill="#ffb02e"/><circle cx="18" cy="-14" r="2" fill="#333"/><path d="M-20,-4 q-8,-6 -2,-10" fill="#fff"/></g>`).join('')}` : `<path d="M360,840 L760,840" stroke="#fff" stroke-width="4" opacity=".7"/><text x="560" y="880" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="22" fill="#9fc0e0">⛸️ каток</text>`}
   <!-- path -->
   <path d="M900,1000 C960,880 1100,800 1300,770 C1500,740 1800,760 ${W},740 L${W},800 C1800,820 1500,800 1340,830 C1160,860 1060,920 1040,1000 Z" fill="${se === 'winter' ? '#e8edf5' : '#efdcc0'}"/>
@@ -86,8 +86,8 @@ export const SCENE = {
   music: 'moscow',
   hotspots: [
     { id: 'pond', x: 560, y: 720, stand: 900, label: 'Пруд', icon: '🦆', actions: ['ducks', 'selfie'] },
-    { id: 'bench', x: 1260, y: 560, stand: 1260, label: 'Лавочка', icon: '🪑', actions: ['bench', 'phoneScroll', 'callMom'] },
-    { id: 'track', x: 1560, y: 380, stand: 1560, label: 'Беговая дорожка', icon: '🏃‍♀️', actions: ['run', 'walkPet'] },
+    { id: 'bench', x: 1260, y: 560, stand: 1260, label: 'Лавочка', icon: '🪑', actions: ['bench', 'callLover', 'phoneScroll', 'callMom'] },
+    { id: 'track', x: 1560, y: 380, stand: 1560, label: 'Беговая дорожка', icon: '🏃‍♀️', actions: ['run', 'danceParty', 'walkPet'] },
     { id: 'icecream', x: 1880, y: 470, stand: 1880, label: 'Мороженое', icon: '🍦', actions: ['icecream'] },
   ],
 };

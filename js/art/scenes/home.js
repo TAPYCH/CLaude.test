@@ -1,5 +1,6 @@
 // Family home in Sukhum. World 2000 × 1000.
-import { skyDefs, isDark, stars, moon, sun, cloud, mountains, palm, pottedPlant, shadowEllipse } from './common.js';
+import { skyDefs, isDark, stars, moon, sun, cloud, mountains, palm, pottedPlant, shadowEllipse, steam } from './common.js';
+import { NPC_OUTFITS } from '../../data/npcs.js';
 
 export const W = 2000;
 
@@ -65,6 +66,7 @@ export function paint({ phase }) {
   <rect x="1170" y="650" width="18" height="146" fill="#8a5a33"/><rect x="1532" y="650" width="18" height="146" fill="#8a5a33"/>
   <!-- khachapuri -->
   <g transform="translate(1250,600)"><ellipse rx="56" ry="14" fill="#fff" stroke="#eee" stroke-width="2"/><path d="M-50,-2 Q0,-34 50,-2 Q0,-10 -50,-2 Z" fill="#e8a65a"/><ellipse cx="0" cy="-10" rx="26" ry="8" fill="#fff4c4"/><circle cx="0" cy="-12" r="6" fill="#ffb02e"/></g>
+  ${steam(1250, 578, 0.5)}
   <!-- mamalyga & adjika -->
   <g transform="translate(1360,600)"><ellipse rx="30" ry="9" fill="#fff" stroke="#eee" stroke-width="2"/><ellipse cy="-8" rx="22" ry="12" fill="#ffe08a"/></g>
   <g transform="translate(1420,600)"><rect x="-14" y="-30" width="28" height="30" rx="6" fill="#d23b2b"/><rect x="-16" y="-36" width="32" height="8" rx="3" fill="#f2c14e"/></g>
@@ -81,7 +83,7 @@ export function paint({ phase }) {
   <rect x="1640" y="560" width="200" height="236" rx="12" fill="#f2f2f6" stroke="#ddd" stroke-width="3"/>
   <rect x="1660" y="640" width="160" height="110" rx="8" fill="#3b3343"/><rect x="1672" y="652" width="136" height="60" rx="6" fill="#ffb02e" opacity=".35"/>
   ${[1690, 1740, 1790].map((x) => `<circle cx="${x}" cy="590" r="10" fill="#c7c7d6"/>`).join('')}
-  <g transform="translate(1720,556)"><rect x="-50" y="-60" width="100" height="60" rx="10" fill="#ff8fab"/><rect x="-60" y="-66" width="120" height="12" rx="6" fill="#ff6f9c"/>${dark ? '' : '<path d="M-20,-80 q10,-20 0,-40 M10,-80 q10,-20 0,-40" stroke="#fff" stroke-width="4" fill="none" opacity=".7"/>'}</g>
+  <g transform="translate(1720,556)"><rect x="-50" y="-60" width="100" height="60" rx="10" fill="#ff8fab"/><rect x="-60" y="-66" width="120" height="12" rx="6" fill="#ff6f9c"/>${dark ? '' : '<path class="amb-steam" d="M-20,-80 q10,-20 0,-40 M10,-80 q10,-20 0,-40" stroke="#fff" stroke-width="4" fill="none" opacity=".7"/>'}</g>
   ${[1660, 1700, 1740, 1780, 1820].map((x, i) => `<path d="M${x},380 L${x},${430 + (i % 2) * 20}" stroke="#a8703f" stroke-width="2"/><circle cx="${x}" cy="${440 + (i % 2) * 20}" r="10" fill="${['#e94b5a', '#f2c14e', '#e94b5a', '#4caf72', '#f2c14e'][i]}"/>`).join('')}
   <rect x="1640" y="370" width="200" height="12" rx="6" fill="#a8703f"/>
 
@@ -92,7 +94,7 @@ export function paint({ phase }) {
   ${pottedPlant(1600, 790, 1.1, '#e39a6b')}`;
 }
 
-const MOM = { top: 'cardigan', bottom: 'skirt_satin', shoes: 'flats_pink', acc: ['pearls', 'studs'], hairStyle: 'bun', hairColor: 'black', lips: 'rose' };
+const MOM = NPC_OUTFITS.mom;
 
 export const SCENE = {
   id: 'home',
@@ -104,10 +106,10 @@ export const SCENE = {
   spawn: 980,
   music: 'abkhazia',
   hotspots: [
-    { id: 'bed', x: 300, y: 560, stand: 400, label: 'Кровать', icon: '🛏️', actions: ['sleep', 'nap', 'phoneScroll'] },
+    { id: 'bed', x: 300, y: 560, stand: 400, label: 'Кровать', icon: '🛏️', actions: ['sleep', 'callLover', 'nap', 'phoneScroll'] },
     { id: 'wardrobe', x: 575, y: 260, stand: 575, label: 'Шкаф', icon: '👗', actions: ['wardrobe', 'makeup'] },
-    { id: 'balcony', x: 900, y: 260, stand: 900, label: 'Балкон', icon: '🌊', actions: ['balcony', 'selfie'] },
-    { id: 'table', x: 1360, y: 520, stand: 1330, label: 'Мамин стол', icon: '🥘', actions: ['mamaFood', 'helpCook', 'tea'] },
+    { id: 'balcony', x: 900, y: 260, stand: 900, label: 'Балкон', icon: '🌊', actions: ['balcony', 'selfie', 'puzzle'] },
+    { id: 'table', x: 1360, y: 520, stand: 1330, label: 'Мамин стол', icon: '🥘', actions: ['mamaFood', 'khachapuri', 'helpCook', 'tea'] },
     { id: 'mom', x: 1720, y: 420, stand: 1550, label: 'Мама', icon: '🤗', npc: true, actions: ['momTalk'] },
     { id: 'bath', x: 1940, y: 460, stand: 1900, label: 'Ванная', icon: '🛁', actions: ['shower', 'brushTeeth'] },
   ],

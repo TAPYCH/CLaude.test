@@ -23,7 +23,9 @@ export function stars(w, h, n = 40, seed = 7) {
     const x = rnd() * w;
     const y = rnd() * h;
     const size = 0.8 + rnd() * 1.8;
-    s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${size.toFixed(1)}" fill="#fff" opacity="${(0.5 + rnd() * 0.5).toFixed(2)}"/>`;
+    const op = (0.5 + rnd() * 0.5).toFixed(2);
+    const tw = i % 3 === 0 ? ` class="tw" style="animation-delay:-${((i * 0.73) % 3.2).toFixed(2)}s"` : '';
+    s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${size.toFixed(1)}" fill="#fff" opacity="${op}"${tw}/>`;
   }
   return s;
 }
@@ -34,14 +36,15 @@ export function moon(x, y, r = 26) {
 }
 
 export function sun(x, y, r = 40, color = '#fff3b0') {
-  return `<circle cx="${x}" cy="${y}" r="${r * 2.2}" fill="${color}" opacity=".18"/><circle cx="${x}" cy="${y}" r="${r * 1.5}" fill="${color}" opacity=".3"/><circle cx="${x}" cy="${y}" r="${r}" fill="${color}"/>`;
+  return `<g class="amb-pulse"><circle cx="${x}" cy="${y}" r="${r * 2.2}" fill="${color}" opacity=".18"/><circle cx="${x}" cy="${y}" r="${r * 1.5}" fill="${color}" opacity=".3"/></g><circle cx="${x}" cy="${y}" r="${r}" fill="${color}"/>`;
 }
 
 export function cloud(x, y, s = 1, op = 0.9) {
-  return `<g transform="translate(${x},${y}) scale(${s})" opacity="${op}">
+  // outer group carries the CSS drift (never animate an element that has a transform attribute)
+  return `<g class="amb-cloud" style="animation-delay:-${Math.round((x * 7 + y * 3) % 36)}s;animation-duration:${30 + Math.round((x * 13) % 16)}s"><g transform="translate(${x},${y}) scale(${s})" opacity="${op}">
     <ellipse cx="0" cy="0" rx="60" ry="22" fill="#fff"/>
     <circle cx="-26" cy="-10" r="24" fill="#fff"/><circle cx="8" cy="-22" r="30" fill="#fff"/><circle cx="38" cy="-6" r="20" fill="#fff"/>
-  </g>`;
+  </g></g>`;
 }
 
 /** Moscow skyline silhouette: Stalin high-rise, Ostankino tower, Moscow City. */
@@ -94,7 +97,7 @@ export function palm(x, y, s = 1, col = '#3f9a5a') {
   return `<g transform="translate(${x},${y}) scale(${s})">
     <path d="M-8,0 C-14,-80 -4,-170 10,-240 L22,-238 C10,-170 4,-80 10,0 Z" fill="#9b6b43"/>
     ${[-200, -160, -120, -80, -40].map((yy) => `<path d="M${-6 + (yy + 200) * -0.02},${yy} q10,6 20,0" stroke="#7d5232" stroke-width="3" fill="none"/>`).join('')}
-    <g transform="translate(16,-240)">${[-170, -140, -110, -60, -25, 10, 35].map(leaf).join('')}
+    <g transform="translate(16,-240)"><g class="amb-sway" style="animation-delay:-${Math.round(x % 5)}s">${[-170, -140, -110, -60, -25, 10, 35].map(leaf).join('')}</g>
     <circle cx="-4" cy="6" r="8" fill="#7d5232"/><circle cx="8" cy="8" r="8" fill="#6d4628"/></g>
   </g>`;
 }
@@ -135,7 +138,7 @@ export function stringLights(x0, x1, y, sag = 30) {
     const t = i / n;
     const x = x0 + (x1 - x0) * t;
     const yy = (1 - t) * (1 - t) * y + 2 * (1 - t) * t * (y + sag * 2) + t * t * y;
-    s += `<circle cx="${x}" cy="${yy + 8}" r="12" fill="${cols[i % 4]}" opacity=".25" class="glow"/><circle cx="${x}" cy="${yy + 8}" r="5.5" fill="${cols[i % 4]}"/>`;
+    s += `<circle cx="${x}" cy="${yy + 8}" r="12" fill="${cols[i % 4]}" opacity=".25" class="glow" style="animation-delay:-${((i * 0.9) % 2.6).toFixed(1)}s"/><circle cx="${x}" cy="${yy + 8}" r="5.5" fill="${cols[i % 4]}"/>`;
   }
   return s;
 }
@@ -159,4 +162,11 @@ export function mandarinTree(x, y, s = 1, fruit = true) {
 
 export function frame(x, y, w, h, inner, border = '#fff') {
   return `<g transform="translate(${x},${y})"><rect x="-6" y="-6" width="${w + 12}" height="${h + 12}" rx="6" fill="${border}"/><rect width="${w}" height="${h}" rx="3" fill="#ffe9d6"/>${inner}</g>`;
+}
+
+/** Two wisps of rising steam (CSS-animated). */
+export function steam(x, y, s = 1) {
+  return `<g transform="translate(${x},${y}) scale(${s})">${[-10, 10]
+    .map((d, i) => `<path class="amb-steam" style="animation-delay:-${i * 1.3}s" d="M${d},0 q-8,-14 0,-28 q8,-14 0,-28" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none" opacity=".7"/>`)
+    .join('')}</g>`;
 }

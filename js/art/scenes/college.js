@@ -1,5 +1,6 @@
 // Medical college — dental technician lab. World 2000 × 1000.
 import { skyDefs, isDark, moon, cloud, moscowSkyline, pottedPlant, shadowEllipse } from './common.js';
+import { NPC_OUTFITS } from '../../data/npcs.js';
 
 export const W = 2000;
 
@@ -99,8 +100,8 @@ export function paint({ phase }) {
   ${isDark(phase) ? '<rect width="2000" height="1000" fill="#1b1640" opacity=".1"/>' : ''}`;
 }
 
-const TEACHER = { top: 'shirt_white', bottom: 'skirt_satin', shoes: 'pumps_white', acc: ['glasses', 'pearl_drops'], hairStyle: 'bob', hairColor: 'platinum', lips: 'berry' };
-const KATYA = { top: 'hoodie_msk', bottom: 'jeans', shoes: 'sneakers', acc: ['hoops'], hairStyle: 'ponytail', hairColor: 'honey', lips: 'peach' };
+const TEACHER = NPC_OUTFITS.teacher;
+const KATYA = NPC_OUTFITS.katya;
 
 export const SCENE = {
   id: 'college',
@@ -112,8 +113,8 @@ export const SCENE = {
   spawn: 930,
   music: 'moscow',
   hotspots: [
-    { id: 'board', x: 280, y: 110, stand: 230, label: 'Лекция', icon: '🎓', actions: ['lecture'] },
-    { id: 'teacher', x: 420, y: 430, stand: 250, label: 'Ирина Петровна', icon: '👩‍🏫', npc: true, actions: ['consult', 'exam'] },
+    { id: 'board', x: 280, y: 110, stand: 230, label: 'Лекция', icon: '🎓', actions: ['lecture', 'quiz'] },
+    { id: 'teacher', x: 420, y: 430, stand: 250, label: 'Ирина Петровна', icon: '👩‍🏫', npc: true, actions: ['consult', 'olympiad', 'exam'] },
     { id: 'bench', x: 760, y: 470, stand: 760, label: 'Лабораторный стол', icon: '🦷', actions: ['practice', 'memory'] },
     { id: 'shelf', x: 1520, y: 140, stand: 1520, label: 'Стенд с моделями', icon: '🃏', actions: ['memory', 'selfie'] },
     { id: 'vending', x: 1780, y: 340, stand: 1760, label: 'Кофейный автомат', icon: '☕', actions: ['vending'] },

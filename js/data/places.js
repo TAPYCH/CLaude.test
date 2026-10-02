@@ -21,6 +21,7 @@ export const MAP = {
       { scene: 'garden', x: 84, y: 40, icon: '🍊', name: 'Мандариновый сад' },
       { excursion: 'ritsa', x: 30, y: 26, icon: '🏞️', name: 'Озеро Рица' },
       { excursion: 'afon', x: 36, y: 62, icon: '⛪', name: 'Новый Афон' },
+      { scene: 'mylab', x: 74, y: 80, icon: '🦷', name: 'Моя лаборатория', locked: true },
       { excursion: 'gagra', x: 12, y: 46, icon: '🏛️', name: 'Гагра' },
     ],
   },

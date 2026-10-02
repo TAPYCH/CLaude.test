@@ -63,7 +63,7 @@ export const SCENE = {
   spawn: 1000,
   music: 'moscow',
   hotspots: [
-    { id: 'boutique', x: 260, y: 310, stand: 260, label: 'Бутик «Мандарин»', icon: '👗', actions: ['boutique', 'selfie'] },
+    { id: 'boutique', x: 260, y: 310, stand: 260, label: 'Бутик «Мандарин»', icon: '👗', actions: ['boutique', 'fashionShow', 'selfie'] },
     { id: 'salon', x: 710, y: 330, stand: 710, label: 'Салон «Локон»', icon: '💇‍♀️', actions: ['salon', 'makeup'] },
     { id: 'pets', x: 1160, y: 330, stand: 1160, label: 'Зоомагазин', icon: '🐾', actions: ['petshop'] },
     { id: 'grocery', x: 1690, y: 330, stand: 1690, label: 'Продукты', icon: '🛒', actions: ['grocery', 'foodcourt'] },

@@ -1,11 +1,15 @@
 // Quests, daily tasks, achievements and phone messages — all driven by bus events.
-import { S, addMoney, addXP, levelOf } from './state.js';
+import { S, addMoney, addXP, levelOf, changeNeed, changeGrades } from './state.js';
 import { bus } from './bus.js';
-import { QUESTS, DAILY_POOL } from '../data/quests.js';
+import { QUESTS, DAILY_POOL, SIDE_QUESTS, DREAMS, CHAPTERS } from '../data/quests.js';
 import { ACHIEVEMENTS } from '../data/achievements.js';
 import { CONTACTS } from '../data/contacts.js';
 
 export const currentQuest = () => QUESTS[S.quest.index] || null;
+export const currentChapter = () => {
+  const q = currentQuest();
+  return CHAPTERS.find((c) => c.n === (q ? q.chapter : CHAPTERS.length)) || CHAPTERS[CHAPTERS.length - 1];
+};
 
 function eventMatches(goal, evt, d) {
   switch (goal.type) {
@@ -16,7 +20,8 @@ function eventMatches(goal, evt, d) {
         evt === 'minigame' &&
         (!goal.id || goal.id === d.id) &&
         (goal.stars == null || d.stars >= goal.stars) &&
-        (goal.score == null || d.score >= goal.score)
+        (goal.score == null || d.score >= goal.score) &&
+        (goal.mode == null || goal.mode === d.mode)
       );
     case 'buy':
       return evt === 'buy';
@@ -44,6 +49,14 @@ function stateProgress(goal) {
       return goal.ids.filter((id) => S.postcards.includes(id)).length;
     case 'need':
       return S.needs[goal.id] >= goal.value ? goal.count : null;
+    case 'money':
+      return S.money >= goal.value ? goal.count : 0;
+    case 'grades':
+      return S.grades >= goal.value ? goal.count : 0;
+    case 'flag':
+      return S.flags[goal.flag] ? goal.count : 0;
+    case 'stat':
+      return (S.stats[goal.key] || 0) >= goal.value ? goal.count : 0;
     default:
       return null;
   }
@@ -55,6 +68,31 @@ function applyReward(r) {
   if (r.xp) for (const [k, v] of Object.entries(r.xp)) S.skills[k] += v;
   if (r.item && !S.owned.includes(r.item)) S.owned.push(r.item);
   if (r.petFood) S.inventory.petFood += r.petFood;
+  if (r.social) changeNeed('social', r.social);
+  if (r.fun) changeNeed('fun', r.fun);
+  if (r.grades) changeGrades(r.grades);
+}
+
+/** Human-readable progress of the current main quest, e.g. "4 200 / 6 000 ₽". */
+export function questProgressText(q = currentQuest()) {
+  if (!q) return '';
+  const g = q.goal;
+  if (g.type === 'money') return `${Math.min(S.money, g.value).toLocaleString('ru-RU')} / ${g.value.toLocaleString('ru-RU')} ₽`;
+  if (g.type === 'grades') return `Успеваемость ${S.grades}% / ${g.value}%`;
+  if (g.type === 'skill') return `Уровень ${levelOf(S.skills[g.id])} / ${g.level}`;
+  if (g.type === 'stat') return `${Math.min(S.stats[g.key] || 0, g.value)} / ${g.value}`;
+  if (g.count > 1) return `${S.quest.progress} / ${g.count}`;
+  return '';
+}
+
+export function questFraction(q = currentQuest()) {
+  if (!q) return 0;
+  const g = q.goal;
+  if (g.type === 'money') return Math.min(1, S.money / g.value);
+  if (g.type === 'grades') return Math.min(1, S.grades / g.value);
+  if (g.type === 'skill') return Math.min(1, levelOf(S.skills[g.id]) / g.level);
+  if (g.type === 'stat') return Math.min(1, (S.stats[g.key] || 0) / g.value);
+  return Math.min(1, S.quest.progress / g.count);
 }
 
 function advanceQuest(evt, d) {
@@ -72,11 +110,18 @@ function advanceQuest(evt, d) {
   }
   if (changed) bus.emit('questProgress', q);
   if (S.quest.progress >= q.goal.count) {
-    applyReward(q.reward);
+    // advance first: rewards emit events that re-enter this function
     S.quest.index++;
     S.quest.progress = 0;
-    if (!currentQuest()) S.flags.allQuests = true;
+    const nq = currentQuest();
+    S.quest.id = nq ? nq.id : null;
+    applyReward(q.reward);
+    if (!nq) S.flags.allQuests = true;
     bus.emit('questDone', q);
+    if (nq && nq.chapter > S.chapterSeen) {
+      S.chapterSeen = nq.chapter;
+      bus.emit('chapter', CHAPTERS.find((c) => c.n === nq.chapter));
+    }
     const next = currentQuest();
     if (next && next.from) setTimeout(() => sendMessage(next.from.who, next.from.text), 2500);
     // the next quest may already be satisfied (e.g. skill level reached earlier)
@@ -110,6 +155,81 @@ function advanceDailies(evt, d) {
       task.done = true;
       addMoney(def.money, 'daily');
       bus.emit('dailyDone', def);
+    }
+  }
+}
+
+// ---------------------------------------------------------------- side quests (NPC requests)
+export const sideDef = (id) => SIDE_QUESTS.find((q) => q.id === id);
+
+export function offerSideQuest(force = false) {
+  if (!S.started || S.side.length >= 2) return;
+  if (!force && Math.random() < 0.5) return;
+  const pool = SIDE_QUESTS.filter((q) => {
+    if (S.side.some((a) => a.id === q.id)) return false;
+    const last = S.sideDone[q.id];
+    if (last != null && S.day - last < 6) return false;
+    try {
+      return q.when(S);
+    } catch (e) {
+      return false;
+    }
+  });
+  if (!pool.length) return;
+  const q = pool[Math.floor(Math.random() * pool.length)];
+  S.side.push({ id: q.id, progress: 0, until: S.day + q.days });
+  sendMessage(q.who, `${q.text}\n\n📌 Просьба: ${q.desc} (до ${q.days === 1 ? 'завтра' : q.days + ' дн.'})`);
+  bus.emit('sideNew', q);
+}
+
+function advanceSide(evt, d) {
+  for (const a of [...S.side]) {
+    const q = sideDef(a.id);
+    if (!q) continue;
+    if (eventMatches(q.goal, evt, d)) a.progress++;
+    const sp = stateProgress(q.goal);
+    if (sp != null) a.progress = Math.max(a.progress, sp);
+    if (a.progress >= q.goal.count) {
+      S.side = S.side.filter((x) => x !== a);
+      S.sideDone[q.id] = S.day;
+      applyReward(q.reward);
+      S.stats.sideDone = (S.stats.sideDone || 0) + 1;
+      bus.emit('sideDone', q);
+    }
+  }
+}
+
+export function expireSideQuests() {
+  for (const a of [...S.side]) {
+    if (S.day > a.until) {
+      const q = sideDef(a.id);
+      S.side = S.side.filter((x) => x !== a);
+      S.sideDone[a.id] = S.day;
+      if (q) sendMessage(q.who, 'Ну ладно, в другой раз 😔');
+      bus.emit('sideFailed', q);
+    }
+  }
+}
+
+// ---------------------------------------------------------------- dreams
+export function dreamValue(d) {
+  try {
+    return d.measure(S, levelOf);
+  } catch (e) {
+    return 0;
+  }
+}
+
+function checkDreams() {
+  for (const d of DREAMS) {
+    const v = dreamValue(d);
+    let tier = S.dreams[d.id] || 0;
+    while (tier < d.tiers.length && v >= d.tiers[tier]) {
+      const reward = d.rewards[tier];
+      tier++;
+      S.dreams[d.id] = tier;
+      addMoney(reward, 'dream');
+      bus.emit('dream', { dream: d, tier, reward });
     }
   }
 }
@@ -158,12 +278,17 @@ export function unreadFor(who) {
 }
 
 // ---------------------------------------------------------------- wiring
-const IGNORE = new Set(['questProgress', 'questDone', 'dailyDone', 'achievement', 'message', 'xp', 'money']);
+const IGNORE = new Set(['questProgress', 'questDone', 'dailyDone', 'achievement', 'message', 'xp', 'chapter', 'dream', 'sideDone', 'sideNew', 'sideFailed', 'debtPaid']);
+let inited = false;
 export function initProgress() {
+  if (inited) return;
+  inited = true;
   bus.on('*', (evt, d) => {
     if (IGNORE.has(evt)) return;
     advanceQuest(evt, d || {});
     advanceDailies(evt, d || {});
+    advanceSide(evt, d || {});
+    checkDreams();
     checkAchievements();
   });
   bus.on('levelup', () => advanceQuest('check', {}));

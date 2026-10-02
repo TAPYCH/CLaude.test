@@ -1,9 +1,10 @@
 // Persistent game state + helpers. Single source of truth: `S`.
 import { DEFAULT_OUTFIT } from '../data/items.js';
 import { bus } from './bus.js';
+import { QUESTS, LEGACY_ORDER } from '../data/quests.js';
 
 const KEY = 'lana-life-save-v1';
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 
 export const NEEDS = [
   { id: 'hunger', name: 'Сытость', icon: '🍓', color: '#ff8a5c', decay: 4.2 },
@@ -52,9 +53,16 @@ export function freshState() {
     savedOutfits: [],
     owned: ['top_keyhole', 'skirt_white', 'pumps_white', 'studs', 'bag_chain', 'pajamas'],
     salon: { hairStyle: ['long'], hairColor: ['chestnut'], lips: ['nude'] },
-    inventory: { groceries: 3, petFood: 0, snacks: 2 },
+    inventory: { groceries: 3, petFood: 0, snacks: 2, meals: 0, sweets: 0 },
     pets: [],
-    quest: { index: 0, progress: 0 },
+    quest: { index: 0, progress: 0, id: 'breakfast' },
+    chapterSeen: 0,
+    grades: 50,
+    debt: 0,
+    side: [],
+    sideDone: {},
+    dreams: {},
+    lab: { owned: false, upgrades: [], orders: 0 },
     daily: { day: -1, tasks: [] },
     achievements: {},
     stats: {},
@@ -81,6 +89,19 @@ function migrate(data) {
   out.settings = { ...base.settings, ...(data.settings || {}) };
   out.salon = { ...base.salon, ...(data.salon || {}) };
   out.outfit = { ...base.outfit, ...(data.outfit || {}) };
+  out.lab = { ...base.lab, ...(data.lab || {}) };
+  // v1 saves stored only the quest position; map it to the (longer) v2 story by quest id
+  if (data.quest && !data.quest.id) {
+    const id = LEGACY_ORDER[data.quest.index];
+    const idx = id ? QUESTS.findIndex((q) => q.id === id) : QUESTS.length;
+    out.quest = { index: idx < 0 ? 0 : idx, progress: data.quest.progress || 0, id: id || null };
+  } else if (data.quest && data.quest.id) {
+    const idx = QUESTS.findIndex((q) => q.id === data.quest.id);
+    if (idx >= 0) out.quest.index = idx;
+  }
+  out.chapterSeen = data.chapterSeen ?? (QUESTS[out.quest.index] ? QUESTS[out.quest.index].chapter : 5);
+  out.flags = { ...(data.flags || {}) };
+  if (out.quest.index > QUESTS.findIndex((q) => q.id === 'home')) out.flags.homecoming = true;
   out.version = SAVE_VERSION;
   return out;
 }
@@ -135,6 +156,16 @@ export function changeNeed(id, delta) {
 }
 
 export function addMoney(n, reason) {
+  if (n > 0 && S.debt > 0) {
+    // incoming money pays off debts first
+    const pay = Math.min(S.debt, n);
+    S.debt -= pay;
+    S.money = Math.round(S.money + n - pay);
+    if (pay) bus.emit('debtPaid', { amount: pay, left: S.debt });
+    bus.emit('money', { amount: n, reason });
+    stat('earned', n);
+    return;
+  }
   S.money = Math.max(0, Math.round(S.money + n));
   bus.emit('money', { amount: n, reason });
   if (n > 0) stat('earned', n);
@@ -182,4 +213,19 @@ export function owns(id) {
 
 export function absoluteMinutes() {
   return S.day * 1440 + S.minutes;
+}
+
+/** Pay a bill; whatever can't be paid becomes debt (repaid automatically from income). */
+export function payBill(amount) {
+  const paid = Math.min(S.money, amount);
+  S.money -= paid;
+  S.debt += amount - paid;
+  bus.emit('money', { amount: -paid, reason: 'bill' });
+  return amount - paid;
+}
+
+export function changeGrades(delta) {
+  const before = S.grades;
+  S.grades = Math.max(0, Math.min(100, S.grades + delta));
+  if (S.grades !== before) bus.emit('grades', { delta, value: S.grades });
 }

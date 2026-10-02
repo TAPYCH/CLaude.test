@@ -1,5 +1,5 @@
 // Core game logic: time flow, needs, actions, travel, events.
-import { S, NEEDS, changeNeed, addMoney, addXP, stat, save, mood, levelOf, record } from './core/state.js';
+import { S, NEEDS, changeNeed, addMoney, addXP, stat, save, mood, levelOf, record, changeGrades, payBill } from './core/state.js';
 import { bus } from './core/bus.js';
 import { ACTIONS } from './data/actions.js';
 import { SCENES, CITIES } from './data/scenes.js';
@@ -7,13 +7,14 @@ import { ITEMS } from './data/items.js';
 import { PET_TYPES } from './art/pets.js';
 import { CONFIG } from './config.js';
 import { AMBIENT, NPC_LINES } from './data/contacts.js';
-import { ensureDailies, sendMessage, currentQuest } from './core/progress.js';
+import { ensureDailies, sendMessage, currentQuest, offerSideQuest, expireSideQuests } from './core/progress.js';
+import { BARISTA_RANKS, EQUIPMENT, LAB_RENT, STIPEND, RENT } from './data/career.js';
 import { world, loadScene, walkTo, setOverhead, lanaAnim, setExpression, lanaScreenPos, hideHotspots, rebuildPet, setProp, cameraFlash, heartsAt } from './ui/world.js';
 import { updateHud } from './ui/hud.js';
 import { toast, floatText, confetti } from './ui/fx.js';
 import { dialog } from './ui/modal.js';
 import { sfx, playMusic } from './audio.js';
-import { money, weekday, formatClock, weatherOf } from './core/time.js';
+import { money, weekday, formatClock, weatherOf, isHoliday } from './core/time.js';
 import { playMinigame } from './minigames/index.js';
 import { el, app, wait } from './ui/dom.js';
 import { renderLanaHead } from './art/character.js';
@@ -68,16 +69,48 @@ function newDay() {
   ensureDailies();
   S.flags.loveSent = false;
   const wd = weekday(S.day);
+  // skipped lectures yesterday lower the grades (after the first lecture quest, during term time)
+  const y = S.day - 1;
+  if (S.started && !S.flags.diploma && S.quest.index >= 2 && weekday(y) < 5 && !isHoliday(y) && S.flags.lectureDay !== y) {
+    changeGrades(-5);
+    S.stats.skips = (S.stats.skips || 0) + 1;
+    if (S.stats.skips === 1 || S.stats.skips % 4 === 0) sendMessage('teacher', `Лана, вы пропустили пары. Успеваемость: ${S.grades}%. Не забывайте — от неё зависят стипендия и допуск к экзамену.`);
+  }
   if (wd === 0) {
-    addMoney(2500, 'stipend');
-    sendMessage('katya', 'Стипендия пришла! 2 500 ₽ 🎉 Не трать всё на кофе 😅');
+    if (!S.flags.diploma) {
+      if (S.grades >= STIPEND.highMin) {
+        addMoney(STIPEND.high, 'stipend');
+        sendMessage('katya', `Повышенная стипендия! ${money(STIPEND.high)} 🤩 Ты у нас отличница!`);
+      } else if (S.grades >= STIPEND.min) {
+        addMoney(STIPEND.base, 'stipend');
+        sendMessage('katya', `Стипендия пришла! ${money(STIPEND.base)} 🎉 При успеваемости 80%+ будет повышенная.`);
+      } else sendMessage('katya', `Лан, тебе в этот раз не дали стипендию 😟 Нужна успеваемость от ${STIPEND.min}% (у тебя ${S.grades}%).`);
+    }
+    const debt = payBill(RENT);
+    sendMessage('dorm', debt ? `Оплата общежития ${money(RENT)}. Не хватило ${money(debt)} — долг спишется с ближайших поступлений.` : `Оплата общежития за неделю: ${money(RENT)}. Спасибо!`);
   }
   if (wd === 4) {
     addMoney(1500, 'mom');
     sendMessage('mom', 'Доча, скинула тебе 1 500 ₽ на вкусняшки 💛');
   }
+  expireSideQuests();
+  if (S.day % 2 === 0) offerSideQuest(true);
   holidays();
   bus.emit('newDay', { day: S.day });
+}
+
+export function baristaRank() {
+  const shifts = S.stats.mg_barista || 0;
+  const charm = levelOf(S.skills.charm);
+  let r = 0;
+  BARISTA_RANKS.forEach((rk, i) => {
+    if (shifts >= rk.shifts && charm >= rk.charm) r = i;
+  });
+  return r;
+}
+
+export function labBonus() {
+  return (S.lab.upgrades || []).reduce((a, id) => a + ((EQUIPMENT.find((e) => e.id === id) || {}).bonus || 0), 0);
 }
 
 const HOLIDAYS = {
@@ -209,6 +242,9 @@ export async function doAction(id, hotspot) {
     if (a.special === 'shop') return void (await ui.openShop(a.shopTab));
     if (a.special === 'sleep') return void (await sleep());
     if (a.special === 'exam') return void (await exam());
+    if (a.special === 'olympiad') return void (await olympiad());
+    if (a.special === 'labShop') return void (await ui.openLabShop());
+    if (a.special === 'opening') return void (await grandOpening());
     if (a.cost) addMoney(-a.cost, id);
     if (a.minigame) return void (await minigameAction(id, a));
     const npc = hotspot && hotspot.npc ? npcSay(hotspot.id) : null;
@@ -372,12 +408,27 @@ export const activePet = () => S.pets.find((p) => p.id === S.activePet) || S.pet
 const MG_REWARD = {
   crown: (res, mode) => {
     const lab = 1 + outfitBonus('lab');
+    const lv = levelOf(S.skills.dental);
     const out = { xp: { dental: Math.round((18 + res.stars * 22) * lab) }, needs: { energy: -8, fun: res.stars >= 2 ? 8 : -4 } };
-    if (mode === 'orders') out.money = 700 + res.stars * 550;
+    if (mode === 'orders') out.money = res.stars ? 500 + lv * 120 + res.stars * 350 : 150;
+    if (mode === 'lab') out.money = res.stars ? Math.round((700 + lv * 160 + res.stars * 450) * (1 + labBonus())) : 200;
+    if (mode === 'practice' || mode === 'normal') if (!S.flags.diploma) changeGrades(res.stars);
     stat('crowns');
     if (res.stars >= 3) stat('crown3');
     return out;
   },
+  quiz: (res) => {
+    changeGrades(res.stars * 4 - 2);
+    return { xp: { dental: 12 + res.stars * 14 }, needs: { energy: -6, fun: res.stars >= 2 ? 6 : -6 } };
+  },
+  khachapuri: (res) => ({ xp: { cooking: 20 + res.stars * 15 }, needs: { hunger: 25 + res.stars * 10, fun: 10, social: 12 } }),
+  dance: (res) => ({ xp: { charm: 14 + res.stars * 10, fitness: 10 + res.stars * 6 }, needs: { fun: 18 + res.stars * 6, social: 18, energy: -14 } }),
+  fashion: (res) => {
+    const prize = [0, 800, 2000, 4500][res.stars];
+    if (res.stars >= 3) stat('fashion3');
+    return { money: prize, xp: { charm: 18 + res.stars * 10 }, needs: { fun: 12 } };
+  },
+  puzzle: (res) => ({ money: res.stars * 200, needs: { fun: 10 } }),
   mandarins: (res) => {
     const season = [10, 11, 0].includes(new Date(Date.UTC(2025, 8, 1) + S.day * 864e5).getUTCMonth());
     stat('mandarins', res.score);
@@ -388,9 +439,10 @@ const MG_REWARD = {
     return { money: (res.pearls || 0) * 150, xp: { fitness: 16 + res.stars * 10 }, needs: { fun: 26, hygiene: 20, energy: -12 } };
   },
   barista: (res) => {
+    const rank = BARISTA_RANKS[baristaRank()];
     stat('mg_barista');
     if (res.stars >= 3) stat('barista3');
-    return { money: 1100 + (res.tips || 0), xp: { charm: 18 + res.stars * 8 }, needs: { energy: -18, social: 20, fun: res.stars >= 2 ? 6 : -6 } };
+    return { money: rank.pay + (res.tips || 0), xp: { charm: 18 + res.stars * 8 }, needs: { energy: -18, social: 20, fun: res.stars >= 2 ? 6 : -6 } };
   },
   memory: (res) => {
     if (res.stars >= 3) stat('memory3');
@@ -429,13 +481,17 @@ export function applyRewards(rw) {
 
 async function minigameAction(id, a, mode = null) {
   const mg = a.minigame;
-  mode = mode || (id === 'orders' ? 'orders' : id === 'typodont' ? 'practice' : 'normal');
+  mode = mode || { orders: 'orders', labOrders: 'lab', typodont: 'practice' }[id] || 'normal';
+  const rankBefore = mg === 'barista' ? baristaRank() : 0;
   pauseTime();
   playMusic('game');
   let res;
   try {
     res = await playMinigame(mg, {
       mode,
+      level: minigameLevel(mg),
+      labBonus: labBonus(),
+      lab: S.lab.upgrades || [],
       reward: (r) => applyRewards(MG_REWARD[mg] ? MG_REWARD[mg](r, mode) : {}),
     });
   } finally {
@@ -445,7 +501,16 @@ async function minigameAction(id, a, mode = null) {
   if (!res) return null;
   advanceMinutes(a.minutes || 30, 0.6);
   stat('mg_' + mg + '_played');
+  stat('starsTotal', res.stars || 0);
+  if (id === 'labOrders') S.lab.orders = (S.lab.orders || 0) + 1;
   if (res.score != null) record(mg, res.score);
+  if (mg === 'barista') {
+    const r = baristaRank();
+    if (r > rankBefore) {
+      sendMessage('vika', `Лана, ты молодец! Повышаю тебя до «${BARISTA_RANKS[r].name}». Теперь за смену ${money(BARISTA_RANKS[r].pay)} + чаевые ☕🎉`);
+      confetti(60);
+    }
+  }
   bus.emit('minigame', { id: mg, stars: res.stars, score: res.score, mode });
   bus.emit('action', { id });
   setExpression(res.stars >= 2 ? 'excited' : 'neutral', 2500);
@@ -465,13 +530,18 @@ export async function playPetGame() {
   }
 }
 
+function minigameLevel(mg) {
+  const L = (k) => levelOf(S.skills[k]);
+  return { crown: L('dental'), quiz: L('dental'), memory: L('dental'), barista: baristaRank() + 1, mandarins: L('fitness'), runner: L('fitness'), shells: L('fitness'), dance: L('charm'), fashion: L('charm'), khachapuri: L('cooking') }[mg] || 1;
+}
+
 // ---------------------------------------------------------------- exam & finale
 async function exam() {
-  const ok = levelOf(S.skills.dental) >= 5 && S.attendance >= 5;
+  const ok = levelOf(S.skills.dental) >= 5 && S.grades >= 60;
   if (!ok) {
     await dialog({
       icon: '👩‍🏫', title: 'Ирина Петровна',
-      text: `«Лана, для допуска нужно:\n• Зуботехника 5 уровня (сейчас ${levelOf(S.skills.dental)})\n• Минимум 5 посещённых пар (сейчас ${S.attendance})»`,
+      text: `«Лана, для допуска нужно:\n• Зуботехника 5 уровня (сейчас ${levelOf(S.skills.dental)}) ${levelOf(S.skills.dental) >= 5 ? '✅' : '❌'}\n• Успеваемость от 60% (сейчас ${S.grades}%) ${S.grades >= 60 ? '✅' : '❌'}»`,
       buttons: [{ label: 'Поняла, готовлюсь!', value: 1 }],
     });
     return;
@@ -494,6 +564,87 @@ async function exam() {
     S.flags.examCooldown = S.day;
     await dialog({ icon: '😥', title: 'Почти получилось!', text: 'Ирина Петровна: «Неплохо, но нужно идеально. Жду вас завтра на пересдачу!»' });
   }
+}
+
+async function olympiad() {
+  if (S.flags.olympiadTry === S.day) {
+    await dialog({ icon: '🏅', title: 'Олимпиада', text: 'Следующая попытка — завтра. Потренируйся на типодонте!' });
+    return;
+  }
+  await ui.dialogue('olympiad');
+  const res = await minigameAction('olympiad', { minigame: 'crown', minutes: 120 }, 'olympiad');
+  if (!res) return;
+  S.flags.olympiadTry = S.day;
+  if (res.stars >= 3) {
+    S.flags.olympiadWon = true;
+    confetti(100);
+    sfx('fanfare');
+    await dialog({ icon: '🥇', title: 'Первое место!', text: 'Жюри в восторге от твоей коронки. Ирина Петровна сияет: «Я в вас не сомневалась!»' });
+  } else {
+    await dialog({ icon: '🥈', title: 'Почти!', text: 'Для победы нужна идеальная работа — 3 звезды. Попробуй завтра.' });
+  }
+}
+
+async function grandOpening() {
+  pauseTime();
+  try {
+    await ui.dialogue('opening');
+  } finally {
+    resumeTime();
+  }
+  S.flags.opened = true;
+  confetti(160);
+  sfx('fanfare');
+  lanaAnim('joy', 1100);
+  changeNeed('fun', 40);
+  changeNeed('social', 40);
+  bus.emit('action', { id: 'grandOpening' });
+  await dialog({
+    icon: '✨',
+    title: 'Lana Dental открыта!',
+    text: 'История Ланы завершена — но жизнь продолжается: выполняй заказы, покупай оборудование, путешествуй и собирай мечты. 💕',
+    buttons: [{ label: 'Продолжить жить ✨', value: true }],
+  });
+  save();
+}
+
+export function rentLab() {
+  if (S.lab.owned) return true;
+  if (!S.flags.diploma) {
+    toast({ icon: '🎓', title: 'Сначала диплом', text: 'Помещение сдают только дипломированным специалистам' });
+    return false;
+  }
+  if (S.money < LAB_RENT) {
+    sfx('bad');
+    toast({ icon: '💸', title: 'Не хватает денег', text: `Нужно ${money(LAB_RENT)}` });
+    return false;
+  }
+  addMoney(-LAB_RENT, 'lab');
+  S.lab.owned = true;
+  S.flags.ownLab = true;
+  sfx('fanfare');
+  confetti(120);
+  bus.emit('labRented', {});
+  save();
+  return true;
+}
+
+export function buyEquipment(id) {
+  const e = EQUIPMENT.find((x) => x.id === id);
+  if (!e || S.lab.upgrades.includes(id)) return false;
+  if (S.money < e.price) {
+    sfx('bad');
+    toast({ icon: '💸', title: 'Не хватает денег', text: `Нужно ${money(e.price)}` });
+    return false;
+  }
+  addMoney(-e.price, 'equipment');
+  S.lab.upgrades.push(id);
+  stat('labUpgrades');
+  sfx('coin');
+  if (S.scene === 'mylab') loadScene('mylab', world.lanaX);
+  bus.emit('equipment', { id });
+  save();
+  return true;
 }
 
 // ---------------------------------------------------------------- sleep
@@ -629,10 +780,18 @@ export async function travel(to, mode) {
   loadScene(S.scene);
   resumeTime();
   playMusic(SCENES[S.scene].music);
-  showBanner(SCENES[S.scene]);
+  if (to === 'abkhazia' && !S.flags.homecoming) {
+    S.flags.homecoming = true;
+    await ui.dialogue('homecoming');
+  } else showBanner(SCENES[S.scene]);
   stat('trips');
   stat('trip_' + mode);
   bus.emit('travel', { to, mode });
+  if (to === 'abkhazia' && S.inventory.sweets > 0) {
+    S.inventory.sweets--;
+    S.flags.sweetsDelivered = true;
+    setTimeout(() => sendMessage('grandma', 'Ой, конфеты «Москва»! Внученька, спасибо, родная 🥹🍬'), 4000);
+  }
   if (to === 'abkhazia') setTimeout(() => sendMessage('mom', 'Доченька приехала!!! 😍 Иди скорее обниматься, стол накрыт!'), 1500);
   else setTimeout(() => sendMessage('katya', 'С возвращением в Москву! Завтра пары, не проспи 😉'), 1500);
   save();

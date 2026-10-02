@@ -116,6 +116,9 @@ const SFX = {
   shine: () => [96, 100, 103].forEach((n, i) => tone({ freq: N(n), type: 'sine', dur: 0.1, vol: 0.08, at: i * 0.04 })),
   purr: () => tone({ freq: 60, type: 'sawtooth', dur: 0.6, vol: 0.06, attack: 0.1 }),
   woof: () => tone({ freq: 300, type: 'square', dur: 0.12, vol: 0.12, slide: -150 }),
+  kick: () => tone({ freq: 140, type: 'sine', dur: 0.16, vol: 0.4, slide: -95 }),
+  hat: () => noise({ dur: 0.04, vol: 0.06, filter: 7000, type: 'highpass' }),
+  snare: () => noise({ dur: 0.12, vol: 0.14, filter: 2400, type: 'bandpass' }),
   train: () => {
     tone({ freq: N(74), type: 'square', dur: 0.5, vol: 0.06, attack: 0.05 });
     tone({ freq: N(78), type: 'square', dur: 0.5, vol: 0.06, attack: 0.05 });
@@ -131,6 +134,17 @@ export function sfx(name) {
     fn();
   } catch (e) {
     /* audio is best-effort */
+  }
+}
+
+/** A single musical note (MIDI number) — used by rhythm games. */
+export function playNote(n, { dur = 0.22, vol = 0.2, type = 'triangle' } = {}) {
+  if (!enabled.sound) return;
+  try {
+    ensure();
+    tone({ freq: N(n), type, dur, vol });
+  } catch (e) {
+    /* best-effort */
   }
 }
 

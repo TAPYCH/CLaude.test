@@ -1,5 +1,6 @@
 // Coffee shop «Пенка». World 1800 × 1000.
-import { skyDefs, isDark, cloud, moon, pottedPlant, shadowEllipse, stringLights } from './common.js';
+import { skyDefs, isDark, cloud, moon, pottedPlant, shadowEllipse, stringLights, steam } from './common.js';
+import { NPC_OUTFITS } from '../../data/npcs.js';
 
 export const W = 1800;
 
@@ -28,10 +29,10 @@ export function paint({ phase }) {
   </g>
   ${stringLights(640, 1200, 60, 30)}
   <!-- menu board -->
-  <rect x="660" y="140" width="300" height="320" rx="14" fill="#3b3440" stroke="#c98b5a" stroke-width="10"/>
-  <text x="810" y="196" text-anchor="middle" font-family="Marck Script" font-size="42" fill="#fff">Меню</text>
-  ${[['Капучино', '220'], ['Латте', '240'], ['Раф', '280'], ['Матча', '300'], ['Круассан', '180']].map(([n, p], i) => `<text x="690" y="${246 + i * 42}" font-family="Nunito" font-weight="800" font-size="22" fill="#ffe9da">${n}</text><text x="930" y="${246 + i * 42}" text-anchor="end" font-family="Nunito" font-weight="900" font-size="22" fill="#ffc96b">${p}</text>`).join('')}
-  <path d="M700,440 q20,-14 40,0 q20,14 40,0" stroke="#ff9cbc" stroke-width="3" fill="none"/>
+  <rect x="770" y="140" width="300" height="320" rx="14" fill="#3b3440" stroke="#c98b5a" stroke-width="10"/>
+  <text x="920" y="196" text-anchor="middle" font-family="Marck Script" font-size="42" fill="#fff">Меню</text>
+  ${[['Капучино', '220'], ['Латте', '240'], ['Раф', '280'], ['Матча', '300'], ['Круассан', '180']].map(([n, p], i) => `<text x="800" y="${246 + i * 42}" font-family="Nunito" font-weight="800" font-size="22" fill="#ffe9da">${n}</text><text x="1040" y="${246 + i * 42}" text-anchor="end" font-family="Nunito" font-weight="900" font-size="22" fill="#ffc96b">${p}</text>`).join('')}
+  <path d="M810,440 q20,-14 40,0 q20,14 40,0" stroke="#ff9cbc" stroke-width="3" fill="none"/>
 
   <!-- counter -->
   ${shadowEllipse(320, 798, 300, 10, 0.18)}
@@ -41,7 +42,7 @@ export function paint({ phase }) {
   <!-- espresso machine -->
   <g transform="translate(150,546)"><rect x="-80" y="-150" width="160" height="150" rx="16" fill="#e8e8f0"/><rect x="-80" y="-150" width="160" height="34" rx="14" fill="#ff8fab"/>
     <rect x="-60" y="-104" width="120" height="16" rx="6" fill="#c7c7d6"/>${[-36, 0, 36].map((x) => `<rect x="${x - 8}" y="-88" width="16" height="22" rx="3" fill="#8a8a9a"/>`).join('')}
-    ${cup(-36, -10, 0.9)}${cup(36, -10, 0.9)}<circle cx="56" cy="-132" r="7" fill="#fff"/><circle cx="-56" cy="-132" r="7" fill="#3fcfae"/></g>
+    ${cup(-36, -10, 0.9)}${cup(36, -10, 0.9)}${steam(-36, -26, 0.55)}${steam(36, -26, 0.55)}<circle cx="56" cy="-132" r="7" fill="#fff"/><circle cx="-56" cy="-132" r="7" fill="#3fcfae"/></g>
   <!-- pastry display -->
   <g transform="translate(420,546)"><rect x="-130" y="-130" width="260" height="130" rx="16" fill="#e9f6ff" opacity=".85" stroke="#fff" stroke-width="5"/>
     <rect x="-120" y="-66" width="240" height="6" fill="#fff"/>
@@ -49,7 +50,7 @@ export function paint({ phase }) {
     ${[-90, -30, 30, 90].map((x, i) => `<g transform="translate(${x},-10)"><rect x="-22" y="-26" width="44" height="26" rx="6" fill="${['#ffd6e4', '#fff1c9', '#e2d1ff', '#d6f5e8'][i]}"/><circle cy="-30" r="6" fill="#ff6f9c"/></g>`).join('')}
   </g>
   <!-- hanging lamps -->
-  ${[160, 440].map((x) => `<path d="M${x},0 L${x},300" stroke="#6b5a4a" stroke-width="3"/><path d="M${x - 40},340 Q${x},280 ${x + 40},340 Z" fill="#ffcf6b"/><ellipse cx="${x}" cy="342" rx="40" ry="8" fill="#fff6d6"/>${dark ? `<circle cx="${x}" cy="380" r="120" fill="url(#kGlow)"/>` : ''}`).join('')}
+  ${[160, 440].map((x, i) => `<g class="amb-lamp" style="transform-origin:${x}px 0px;animation-delay:-${i * 2.2}s"><path d="M${x},0 L${x},300" stroke="#6b5a4a" stroke-width="3"/><path d="M${x - 40},340 Q${x},280 ${x + 40},340 Z" fill="#ffcf6b"/><ellipse cx="${x}" cy="342" rx="40" ry="8" fill="#fff6d6"/>${dark ? `<circle cx="${x}" cy="380" r="120" fill="url(#kGlow)"/>` : ''}</g>`).join('')}
 
   <!-- tables -->
   ${[900, 1130].map((x, i) => `
@@ -80,6 +81,8 @@ export function paint({ phase }) {
   ${isDark(phase) ? '<rect width="1800" height="1000" fill="#2b1840" opacity=".08"/>' : ''}`;
 }
 
+const VIKA = NPC_OUTFITS.vika;
+
 export const SCENE = {
   id: 'cafe',
   city: 'moscow',
@@ -91,7 +94,9 @@ export const SCENE = {
   music: 'moscow',
   hotspots: [
     { id: 'counter', x: 320, y: 300, stand: 330, label: 'Стойка бариста', icon: '☕', actions: ['work', 'vending'] },
-    { id: 'table', x: 1010, y: 500, stand: 1010, label: 'Столик', icon: '🥐', actions: ['coffeeDessert', 'chatGuests', 'study'] },
-    { id: 'sofa', x: 1470, y: 520, stand: 1470, label: 'Диванчик', icon: '🛋️', actions: ['phoneScroll', 'selfie', 'callMom'] },
+    { id: 'vika', x: 690, y: 420, stand: 820, label: 'Вика', icon: '💬', npc: true, actions: ['vikaChat', 'work'] },
+    { id: 'table', x: 1010, y: 500, stand: 1040, label: 'Столик', icon: '🥐', actions: ['coffeeDessert', 'chatGuests', 'study'] },
+    { id: 'sofa', x: 1470, y: 520, stand: 1470, label: 'Диванчик', icon: '🛋️', actions: ['callLover', 'phoneScroll', 'selfie', 'callMom'] },
   ],
+  npcs: [{ id: 'vika', x: 690, outfit: VIKA, hotspot: 'vika', h: 0.97 }],
 };

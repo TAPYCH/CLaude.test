@@ -39,7 +39,7 @@ function cropFor(cat, id) {
   return CROP[cat];
 }
 
-function withItem(base, cat, id) {
+export function withItem(base, cat, id) {
   const o = { ...base, acc: [...(base.acc || [])] };
   if (cat === 'top' || cat === 'bottom') {
     o[cat] = id;
@@ -54,7 +54,7 @@ function withItem(base, cat, id) {
   return o;
 }
 
-function thumb(cat, id, base) {
+export function thumb(cat, id, base) {
   const o = withItem(base, cat, id);
   if (cat === 'acc') o.hairStyle = ITEMS[id].slot === 'head' ? 'long' : o.hairStyle;
   const svg = renderLana({ outfit: o, expr: 'happy' });

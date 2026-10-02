@@ -97,13 +97,15 @@ export default {
       api.sfx('splash');
     });
 
+    // higher barista rank = trickier drinks from the start and less patient guests (but better pay)
+    const rank = Math.max(0, (api.opts.level || 1) - 1);
     function level() {
-      return served < 2 ? 0 : served < 4 ? 1 : served < 7 ? 2 : 3;
+      return Math.min(3, (served < 2 ? 0 : served < 4 ? 1 : served < 7 ? 2 : 3) + (rank >= 2 ? 1 : 0));
     }
     function next() {
       const pool = DRINKS.filter((d) => d.lvl <= level());
       const d = pool[Math.floor(Math.random() * pool.length)];
-      const time = 9 + d.s.length * 2.2;
+      const time = 9 + d.s.length * 2.2 - rank * 0.6;
       order = { d, face: FACES[Math.floor(Math.random() * FACES.length)], time, left: time, showFor: served < 3 ? 99 : 2.6 + d.s.length * 0.4 };
       cup = [];
       const g = ui.querySelector('[data-guest]');

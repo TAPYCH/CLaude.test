@@ -28,7 +28,7 @@ export default {
   scoreLabel: 'баллов качества',
   noCountdown: true,
   howto: (mode) =>
-    (mode === 'exam' ? 'ЭКЗАМЕН! Нужно 3 звезды.\n\n' : '') +
+    ({ exam: 'ЭКЗАМЕН! Нужно 3 звезды.\n\n', olympiad: 'ОЛИМПИАДА! Строгое жюри и меньше времени — нужна идеальная работа.\n\n', orders: 'Заказ клиента: меньше времени, оплата зависит от качества.\n\n', lab: 'Заказ в «Lana Dental». Оборудование помогает: фрезер даёт +4 с, микроскоп — точность.\n\n' }[mode] || '') +
     '1. Подбери оттенок по шкале VITA.\n2. Срежь лишний воск по контуру зуба — води пальцем.\n3. Отполируй коронку до блеска!',
   create(api) {
     const { ctx } = api;
@@ -41,7 +41,12 @@ export default {
     const options = shuffle([target, ...shuffle(SHADES.filter((s) => s !== target)).slice(0, 3)]);
     let shadeOk = null;
     let shadePick = null;
-    let carveTime = mode === 'exam' ? 22 : 26;
+    const lab = api.opts.lab || [];
+    // harder modes give less time; a CAD/CAM mill in Lana's own lab buys some back
+    let carveTime = { exam: 22, olympiad: 20, orders: 24, lab: 23 }[mode] || 26;
+    if (mode === 'lab' && lab.includes('mill')) carveTime += 4;
+    const precision = mode === 'lab' && lab.includes('microscope') ? 0.42 : 0.45;
+    const thresholds = mode === 'olympiad' ? [45, 72, 88] : [40, 66, 84];
     let polish = 0;
     let polishTime = 9;
     let iou = 0;
@@ -162,6 +167,7 @@ export default {
         b.style.cssText = `width:68px;height:96px;border-radius:14px 14px 30px 30px;background:linear-gradient(180deg,#fff,${s.c} 40%,${s.c});box-shadow:0 6px 16px rgba(0,0,0,.25);font-weight:900;font-size:16px;color:#7a6a50;display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;border:3px solid #fff`;
         b.textContent = s.id;
         b.addEventListener('click', () => {
+          if (shadePick) return; // one choice only (double taps used to start carving twice)
           shadePick = s;
           shadeOk = s === target;
           api.sfx(shadeOk ? 'success' : 'bad');
@@ -179,6 +185,7 @@ export default {
     }
 
     function startCarve() {
+      if (phase !== 'shade') return;
       phase = 'carve';
       t = 0;
       initWax();
@@ -204,10 +211,10 @@ export default {
     function finish() {
       phase = 'end';
       const shadePts = shadeOk ? 20 : 6;
-      const carvePts = Math.max(0, Math.min(1, (iou - 0.45) / 0.45)) * 60;
+      const carvePts = Math.max(0, Math.min(1, (iou - precision) / (0.9 - precision))) * 60;
       const polishPts = (polish / 100) * 20;
       const score = Math.round(shadePts + carvePts + polishPts);
-      const stars = starsFor(score, [40, 66, 84]);
+      const stars = starsFor(score, thresholds);
       const fb = [];
       fb.push(shadeOk ? `Оттенок ${target.id} подобран идеально.` : `Оттенок промах: нужен был ${target.id}.`);
       fb.push(`Точность формы: ${Math.round(iou * 100)}%.`);
@@ -266,7 +273,7 @@ export default {
           if (t >= polishTime || polish >= 100) finish();
         }
         const left = phase === 'carve' ? Math.ceil(carveTime - t) : phase === 'polish' ? Math.ceil(polishTime - t) : null;
-        const stats = [`${mode === 'exam' ? '📜 Экзамен' : '🦷 ' + shape.name}`];
+        const stats = [`${{ exam: '📜 Экзамен', olympiad: '🏅 Олимпиада', orders: '💼 Заказ', lab: '🦷 Lana Dental' }[mode] || '🦷 ' + shape.name}`];
         if (phase === 'carve') stats.push(`🎯 ${Math.round(iou * 100)}%`);
         if (phase === 'polish') stats.push(`✨ ${Math.round(polish)}%`);
         if (left != null) stats.push(`⏱ ${Math.max(0, left)}`);

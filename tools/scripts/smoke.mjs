@@ -9,6 +9,17 @@ export default async ({ page }) => {
   await sleep(400);
   await page.$eval('.story .skip', (e) => e.click());
   await sleep(1200);
+  // auto-dismiss story overlays/dialogs/phone opened by actions
+  await page.evaluate(() => setInterval(() => {
+    const cc = document.querySelector('.chapter-card:not(.closing)');
+    if (cc) return cc.click();
+    const d = document.querySelector('.dlg:not(.closing) .dlg-skip');
+    if (d) return d.click();
+    const b = document.querySelector('.overlay:not(.closing) .dialog .btn');
+    if (b) return b.click();
+    const ph = document.querySelector('.phone-close');
+    if (ph) ph.click();
+  }, 250));
   const report = await page.evaluate(async () => {
     const g = await import('/js/game.js');
     const { SCENES } = await import('/js/data/scenes.js');
@@ -27,7 +38,8 @@ export default async ({ page }) => {
         for (const a of h.actions) {
           const def = ACTIONS[a];
           if (!def) { log.push(`MISSING action ${a} in ${id}`); continue; }
-          if (def.minigame || def.special === 'wardrobe' || def.special === 'shop' || def.special === 'sleep' || def.special === 'exam') continue;
+          if (def.minigame || ['wardrobe', 'shop', 'sleep', 'exam', 'olympiad'].includes(def.special)) continue;
+          if (id === 'mylab') { S.lab.owned = true; S.flags.diploma = true; }
           S.minutes = 10 * 60; S.day = 2; // Wednesday morning
           for (const k of Object.keys(S.needs)) S.needs[k] = 60;
           const av = g.actionAvailability(a);

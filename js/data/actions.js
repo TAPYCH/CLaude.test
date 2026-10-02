@@ -1,7 +1,11 @@
 // Everything Lana can do. Effects are totals applied smoothly over the action.
 // minutes – in-game duration; cost – ₽; xp – skill experience; anim – body animation class.
 import { S } from '../core/state.js';
-import { isWeekend } from '../core/time.js';
+import { isWeekend, isHoliday } from '../core/time.js';
+import { changeGrades } from '../core/state.js';
+import { QUESTS } from './quests.js';
+
+const currentQuestId = () => (QUESTS[S.quest.index] || {}).id;
 
 const hour = () => S.minutes / 60;
 const between = (a, b) => hour() >= a && hour() < b;
@@ -54,16 +58,26 @@ export const ACTIONS = {
   brushTeeth: { name: 'Почистить зубы', icon: '🪥', minutes: 5, effects: { hygiene: 12 }, xp: { dental: 3 }, desc: 'Будущий зубной техник!' },
 
   // ---------------------------------------------------------------- study & career
-  study: { name: 'Учить конспекты', icon: '📖', minutes: 120, effects: { energy: -10, fun: -8 }, xp: { dental: 34 }, anim: 'busy', bonusKey: 'study' },
+  study: { name: 'Учить конспекты', icon: '📖', minutes: 120, effects: { energy: -10, fun: -8 }, xp: { dental: 34 }, anim: 'busy', bonusKey: 'study', after: () => !S.flags.diploma && changeGrades(2) },
   lecture: {
     name: 'Сходить на пары', icon: '🎓', minutes: 180, effects: { energy: -12, fun: -4, social: 14 }, xp: { dental: 48 }, anim: 'busy', bonusKey: 'study',
-    req: () => (isWeekend(S.day) ? 'Сегодня выходной 🎉' : between(8, 15) ? null : 'Пары идут с 9:00 до 15:00'),
-    after: () => { S.attendance++; },
+    req: () =>
+      S.flags.diploma ? 'Ты уже окончила колледж 🎓'
+      : isHoliday(S.day) ? 'Каникулы! Пар нет 🎉'
+      : isWeekend(S.day) ? 'Сегодня выходной 🎉'
+      : S.flags.lectureDay === S.day ? 'На сегодня пары уже были'
+      : between(8, 15) ? null : 'Пары идут с 9:00 до 15:00',
+    after: () => {
+      S.attendance++;
+      S.flags.lectureDay = S.day;
+      changeGrades(6);
+    },
   },
   typodont: { name: 'Тренировка: коронка', icon: '🦷', minigame: 'crown', minutes: 60, desc: 'Мини-игра' },
   practice: { name: 'Практика в лаборатории', icon: '🦷', minigame: 'crown', minutes: 90, desc: 'Мини-игра · главный навык' },
   memory: { name: 'Мемори: инструменты', icon: '🃏', minigame: 'memory', minutes: 30, desc: 'Мини-игра' },
-  consult: { name: 'Консультация', icon: '👩‍🏫', minutes: 30, effects: { social: 8 }, xp: { dental: 18 }, req: () => cooldown('consult', 20) },
+  puzzle: { name: 'Пазл из открытки', icon: '🧩', minigame: 'puzzle', minutes: 30, desc: 'Мини-игра · отдых', req: () => (S.postcards.length ? null : 'Сначала привези открытку с экскурсии 🖼️') },
+  consult: { name: 'Консультация', icon: '👩‍🏫', minutes: 30, effects: { social: 8 }, xp: { dental: 18 }, req: () => cooldown('consult', 20), cooldown: 'consult', after: () => !S.flags.diploma && changeGrades(2) },
   exam: { name: 'Сдать экзамен', icon: '📜', special: 'exam', minutes: 120, desc: 'Финальный экзамен' },
   friendChat: { name: 'Поболтать с Катей', icon: '💬', minutes: 30, effects: { social: 28, fun: 10 }, xp: { charm: 10 } },
   work: {
@@ -90,6 +104,41 @@ export const ACTIONS = {
   momTalk: { name: 'Поболтать с мамой', icon: '🤗', minutes: 40, effects: { social: 38, fun: 12 }, special: 'momTalk' },
   amraChat: { name: 'Болтать с Амрой', icon: '👯‍♀️', minutes: 40, effects: { social: 34, fun: 14 }, xp: { charm: 10 } },
   grandmaTalk: { name: 'Обнять бабушку', icon: '👵', minutes: 15, effects: { social: 16, fun: 6 } },
+
+  // ---------------------------------------------------------------- story & progression
+  callLover: {
+    name: 'Видеозвонок любимому', icon: '📹', minutes: 40, effects: { social: 40, fun: 22 }, cooldown: 'callLover',
+    req: () => cooldown('callLover', 10),
+  },
+  quiz: { name: 'Коллоквиум (тест)', icon: '📝', minigame: 'quiz', minutes: 45, desc: 'Мини-игра · успеваемость', req: () => (S.flags.diploma ? 'Ты уже дипломированный техник 🎓' : null) },
+  khachapuri: { name: 'Хачапури с мамой', icon: '🫓', minigame: 'khachapuri', minutes: 90, desc: 'Мини-игра · кулинария' },
+  dance: { name: 'Танцы на набережной', icon: '💃', minigame: 'dance', minutes: 60, desc: 'Мини-игра · обаяние', req: () => (between(16, 24) || between(0, 2) ? null : 'Танцы начинаются в 16:00') },
+  danceParty: { name: 'Танцевать', icon: '💃', minigame: 'dance', minutes: 60, desc: 'Мини-игра · обаяние' },
+  fashionShow: {
+    name: 'Фотосессия «Образ недели»', icon: '📸', minigame: 'fashion', minutes: 90, desc: 'Мини-игра · призы',
+    req: () => (S.flags.fashionWeek === Math.floor(S.day / 7) ? 'Фотосессия раз в неделю — приходи на следующей' : null),
+    after: () => { S.flags.fashionWeek = Math.floor(S.day / 7); },
+  },
+  olympiad: {
+    name: 'Олимпиада по моделированию', icon: '🏅', special: 'olympiad', minutes: 120, desc: 'Коронка на 3 звезды',
+    req: () => {
+      const q = currentQuestId();
+      if (S.flags.olympiadWon) return 'Ты уже победила 🏅';
+      return q === 'olympiad' ? null : 'Откроется по сюжету (глава «Сессия»)';
+    },
+  },
+  vikaChat: { name: 'Поболтать с Викой', icon: '☕', minutes: 20, effects: { social: 18, fun: 6 }, xp: { charm: 8 } },
+  labOrders: { name: 'Выполнить заказ', icon: '🦷', minigame: 'crown', minutes: 120, desc: 'Мини-игра · ₽₽₽', req: () => (S.lab.owned ? null : 'Сначала арендуй помещение') },
+  labShop: { name: 'Каталог оборудования', icon: '🔧', special: 'labShop', instant: true },
+  labRest: { name: 'Кофе-брейк', icon: '☕', minutes: 20, effects: { energy: 14, fun: 8 } },
+  grandOpening: {
+    name: 'Праздник открытия', icon: '🎉', special: 'opening', minutes: 180,
+    req: () => {
+      if (S.flags.opened) return 'Открытие уже было — лаборатория работает! ✨';
+      if (currentQuestId() !== 'opening') return 'Сначала подготовь лабораторию (сюжет)';
+      return (S.lab.orders || 0) >= 3 ? null : `Сначала выполни 3 заказа здесь (${S.lab.orders || 0}/3)`;
+    },
+  },
 
   // ---------------------------------------------------------------- shops
   onlineShop: { name: 'Онлайн-магазин', icon: '🛍️', special: 'shop', instant: true },

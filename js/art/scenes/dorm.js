@@ -179,9 +179,9 @@ export const SCENE = {
   spawn: 1000,
   music: 'moscow',
   hotspots: [
-    { id: 'bed', x: 300, y: 560, stand: 420, label: 'Кровать', icon: '🛏️', actions: ['sleep', 'nap', 'phoneScroll'] },
+    { id: 'bed', x: 300, y: 560, stand: 420, label: 'Кровать', icon: '🛏️', actions: ['sleep', 'callLover', 'nap', 'phoneScroll'] },
     { id: 'wardrobe', x: 660, y: 330, stand: 660, label: 'Шкаф и зеркало', icon: '👗', actions: ['wardrobe', 'selfie', 'makeup'] },
-    { id: 'window', x: 970, y: 300, stand: 970, label: 'Окно', icon: '🪟', actions: ['window', 'callMom'] },
+    { id: 'window', x: 970, y: 300, stand: 970, label: 'Окно', icon: '🪟', actions: ['window', 'callMom', 'puzzle'] },
     { id: 'desk', x: 1240, y: 470, stand: 1320, label: 'Стол', icon: '📚', actions: ['study', 'typodont', 'memory', 'orders', 'onlineShop'] },
     { id: 'fridge', x: 1610, y: 420, stand: 1610, label: 'Холодильник', icon: '🧊', actions: ['snack', 'eatMeal'] },
     { id: 'stove', x: 1770, y: 540, stand: 1770, label: 'Плитка', icon: '🍳', actions: ['cook', 'tea'] },

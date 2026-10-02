@@ -1,15 +1,16 @@
 // Lana's phone — the main menu of the game.
 import { S, NEEDS, SKILLS, levelOf, levelProgress, MAX_LEVEL, save, reset, exportSave, importSave, addMoney, changeNeed } from '../core/state.js';
-import { formatClock, formatDate, money } from '../core/time.js';
-import { QUESTS, DAILY_POOL } from '../data/quests.js';
+import { formatClock, formatDate, money, weekday, plural } from '../core/time.js';
+import { QUESTS, DAILY_POOL, CHAPTERS, DREAMS } from '../data/quests.js';
+import { BARISTA_RANKS, EQUIPMENT, LAB_RENT, STIPEND, RENT } from '../data/career.js';
 import { ACHIEVEMENTS } from '../data/achievements.js';
 import { CONTACTS, REPLIES } from '../data/contacts.js';
 import { MAP, EXCURSIONS, postcardArt } from '../data/places.js';
 import { SCENES } from '../data/scenes.js';
 import { PET_TYPES, renderPet } from '../art/pets.js';
 import { renderLanaHead, renderLana } from '../art/character.js';
-import { currentQuest, sendReply, markRead, unreadFor } from '../core/progress.js';
-import { goScene, travel, excursion, TRAVEL, adoptPet, feedPet, pauseTime, resumeTime, playPetGame } from '../game.js';
+import { currentQuest, currentChapter, questProgressText, questFraction, sideDef, dreamValue, sendReply, markRead, unreadFor } from '../core/progress.js';
+import { goScene, travel, excursion, TRAVEL, adoptPet, feedPet, pauseTime, resumeTime, playPetGame, rentLab, buyEquipment, baristaRank, labBonus } from '../game.js';
 import { openWardrobe } from './wardrobe.js';
 import { el, app, esc, wait } from './dom.js';
 import { sfx, setAudio } from '../audio.js';
@@ -21,6 +22,7 @@ import { bus } from '../core/bus.js';
 import { install, canInstall } from '../pwa.js';
 
 const APPS = [
+  { id: 'path', name: 'Мой путь', icon: '🧭', bg: 'linear-gradient(160deg,#ffb8c9,#ff7aa2)' },
   { id: 'map', name: 'Карта', icon: '🗺️', bg: 'linear-gradient(160deg,#9be7c4,#3fcfae)' },
   { id: 'wardrobe', name: 'Гардероб', icon: '👗', bg: 'linear-gradient(160deg,#ffc1d6,#ff6f9c)' },
   { id: 'shop', name: 'Магазин', icon: '🛍️', bg: 'linear-gradient(160deg,#ffd59a,#ff9a2e)' },
@@ -30,6 +32,7 @@ const APPS = [
   { id: 'achievements', name: 'Награды', icon: '🏆', bg: 'linear-gradient(160deg,#fff0a8,#ffc23d)' },
   { id: 'profile', name: 'Я', icon: '💖', bg: 'linear-gradient(160deg,#ffd1e8,#f79ac0)' },
   { id: 'album', name: 'Альбом', icon: '📸', bg: 'linear-gradient(160deg,#e6e1ff,#b6a6ff)' },
+  { id: 'lab', name: 'Лаборатория', icon: '🦷', bg: 'linear-gradient(160deg,#b8f0e6,#3fbfae)', when: () => S.flags.diploma },
   { id: 'settings', name: 'Настройки', icon: '⚙️', bg: 'linear-gradient(160deg,#eef0f4,#c4c9d6)' },
 ];
 
@@ -84,11 +87,12 @@ function renderHome() {
       <div class="av">${renderLanaHead({ outfit: S.outfit, expr: 'happy' })}</div>
       <div><h3>Привет, Лана!</h3><p>${formatDate(S.day, true)} · ${formatClock(S.minutes)}</p></div>
     </div>
-    <div class="app-grid">${APPS.map((a, i) => {
-      const badge = a.id === 'messages' ? S.unread : a.id === 'quests' ? S.daily.tasks.filter((t) => !t.done).length : 0;
+    <div class="app-grid">${APPS.filter((a) => !a.when || a.when()).map((a, i) => {
+      const badge = a.id === 'messages' ? S.unread : a.id === 'quests' ? S.daily.tasks.filter((t) => !t.done).length : a.id === 'path' ? S.side.length : 0;
       return `<button class="app-icon" data-app="${a.id}" style="animation-delay:${i * 0.03}s"><div class="ai" style="background:${a.bg}">${a.icon}</div><span>${a.name}</span>${badge ? `<b class="badge">${badge}</b>` : ''}</button>`;
     }).join('')}</div>
-    ${q ? `<div class="widget"><h5>Сюжет</h5><div class="quest"><div class="qi">${q.icon}</div><div><h4>${q.title}</h4><p>${q.desc}</p></div></div></div>` : ''}
+    ${q ? `<button class="widget widget-btn" data-open-path><h5>Глава ${q.chapter} · ${esc(currentChapter().title)}</h5><div class="quest"><div class="qi">${q.icon}</div><div style="flex:1;min-width:0"><h4>${q.title}</h4><p>${q.desc}</p>
+      ${questProgressText(q) ? `<div class="row" style="gap:8px;margin-top:6px"><div class="bar lav" style="flex:1;margin:0"><i style="width:${questFraction(q) * 100}%"></i></div><b class="qp">${questProgressText(q)}</b></div>` : ''}</div></div></button>` : ''}
     <div class="widget"><h5>Задания дня</h5>${dailies || '<p class="muted">Новые задания появятся завтра</p>'}</div>`;
   phone.home.querySelectorAll('[data-app]').forEach((b) =>
     b.addEventListener('click', () => {
@@ -96,6 +100,12 @@ function renderHome() {
       openApp(b.dataset.app);
     }),
   );
+  const wp = phone.home.querySelector('[data-open-path]');
+  if (wp)
+    wp.addEventListener('click', () => {
+      sfx('pop');
+      openApp('path');
+    });
 }
 
 function view(title, { tabs = '' } = {}) {
@@ -117,8 +127,171 @@ async function openApp(id) {
     await openWardrobe();
     return;
   }
-  const fn = { map: appMap, shop: appShop, pets: appPets, messages: appMessages, quests: appQuests, achievements: appAchievements, profile: appProfile, album: appAlbum, settings: appSettings }[id];
+  const fn = { path: appPath, lab: appLab, map: appMap, shop: appShop, pets: appPets, messages: appMessages, quests: appQuests, achievements: appAchievements, profile: appProfile, album: appAlbum, settings: appSettings }[id];
   if (fn) fn();
+}
+
+// ================================================================ MY PATH (progress dashboard)
+const stars3 = (n, of = 3) => '★'.repeat(n) + '☆'.repeat(Math.max(0, of - n));
+
+/** Context-aware advice: what Lana should do right now. */
+function adviceList() {
+  const out = [];
+  const h = S.minutes / 60;
+  const wd = weekday(S.day);
+  const low = NEEDS.filter((n) => S.needs[n.id] < 25).sort((a, b) => S.needs[a.id] - S.needs[b.id]);
+  if (low.length) {
+    const n = low[0];
+    const how = { hunger: 'перекуси или приготовь еду', energy: 'поспи или выпей кофе', fun: 'погуляй, поиграй или позвони любимому', hygiene: 'прими душ', social: 'поболтай с кем-нибудь или ответь в чатах' }[n.id];
+    out.push({ icon: n.icon, text: `${n.name} на нуле — ${how}.` });
+  }
+  if (S.debt > 0) out.push({ icon: '💸', text: `Долг за общежитие ${money(S.debt)} — он спишется с ближайшего заработка.` });
+  else if (S.city === 'moscow' && !S.flags.diploma && (wd === 5 || wd === 6) && S.money < RENT) out.push({ icon: '🏠', text: `В понедельник оплата общежития ${money(RENT)}, а на счету меньше. Подработай!` });
+  if (!S.flags.diploma && S.city === 'moscow' && wd < 5 && h >= 7 && h < 15 && S.flags.lectureDay !== S.day && S.quest.index >= 1)
+    out.push({ icon: '🎓', text: 'Сегодня пары (до 15:00). Пропуск снизит успеваемость на 5%.', go: 'college' });
+  if (!S.flags.diploma && S.grades < STIPEND.min) out.push({ icon: '📉', text: `Успеваемость ${S.grades}% — без стипендии. Пары, конспекты и коллоквиумы поднимут её.` });
+  if (S.pets.some((p) => p.hunger < 25)) out.push({ icon: '🐾', text: 'Питомец проголодался — покорми его (Телефон → Питомцы).' });
+  if (S.inventory.groceries + (S.inventory.meals || 0) + S.inventory.snacks === 0) out.push({ icon: '🛒', text: 'Дома пусто: купи продукты (Магазин → Продукты), готовить дешевле, чем есть в кафе.' });
+  for (const a of S.side) {
+    const d = sideDef(a.id);
+    if (d && a.until - S.day <= 1) out.push({ icon: d.icon, text: `Срочно: «${d.title}» — ${d.desc}.` });
+  }
+  return out.slice(0, 4);
+}
+
+function appPath() {
+  const v = view('🧭 Мой путь');
+  const body = v.querySelector('.app-body');
+  const q = currentQuest();
+  const ch = currentChapter();
+  const chQuests = QUESTS.filter((x) => x.chapter === ch.n);
+  const chDone = chQuests.filter((x) => QUESTS.indexOf(x) < S.quest.index).length;
+  const rank = baristaRank();
+  const rk = BARISTA_RANKS[rank];
+  const nextRk = BARISTA_RANKS[rank + 1];
+  const shifts = S.stats.mg_barista || 0;
+  const charm = levelOf(S.skills.charm);
+  const toMonday = (7 - weekday(S.day)) % 7 || 7;
+  const stipend = S.grades >= STIPEND.highMin ? STIPEND.high : S.grades >= STIPEND.min ? STIPEND.base : 0;
+
+  body.innerHTML = `
+    <div class="path-chapters">${CHAPTERS.map((c) => `<div class="pc ${c.n < ch.n || !q ? 'done' : c.n === ch.n ? 'on' : ''}"><span>${c.n < ch.n || !q ? '✓' : c.icon}</span></div>`).join('<i></i>')}</div>
+    <div class="card path-hero">
+      <div class="muted" style="font-weight:900">ГЛАВА ${ch.n} ИЗ ${CHAPTERS.length}</div>
+      <h3>${ch.icon} ${esc(ch.title)}</h3><p class="muted" style="margin:0 0 8px">${esc(ch.sub)}</p>
+      <div class="bar lav"><i style="width:${q ? (chDone / chQuests.length) * 100 : 100}%"></i></div>
+      <div class="muted" style="margin-top:4px;font-size:12px">Заданий главы: ${q ? chDone : chQuests.length} / ${chQuests.length}</div>
+    </div>
+    ${q ? `<div class="section-title">Сейчас</div>
+    <div class="card quest"><div class="qi">${q.icon}</div><div style="flex:1;min-width:0"><h4>${q.title}</h4><p>${q.desc}</p>
+      <p style="margin-top:6px"><span class="chip lav">💡 ${q.hint}</span></p>
+      ${questProgressText(q) ? `<div class="row" style="gap:8px;margin-top:8px"><div class="bar lav" style="flex:1;margin:0"><i style="width:${questFraction(q) * 100}%"></i></div><b class="qp">${questProgressText(q)}</b></div>` : ''}
+      ${q.target && SCENES[q.target.scene] && SCENES[q.target.scene].city === S.city && q.target.scene !== S.scene && (q.target.scene !== 'mylab' || S.lab.owned) ? `<button class="btn small mint" style="margin-top:10px" data-go="${q.target.scene}">Отправиться: ${SCENES[q.target.scene].name} ›</button>` : ''}
+    </div></div>` : '<div class="card" style="text-align:center"><b>👑 Сюжет пройден!</b><p class="muted">Мечты и заказы ждут — жизнь продолжается.</p></div>'}
+    ${(() => {
+      const adv = adviceList();
+      return adv.length ? `<div class="section-title">Советы на сейчас</div><div class="card">${adv.map((a) => `<div class="advice"><span>${a.icon}</span><p>${esc(a.text)}</p>${a.go && a.go !== S.scene ? `<button class="btn small ghost" data-go="${a.go}">›</button>` : ''}</div>`).join('')}</div>` : '';
+    })()}
+    <div class="section-title">Просьбы близких</div>
+    ${S.side.length ? `<div class="list">${S.side.map((a) => {
+      const d = sideDef(a.id);
+      if (!d) return '';
+      const left = a.until - S.day;
+      const c = CONTACTS[d.who];
+      const rw = [d.reward.money ? money(d.reward.money) : '', d.reward.grades ? `+${d.reward.grades}% успеваемости` : '', d.reward.social ? '💬 общение' : ''].filter(Boolean).join(' · ');
+      return `<div class="card quest"><div class="qi">${d.icon}</div><div style="flex:1;min-width:0"><h4>${d.title}</h4><p>${c ? c.emoji + ' ' + esc(c.name) + ': ' : ''}${esc(d.desc)}</p>
+        <p style="margin-top:6px"><span class="chip ${left <= 1 ? 'red' : 'orange'}">⏳ ${left <= 0 ? 'сегодня последний день' : left === 1 ? 'до завтра' : `ещё ${left} ${plural(left, 'день', 'дня', 'дней')}`}</span> <span class="chip mint">🎁 ${rw}</span></p>
+        ${d.goal.count > 1 ? `<div class="bar mint"><i style="width:${(a.progress / d.goal.count) * 100}%"></i></div>` : ''}</div></div>`;
+    }).join('')}</div>` : '<p class="muted" style="margin:0 4px 6px">Пока никто ничего не просил. Просьбы приходят в чат — выполняй их, чтобы заработать и порадовать близких.</p>'}
+    ${!S.flags.diploma ? `<div class="section-title">Учёба</div>
+    <div class="card">
+      <div class="row" style="justify-content:space-between;font-weight:900"><span>📈 Успеваемость</span><span>${S.grades}%</span></div>
+      <div class="grade-bar"><i style="width:${S.grades}%"></i><s style="left:${STIPEND.min}%" title="стипендия"></s><s style="left:60%" title="допуск"></s><s style="left:${STIPEND.highMin}%" title="повышенная"></s></div>
+      <div class="grade-legend"><span>${STIPEND.min}% стипендия</span><span>60% допуск</span><span>${STIPEND.highMin}% повышенная</span></div>
+      <p class="muted" style="margin:8px 0 0;font-size:13px">Стипендия в понедельник (через ${toMonday} ${plural(toMonday, 'день', 'дня', 'дней')}): <b style="color:var(--ink)">${stipend ? money(stipend) : 'не положена'}</b><br/>
+      Пары по будням 9:00–15:00 (+успеваемость), прогул −5%. Посещено: ${S.attendance}${S.stats.skips ? ` · пропущено: ${S.stats.skips}` : ''}</p>
+    </div>` : ''}
+    <div class="section-title">Деньги</div>
+    <div class="card" style="font-weight:800;font-size:14px;line-height:1.8">
+      💰 На счету: ${money(S.money)}${S.debt ? ` · <span style="color:var(--danger)">долг ${money(S.debt)}</span>` : ''}<br/>
+      ${S.city === 'moscow' || !S.flags.diploma ? `🏠 Общежитие: −${money(RENT)} по понедельникам<br/>` : ''}
+      💛 Мама присылает ${money(1500)} по пятницам<br/>
+      ☕ Смена в «Пенке»: ${money(rk.pay)} + чаевые
+    </div>
+    <div class="section-title">Карьера</div>
+    <div class="card">
+      <div class="row" style="gap:10px"><div style="font-size:30px">☕</div><div style="flex:1"><b>${rk.name}</b> <span class="muted">· кофейня «Пенка»</span>
+      ${nextRk ? `<div class="muted" style="font-size:13px">Следующий ранг «${nextRk.name}» (${money(nextRk.pay)}/смена): смен ${Math.min(shifts, nextRk.shifts)}/${nextRk.shifts} ${shifts >= nextRk.shifts ? '✅' : ''} · обаяние ${Math.min(charm, nextRk.charm)}/${nextRk.charm} ${charm >= nextRk.charm ? '✅' : ''}</div>` : '<div class="muted" style="font-size:13px">Высший ранг! 👑</div>'}</div></div>
+      <div class="row" style="gap:10px;margin-top:10px"><div style="font-size:30px">🦷</div><div style="flex:1"><b>${S.lab.owned ? 'Lana Dental' : S.flags.diploma ? 'Фриланс-техник' : 'Студентка-техник'}</b>
+      <div class="muted" style="font-size:13px">${S.lab.owned ? `Оборудование ${S.lab.upgrades.length}/${EQUIPMENT.length} · бонус к заказам +${Math.round(labBonus() * 100)}% · заказов: ${S.lab.orders || 0}` : S.flags.diploma ? `Цель: своя лаборатория в Сухуме (аренда ${money(LAB_RENT)})` : 'Диплом откроет заказы и собственную лабораторию'}</div></div></div>
+    </div>
+    <div class="section-title">Мечты</div>
+    <div class="list">${DREAMS.map((d) => {
+      const tier = S.dreams[d.id] || 0;
+      const val = dreamValue(d);
+      const next = d.tiers[tier];
+      const prev = tier ? d.tiers[tier - 1] : 0;
+      const f = next == null ? 1 : Math.max(0, Math.min(1, (val - prev) / (next - prev)));
+      return `<div class="card dream"><div class="de">${d.icon}</div><div style="flex:1;min-width:0"><div class="row" style="justify-content:space-between"><b>${d.title}</b><span class="dstars">${stars3(tier)}</span></div>
+        <div class="muted" style="font-size:12.5px">${d.desc}: ${val.toLocaleString('ru-RU')}${next != null ? ` / ${next.toLocaleString('ru-RU')} · 🎁 ${money(d.rewards[tier])}` : ' · исполнена! 🌟'}</div>
+        <div class="bar" style="margin-top:4px"><i style="width:${f * 100}%"></i></div></div></div>`;
+    }).join('')}</div>`;
+
+  body.querySelectorAll('[data-go]').forEach((b) =>
+    b.addEventListener('click', async () => {
+      sfx('click');
+      closePhone();
+      await goScene(b.dataset.go);
+    }),
+  );
+}
+
+// ================================================================ OWN LAB
+function appLab() {
+  const v = view('🦷 Lana Dental');
+  const body = v.querySelector('.app-body');
+  const render = () => {
+    if (!S.lab.owned) {
+      body.innerHTML = `<div class="card" style="text-align:center;padding:20px">
+        <div style="font-size:56px">🔑</div><h3 style="margin:6px 0">Помещение у набережной</h3>
+        <p class="muted">Светлая комната с видом на море в Сухуме. Здесь может быть твоя лаборатория.</p>
+        <p style="font-weight:900">Аренда: ${money(LAB_RENT)}</p>
+        ${S.city !== 'abkhazia' ? '<p class="muted">Помещение в Абхазии — сначала нужно туда приехать.</p>' : ''}
+        <button class="btn block mint" data-rent ${S.money < LAB_RENT || S.city !== 'abkhazia' ? 'disabled' : ''}>Арендовать</button>
+        ${S.money < LAB_RENT ? `<p class="muted" style="margin-top:8px">Не хватает ${money(LAB_RENT - S.money)}. Заказы лаборатории в общежитии хорошо платят!</p>` : ''}</div>`;
+      const b = body.querySelector('[data-rent]');
+      b.addEventListener('click', async () => {
+        if (!rentLab()) return;
+        closePhone();
+        await goScene('mylab');
+        toast({ icon: '🔑', title: 'Ключи у тебя!', text: 'Купи оборудование — каждое увеличивает доход с заказов' });
+      });
+      return;
+    }
+    const bonus = Math.round(labBonus() * 100);
+    body.innerHTML = `<div class="card"><div class="row" style="justify-content:space-between"><b>Бонус к оплате заказов</b><b style="color:var(--mint-d,#2bb79a)">+${bonus}%</b></div>
+        <div class="bar mint"><i style="width:${(S.lab.upgrades.length / EQUIPMENT.length) * 100}%"></i></div>
+        <div class="muted" style="margin-top:4px;font-size:13px">Оборудование ${S.lab.upgrades.length}/${EQUIPMENT.length} · выполнено заказов: ${S.lab.orders || 0} · баланс ${money(S.money)}</div></div>
+      <div class="section-title">Каталог оборудования</div>
+      <div class="list">${EQUIPMENT.map((e) => {
+        const has = S.lab.upgrades.includes(e.id);
+        return `<div class="card row equip ${has ? 'owned' : ''}"><div style="font-size:34px">${e.icon}</div><div style="flex:1;min-width:0"><b>${e.name}</b><div class="muted" style="font-size:13px">${e.desc}</div></div>
+          ${has ? '<span class="chip mint">✓ есть</span>' : `<button class="btn small orange" data-buy="${e.id}" ${S.money < e.price ? 'disabled' : ''}>${money(e.price)}</button>`}</div>`;
+      }).join('')}</div>`;
+    body.querySelectorAll('[data-buy]').forEach((b) =>
+      b.addEventListener('click', () => {
+        const e = EQUIPMENT.find((x) => x.id === b.dataset.buy);
+        if (buyEquipment(e.id)) {
+          toast({ icon: e.icon, title: `${e.name} — куплено!`, text: `Бонус к заказам: +${Math.round(labBonus() * 100)}%` });
+          render();
+        }
+      }),
+    );
+  };
+  render();
+}
+export function openLabShop() {
+  openPhone('lab');
 }
 
 // ================================================================ MAP
@@ -145,13 +318,16 @@ function appMap() {
   let city = S.city;
   const v = view('🗺️ Карта');
   const body = v.querySelector('.app-body');
+  const q = currentQuest();
+  const isTarget = (p) => q && q.target && p.scene && p.scene === q.target.scene && p.scene !== S.scene;
   const render = () => {
     const pins = MAP[city].pins;
     const here = city === S.city;
     body.innerHTML = `
       <div class="city-switch">${['moscow', 'abkhazia'].map((c) => `<button data-city="${c}" class="${c === city ? 'on' : ''}">${c === 'moscow' ? '🏙️ Москва' : '🌴 Абхазия'}</button>`).join('')}</div>
       <div class="map">${mapArt(city)}${pins
-        .map((p, i) => `<button class="pin ${p.scene === S.scene ? 'here' : ''}" data-i="${i}" style="left:${p.x}%;top:${p.y}%"><div class="pi"><span>${p.icon}</span></div><b>${p.name}</b></button>`)
+        .filter((p) => !p.locked || S.flags.diploma || S.lab.owned)
+        .map((p) => `<button class="pin ${p.scene === S.scene ? 'here' : ''} ${p.locked && !S.lab.owned ? 'locked' : ''} ${isTarget(p) ? 'target' : ''}" data-i="${pins.indexOf(p)}" style="left:${p.x}%;top:${p.y}%"><div class="pi"><span>${p.locked && !S.lab.owned ? '🔑' : p.icon}</span></div><b>${p.name}</b></button>`)
         .join('')}</div>
       ${here ? `<p class="muted" style="margin:12px 4px">Нажми на место, чтобы туда отправиться. Дорога по городу занимает ~30 минут.</p>` : ''}
       ${!here ? `<div class="section-title">Поездка ${city === 'abkhazia' ? 'домой, в Абхазию' : 'в Москву'}</div>
@@ -186,6 +362,14 @@ function appMap() {
       toast({ icon: '✈️', title: 'Это другой город', text: 'Сначала купи билет ниже 👇' });
       return;
     }
+    if (p.locked && !S.lab.owned) {
+      if (!S.flags.diploma) {
+        await dialog({ icon: '🔒', title: p.name, text: 'Это помещение у набережной пока закрыто.\nОно откроется в главе 5 — после диплома 🎓', buttons: [{ label: 'Понятно', value: true }] });
+        return;
+      }
+      openApp('lab');
+      return;
+    }
     if (p.scene) {
       if (p.scene === S.scene) {
         toast({ icon: '📍', title: 'Ты уже здесь!' });
@@ -215,6 +399,7 @@ const FOOD = [
   { id: 'groceries', name: 'Пакет продуктов', icon: '🛒', price: 450, desc: 'На 1 готовку (2 порции)' },
   { id: 'snacks', name: 'Перекус', icon: '🥪', price: 160, desc: 'Сэндвич или йогурт' },
   { id: 'petFood', name: 'Корм для питомца', icon: '🥫', price: 120, desc: 'Одна миска' },
+  { id: 'sweets', name: 'Конфеты «Москва»', icon: '🍬', price: 600, desc: 'Гостинец для бабушки — привези в Абхазию', city: 'moscow' },
 ];
 
 function appShop(tab = 'clothes') {
@@ -255,7 +440,7 @@ function appShop(tab = 'clothes') {
       body.appendChild(list);
     } else {
       const list = el('<div class="list"></div>');
-      for (const f of FOOD) {
+      for (const f of FOOD.filter((x) => !x.city || x.city === S.city)) {
         const card = el(`<div class="card row"><div style="font-size:34px">${f.icon}</div><div style="flex:1"><b>${f.name}</b><div class="muted">${f.desc} · есть: ${S.inventory[f.id] || 0}</div></div>
             <button class="btn small orange" ${S.money < f.price ? 'disabled' : ''}>${money(f.price)}</button></div>`);
         card.querySelector('button').addEventListener('click', () => {
@@ -438,16 +623,22 @@ function appQuests() {
     html += `<div class="card quest ${t.done ? 'done' : ''}"><div class="qi">${t.done ? '✅' : d.icon}</div><div style="flex:1"><h4>${d.text}</h4><p>Награда: ${d.money} ₽</p>
       ${d.goal.count > 1 ? `<div class="bar mint"><i style="width:${Math.min(100, (t.progress / d.goal.count) * 100)}%"></i></div>` : ''}</div></div>`;
   }
-  html += '</div><div class="section-title">История Ланы</div><div class="list">';
+  html += '</div>';
+  let chap = 0;
   QUESTS.forEach((q, i) => {
     const done = i < cur;
     const active = i === cur;
-    const pct = active ? Math.min(100, (S.quest.progress / q.goal.count) * 100) : done ? 100 : 0;
+    if (q.chapter !== chap) {
+      chap = q.chapter;
+      const c = CHAPTERS.find((x) => x.n === chap);
+      const open = !currentQuest() || chap <= currentQuest().chapter;
+      html += `${chap > 1 ? '</div>' : ''}<div class="section-title">${open ? c.icon : '🔒'} Глава ${chap}${open ? ` · ${esc(c.title)}` : ''}</div><div class="list">`;
+    }
     const rw = [q.reward.money ? `${q.reward.money} ₽` : '', q.reward.item ? '🎁 предмет' : '', q.reward.petFood ? '🥫 корм' : ''].filter(Boolean).join(' · ');
     html += `<div class="card quest ${done ? 'done' : ''} ${!done && !active ? 'locked' : ''}"><div class="qi">${done ? '✅' : !active ? '🔒' : q.icon}</div><div style="flex:1">
       <h4>${active || done ? q.title : 'Скоро…'}</h4><p>${active || done ? q.desc : 'Откроется по сюжету'}</p>
       ${active ? `<p style="margin-top:6px"><span class="chip lav">💡 ${q.hint}</span></p>` : ''}
-      ${active && q.goal.count > 1 ? `<div class="bar lav"><i style="width:${pct}%"></i></div>` : ''}
+      ${active && questProgressText(q) ? `<div class="row" style="gap:8px;margin-top:6px"><div class="bar lav" style="flex:1;margin:0"><i style="width:${questFraction(q) * 100}%"></i></div><b class="qp">${questProgressText(q)}</b></div>` : ''}
       ${active || done ? `<p style="margin-top:6px" class="muted">Награда: ${rw}</p>` : ''}</div></div>`;
   });
   html += '</div>';
@@ -471,8 +662,8 @@ function appProfile() {
   body.innerHTML = `
     <div class="card row" style="gap:14px">
       <div style="width:84px;height:84px;border-radius:50%;overflow:hidden;background:#ffeef4;flex:none">${renderLanaHead({ outfit: S.outfit })}</div>
-      <div><b style="font-size:20px">Лана, 19 лет</b><div class="muted">Будущий зубной техник 🦷<br/>Москва ⇄ Сухум</div>
-      <div style="margin-top:6px"><span class="chip orange">💰 ${money(S.money)}</span> ${S.flags.diploma ? '<span class="chip mint">🎓 Диплом</span>' : ''}</div></div>
+      <div><b style="font-size:20px">Лана, 19 лет</b><div class="muted">${S.lab.owned ? 'Хозяйка «Lana Dental» 🦷' : S.flags.diploma ? 'Зубной техник 🦷' : 'Будущий зубной техник 🦷'}<br/>Москва ⇄ Сухум · ☕ ${BARISTA_RANKS[baristaRank()].name}</div>
+      <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px"><span class="chip orange">💰 ${money(S.money)}</span>${S.debt ? `<span class="chip red">долг ${money(S.debt)}</span>` : ''}${S.flags.diploma ? '<span class="chip mint">🎓 Диплом</span>' : `<span class="chip lav">📈 ${S.grades}%</span>`}${S.flags.olympiadWon ? '<span class="chip">🏅 Олимпиада</span>' : ''}</div></div>
     </div>
     <div class="section-title">Потребности</div>
     <div class="card">${NEEDS.map((n) => `<div class="row" style="margin:6px 0"><span style="width:26px;font-size:20px">${n.icon}</span><div style="flex:1"><div class="row" style="justify-content:space-between;font-weight:800;font-size:14px"><span>${n.name}</span><span>${Math.round(S.needs[n.id])}%</span></div><div class="bar" style="margin-top:4px"><i style="width:${S.needs[n.id]}%;background:${n.color}"></i></div></div></div>`).join('')}</div>
@@ -484,10 +675,10 @@ function appProfile() {
     <div class="section-title">Статистика</div>
     <div class="card" style="font-weight:800;font-size:14px;line-height:1.9">
       📅 Дней в игре: ${S.day + 1}<br/>🎓 Пар посещено: ${S.attendance}<br/>💸 Заработано: ${money(S.stats.earned || 0)}<br/>
-      🦷 Коронок сделано: ${S.stats.crowns || 0}<br/>🍊 Мандаринов собрано: ${S.stats.mandarins || 0}<br/>🧳 Поездок: ${S.stats.trips || 0}<br/>👗 Вещей в гардеробе: ${S.owned.length}
+      🦷 Коронок сделано: ${S.stats.crowns || 0}<br/>☕ Смен в «Пенке»: ${S.stats.mg_barista || 0}<br/>🍊 Мандаринов собрано: ${S.stats.mandarins || 0}<br/>🧳 Поездок: ${S.stats.trips || 0}<br/>💌 Просьб выполнено: ${S.stats.sideDone || 0}<br/>👗 Вещей в гардеробе: ${S.owned.length}
     </div>
     <div class="section-title">Запасы</div>
-    <div class="card" style="font-weight:800;font-size:14px;line-height:1.9">🛒 Продукты: ${S.inventory.groceries} · 🍲 Порции: ${S.inventory.meals || 0} · 🥪 Перекус: ${S.inventory.snacks} · 🥫 Корм: ${S.inventory.petFood}</div>`;
+    <div class="card" style="font-weight:800;font-size:14px;line-height:1.9">🛒 Продукты: ${S.inventory.groceries} · 🍲 Порции: ${S.inventory.meals || 0} · 🥪 Перекус: ${S.inventory.snacks} · 🥫 Корм: ${S.inventory.petFood}${S.inventory.sweets ? ` · 🍬 Конфеты: ${S.inventory.sweets}` : ''}</div>`;
 }
 
 // ================================================================ ALBUM
@@ -562,7 +753,10 @@ function appSettings() {
           <p>💎 <b>Кристалл</b> над головой показывает настроение: чем оно лучше, тем быстрее растут навыки.</p>
           <p>📋 <b>Задание</b> вверху ведёт по сюжету, стрелка 👇 указывает на нужный предмет.</p>
           <p>💰 <b>Деньги</b>: смены в кофейне, сбор мандаринов, стипендия по понедельникам, мама по пятницам.</p>
-          <p>🎓 <b>Цель</b>: прокачать зуботехнику до 5 уровня, походить на пары и сдать экзамен.</p>
+          <p>🧭 <b>Мой путь</b> в телефоне — главы сюжета, советы «что делать сейчас», успеваемость, карьера, просьбы близких и мечты.</p>
+          <p>📈 <b>Успеваемость</b>: пары по будням её поднимают, прогулы снижают. От неё зависят стипендия и допуск к экзамену.</p>
+          <p>🏠 <b>Расходы</b>: по понедельникам оплата общежития. Не хватит денег — появится долг.</p>
+          <p>🎓 <b>Цель</b>: диплом зубного техника, а потом — своя лаборатория в Сухуме.</p>
           <p>⏸ Пробел — пауза, «P» — телефон (на компьютере).</p></div>`,
         buttons: [{ label: 'Понятно!', value: true }],
       }),

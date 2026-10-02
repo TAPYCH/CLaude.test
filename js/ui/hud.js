@@ -1,7 +1,7 @@
 // Heads-up display: clock, speed, money, quest tracker, needs, phone button.
 import { S, NEEDS } from '../core/state.js';
 import { formatClock, formatDate, formatDateShort, dayPhase, season, weatherOf } from '../core/time.js';
-import { currentQuest } from '../core/progress.js';
+import { currentQuest, questProgressText, questFraction } from '../core/progress.js';
 import { el, $ } from './dom.js';
 import { sfx } from '../audio.js';
 
@@ -113,16 +113,20 @@ export function updateHud() {
   badge.hidden = !S.unread;
   badge.textContent = S.unread;
 
+  const moneyPill = $('.money-pill', root);
+  moneyPill.classList.toggle('debt', S.debt > 0);
+  moneyPill.title = S.debt > 0 ? `Долг: ${S.debt} ₽` : '';
+
   const q = currentQuest();
   const chip = $('[data-quest]', root);
-  const key = q ? q.id + ':' + S.quest.progress : 'none';
+  const ptext = q ? questProgressText(q) : '';
+  const key = q ? q.id + ':' + S.quest.progress + ':' + ptext : 'none';
   if (key !== lastQuestKey) {
     lastQuestKey = key;
     if (!q) chip.hidden = true;
     else {
       chip.hidden = false;
-      const pct = Math.min(1, S.quest.progress / q.goal.count);
-      chip.innerHTML = `<div class="q-ico">${q.icon}</div><div style="min-width:0"><div class="q-t">${q.title}</div><div class="q-d">${q.hint}</div>${q.goal.count > 1 ? `<div class="q-bar"><i style="width:${pct * 100}%"></i></div>` : ''}</div>`;
+      chip.innerHTML = `<div class="q-ico">${q.icon}</div><div style="min-width:0;flex:1"><div class="q-ch">Глава ${q.chapter}${ptext ? ` · <b>${ptext}</b>` : ''}</div><div class="q-t">${q.title}</div><div class="q-d">${q.hint}</div>${ptext ? `<div class="q-bar"><i style="width:${questFraction(q) * 100}%"></i></div>` : ''}</div>`;
     }
   }
 }
