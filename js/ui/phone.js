@@ -189,7 +189,13 @@ function appPath() {
     <div class="card quest"><div class="qi">${q.icon}</div><div style="flex:1;min-width:0"><h4>${q.title}</h4><p>${q.desc}</p>
       <p style="margin-top:6px"><span class="chip lav">💡 ${q.hint}</span></p>
       ${questProgressText(q) ? `<div class="row" style="gap:8px;margin-top:8px"><div class="bar lav" style="flex:1;margin:0"><i style="width:${questFraction(q) * 100}%"></i></div><b class="qp">${questProgressText(q)}</b></div>` : ''}
-      ${q.target && SCENES[q.target.scene] && SCENES[q.target.scene].city === S.city && q.target.scene !== S.scene && (q.target.scene !== 'mylab' || S.lab.owned) ? `<button class="btn small mint" style="margin-top:10px" data-go="${q.target.scene}">Отправиться: ${SCENES[q.target.scene].name} ›</button>` : ''}
+      ${q.target && SCENES[q.target.scene] && SCENES[q.target.scene].city === S.city && q.target.scene !== S.scene && (q.target.scene !== 'mylab' || S.lab.owned)
+        ? `<button class="btn small mint" style="margin-top:10px" data-go="${q.target.scene}">Отправиться: ${SCENES[q.target.scene].name} ›</button>`
+        : (q.goal.type === 'travel' && q.goal.to !== S.city) || (q.target && SCENES[q.target.scene] && SCENES[q.target.scene].city !== S.city) || q.id === 'ownLab' || q.goal.type === 'postcards'
+          ? `<button class="btn small lav" style="margin-top:10px" data-open="map">Открыть карту 🗺️</button>`
+          : q.goal.type === 'buy' || q.goal.type === 'adopt'
+            ? `<button class="btn small orange" style="margin-top:10px" data-open="shop">Открыть магазин 🛍️</button>`
+            : ''}
     </div></div>` : '<div class="card" style="text-align:center"><b>👑 Сюжет пройден!</b><p class="muted">Мечты и заказы ждут — жизнь продолжается.</p></div>'}
     ${(() => {
       const adv = adviceList();
@@ -245,6 +251,12 @@ function appPath() {
       sfx('click');
       closePhone();
       await goScene(b.dataset.go);
+    }),
+  );
+  body.querySelectorAll('[data-open]').forEach((b) =>
+    b.addEventListener('click', () => {
+      sfx('click');
+      openApp(b.dataset.open === 'shop' && q.goal.type === 'adopt' ? 'pets' : b.dataset.open);
     }),
   );
 }

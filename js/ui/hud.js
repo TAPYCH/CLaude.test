@@ -61,7 +61,7 @@ export function mountHud(container, h) {
   });
   $('[data-quest]', root).addEventListener('click', () => {
     sfx('click');
-    handlers.openPhone && handlers.openPhone('quests');
+    handlers.openPhone && handlers.openPhone('path');
   });
   $('[data-money-btn]', root).addEventListener('click', () => {
     sfx('click');
