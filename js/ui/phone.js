@@ -10,7 +10,8 @@ import { SCENES } from '../data/scenes.js';
 import { PET_TYPES, renderPet } from '../art/pets.js';
 import { renderLanaHead, renderLana } from '../art/character.js';
 import { currentQuest, currentChapter, questProgressText, questFraction, sideDef, dreamValue, sendReply, markRead, unreadFor } from '../core/progress.js';
-import { goScene, travel, excursion, TRAVEL, adoptPet, feedPet, pauseTime, resumeTime, playPetGame, rentLab, buyEquipment, baristaRank, labBonus } from '../game.js';
+import { goScene, travel, excursion, TRAVEL, adoptPet, feedPet, pauseTime, resumeTime, playPetGame, rentLab, buyEquipment, buyDecor, baristaRank, labBonus } from '../game.js';
+import { DECOR } from '../data/decor.js';
 import { openWardrobe } from './wardrobe.js';
 import { el, app, esc, wait } from './dom.js';
 import { sfx, setAudio } from '../audio.js';
@@ -405,7 +406,7 @@ const FOOD = [
 ];
 
 function appShop(tab = 'clothes') {
-  const v = view('🛍️ Магазин', { tabs: `<div class="tabs">${[['clothes', '👗 Одежда'], ['salon', '💇‍♀️ Салон'], ['pets', '🐾 Питомцы'], ['food', '🛒 Продукты']].map(([k, n]) => `<button class="tab ${k === tab ? 'on' : ''}" data-tab="${k}">${n}</button>`).join('')}</div>` });
+  const v = view('🛍️ Магазин', { tabs: `<div class="tabs">${[['clothes', '👗 Одежда'], ['salon', '💇‍♀️ Салон'], ['decor', '🛋️ Уют'], ['pets', '🐾 Питомцы'], ['food', '🛒 Продукты']].map(([k, n]) => `<button class="tab ${k === tab ? 'on' : ''}" data-tab="${k}">${n}</button>`).join('')}</div>` });
   const body = v.querySelector('.app-body');
   const render = () => {
     v.querySelectorAll('[data-tab]').forEach((b) => b.classList.toggle('on', b.dataset.tab === tab));
@@ -421,6 +422,24 @@ function appShop(tab = 'clothes') {
         closePhone();
         await openWardrobe({ shop: true, tab: tab === 'clothes' ? 'top' : 'hairStyle' });
       });
+    } else if (tab === 'decor') {
+      body.insertAdjacentHTML('beforeend', '<p class="muted" style="margin:0 2px 10px">Вещи для комнаты в общежитии: их видно в сцене, а уютная комната поднимает настроение после сна.</p>');
+      const list = el('<div class="list"></div>');
+      for (const d of DECOR) {
+        const has = S.decor.includes(d.id);
+        const card = el(`<div class="card row equip ${has ? 'owned' : ''}"><div style="font-size:34px">${d.icon}</div><div style="flex:1;min-width:0"><b>${d.name}</b><div class="muted" style="font-size:13px">${d.desc}</div></div>
+          ${has ? '<span class="chip mint">✓ дома</span>' : `<button class="btn small orange" ${S.money < d.price ? 'disabled' : ''}>${money(d.price)}</button>`}</div>`);
+        const b = card.querySelector('button');
+        if (b)
+          b.addEventListener('click', () => {
+            if (buyDecor(d.id)) {
+              toast({ icon: d.icon, title: `${d.name} — в комнате!`, text: S.scene === 'dorm' ? 'Посмотри, как стало уютно' : 'Будет ждать тебя в общежитии' });
+              render();
+            }
+          });
+        list.appendChild(card);
+      }
+      body.appendChild(list);
     } else if (tab === 'pets') {
       const list = el('<div class="list"></div>');
       for (const [type, t] of Object.entries(PET_TYPES)) {

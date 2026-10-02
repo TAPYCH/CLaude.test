@@ -9,6 +9,7 @@ import { CONFIG } from './config.js';
 import { AMBIENT, NPC_LINES } from './data/contacts.js';
 import { ensureDailies, sendMessage, currentQuest, offerSideQuest, expireSideQuests } from './core/progress.js';
 import { BARISTA_RANKS, EQUIPMENT, LAB_RENT, STIPEND, RENT } from './data/career.js';
+import { DECOR } from './data/decor.js';
 import { world, loadScene, walkTo, setOverhead, lanaAnim, setExpression, lanaScreenPos, hideHotspots, rebuildPet, setProp, cameraFlash, heartsAt } from './ui/world.js';
 import { updateHud } from './ui/hud.js';
 import { toast, floatText, confetti } from './ui/fx.js';
@@ -647,6 +648,23 @@ export function buyEquipment(id) {
   return true;
 }
 
+export function buyDecor(id) {
+  const d = DECOR.find((x) => x.id === id);
+  if (!d || S.decor.includes(id)) return false;
+  if (S.money < d.price) {
+    sfx('bad');
+    toast({ icon: '💸', title: 'Не хватает денег', text: `Нужно ${money(d.price)}` });
+    return false;
+  }
+  addMoney(-d.price, 'decor');
+  S.decor.push(id);
+  sfx('coin');
+  if (S.scene === 'dorm') loadScene('dorm', world.lanaX);
+  bus.emit('buy', { id, cat: 'decor' });
+  save();
+  return true;
+}
+
 // ---------------------------------------------------------------- sleep
 export async function sleep(passedOut = false) {
   const h = S.minutes / 60;
@@ -661,7 +679,7 @@ export async function sleep(passedOut = false) {
   }
   pauseTime();
   playMusic('night');
-  const sleepBonus = 1 + outfitBonus('sleep');
+  const sleepBonus = (1 + outfitBonus('sleep')) * (S.scene === 'dorm' && S.decor.includes('bedding_silk') ? 1.15 : 1);
   const node = el(`<div class="fullscreen sleep-scene">
       <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">${stars(1000, 1000, 90, 11)}${moon(800, 220, 46)}</svg>
       <div class="clock-big"><span data-c>${formatClock(S.minutes)}</span><small>${passedOut ? 'Лана уснула от усталости…' : 'Сладких снов, Лана'}</small></div>
@@ -695,6 +713,7 @@ export async function sleep(passedOut = false) {
   setExpression('happy', 2500);
   lanaAnim('joy', 1000);
   const hh = S.minutes / 60;
+  if (S.scene === 'dorm' && S.decor.length) changeNeed('fun', 4 * S.decor.length); // a cosy room = a good mood
   toast({ icon: hh < 12 ? '☀️' : '😊', title: hh < 12 ? 'Доброе утро, Лана!' : 'Отлично вздремнула!', text: `Бодрость ${Math.round(S.needs.energy)}%` });
   bus.emit('action', { id: 'sleep' });
   save();

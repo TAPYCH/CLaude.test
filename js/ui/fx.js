@@ -19,7 +19,7 @@ export function toast({ icon = '✨', title = '', text = '', avatar = null, time
 }
 
 function pump() {
-  if (showing >= 2 || !queue.length) return;
+  if (showing >= (window.innerWidth < 500 ? 1 : 2) || !queue.length) return;
   const t = queue.shift();
   showing++;
   const node = el(`<div class="toast">
@@ -27,7 +27,16 @@ function pump() {
       <div>${t.title ? `<b>${esc(t.title)}</b>` : ''}${t.text ? `<small>${esc(t.text)}</small>` : ''}</div>
     </div>`);
   node.style.cursor = 'pointer';
-  node.addEventListener('click', () => {
+  let sy = null;
+  node.addEventListener('pointerdown', (e) => (sy = e.clientY));
+  node.addEventListener('pointermove', (e) => {
+    if (sy != null && e.clientY - sy < -6) node.style.transform = `translateY(${e.clientY - sy}px)`;
+  });
+  node.addEventListener('pointerup', (e) => {
+    const dy = sy == null ? 0 : e.clientY - sy;
+    sy = null;
+    if (dy < -24) return close(); // swipe up to dismiss
+    node.style.transform = '';
     if (t.onClick) t.onClick();
     close();
   });
@@ -43,7 +52,8 @@ function pump() {
       pump();
     }, 300);
   };
-  setTimeout(close, t.time);
+  // a backlog of notifications moves along faster
+  setTimeout(close, queue.length > 1 ? Math.min(t.time, 2200) : t.time);
 }
 
 /** Floating "+15 🍓" text at screen coordinates. */

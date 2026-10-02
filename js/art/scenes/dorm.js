@@ -1,5 +1,6 @@
 // Moscow dorm room (общежитие). World 2000 × 1000.
 import { skyDefs, isDark, stars, moon, cloud, moscowSkyline, pottedPlant, floorPlanks, shadowEllipse, stringLights } from './common.js';
+import { isNewYear } from '../../data/decor.js';
 
 export const W = 2000;
 
@@ -12,8 +13,21 @@ function teethRow(x, y, n, w = 9, flip = false) {
   return s;
 }
 
-export function paint({ phase, season }) {
+function newYearTree(x, y) {
+  const balls = [[-34, -120, '#ff6f9c'], [26, -150, '#ffc23d'], [-16, -200, '#7fd3ff'], [36, -78, '#9a7bff'], [-48, -62, '#ffc23d'], [8, -250, '#ff6f9c'], [0, -104, '#3fcfae']];
+  return `${shadowEllipse(x, y + 4, 90, 10, 0.18)}<rect x="${x - 16}" y="${y - 40}" width="32" height="40" rx="4" fill="#c98b5a"/>
+    ${[[300, 190, 50, '#4caf72'], [240, 120, 72, '#3e9a63'], [175, 40, 96, '#358a56']].reverse().map(([top, base, hw, c]) => `<path d="M${x},${y - top} L${x + hw},${y - base} Q${x},${y - base + 18} ${x - hw},${y - base} Z" fill="${c}"/>`).join('')}
+    ${balls.map(([bx, by, c]) => `<circle cx="${x + bx}" cy="${y + by}" r="9" fill="${c}"/><circle cx="${x + bx - 3}" cy="${y + by - 3}" r="3" fill="#fff" opacity=".7"/>`).join('')}
+    <path d="M${x},${y - 312} l9,20 l22,2 l-17,14 l6,21 l-20,-12 l-20,12 l6,-21 l-17,-14 l22,-2 Z" fill="#ffd36b" class="amb-pulse"/>
+    <rect x="${x + 40}" y="${y - 34}" width="44" height="34" rx="4" fill="#ff8fab"/><rect x="${x + 58}" y="${y - 34}" width="8" height="34" fill="#fff"/>
+    <rect x="${x - 86}" y="${y - 26}" width="36" height="26" rx="4" fill="#7fd3ff"/><rect x="${x - 72}" y="${y - 26}" width="7" height="26" fill="#ffd36b"/>`;
+}
+
+export function paint({ phase, season, S }) {
   const dark = isDark(phase);
+  const decor = (S && S.decor) || [];
+  const has = (id) => decor.includes(id);
+  const ny = S && isNewYear(S.day);
   const snow = season === 'winter';
   const leaf = season === 'autumn';
   return `
@@ -22,7 +36,7 @@ export function paint({ phase, season }) {
     <linearGradient id="dWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7e4f0"/><stop offset="1" stop-color="#f3d7e7"/></linearGradient>
     <linearGradient id="dMirror" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3f3ff"/><stop offset=".5" stop-color="#bcdcf2"/><stop offset="1" stop-color="#d9ecfa"/></linearGradient>
     <linearGradient id="dFridge" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8fdcca"/><stop offset=".6" stop-color="#b3eadc"/><stop offset="1" stop-color="#86d1bf"/></linearGradient>
-    <linearGradient id="dBlanket" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb6cf"/><stop offset="1" stop-color="#f58fb2"/></linearGradient>
+    <linearGradient id="dBlanket" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${has('bedding_silk') ? '#d4c4ff' : '#ffb6cf'}"/><stop offset="1" stop-color="${has('bedding_silk') ? '#9f84f0' : '#f58fb2'}"/></linearGradient>
     <radialGradient id="dLamp" cx=".5" cy=".3" r=".6"><stop offset="0" stop-color="#fff2b8" stop-opacity=".75"/><stop offset="1" stop-color="#fff2b8" stop-opacity="0"/></radialGradient>
     <pattern id="dStripes" width="48" height="48" patternUnits="userSpaceOnUse"><rect width="48" height="48" fill="none"/><rect x="0" width="22" height="48" fill="#fff" opacity=".22"/><circle cx="35" cy="12" r="2.4" fill="#e9b9d2" opacity=".6"/><circle cx="35" cy="36" r="2.4" fill="#e9b9d2" opacity=".6"/></pattern>
     <clipPath id="dWin"><rect x="830" y="180" width="280" height="370" rx="8"/></clipPath>
@@ -36,9 +50,12 @@ export function paint({ phase, season }) {
   <rect y="770" width="${W}" height="22" fill="#fff6fb"/><rect y="790" width="${W}" height="5" fill="#d9a7c0" opacity=".6"/>
 
   <!-- rug -->
-  <ellipse cx="1000" cy="905" rx="420" ry="62" fill="#fff4e8"/>
+  ${has('rug_heart')
+    ? `<path d="M1000,975 C860,940 650,900 660,858 C672,818 820,812 1000,852 C1180,812 1328,818 1340,858 C1350,900 1140,940 1000,975 Z" fill="#ff9ebd"/>
+       <path d="M1000,958 C880,930 700,898 708,862 C718,834 840,830 1000,866 C1160,830 1282,834 1292,862 C1300,898 1120,930 1000,958 Z" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="3 14" stroke-linecap="round"/>`
+    : `<ellipse cx="1000" cy="905" rx="420" ry="62" fill="#fff4e8"/>
   <ellipse cx="1000" cy="905" rx="380" ry="50" fill="none" stroke="#ffb7cf" stroke-width="8" stroke-dasharray="2 18" stroke-linecap="round"/>
-  <ellipse cx="1000" cy="905" rx="320" ry="38" fill="none" stroke="#ffd59e" stroke-width="5"/>
+  <ellipse cx="1000" cy="905" rx="320" ry="38" fill="none" stroke="#ffd59e" stroke-width="5"/>`}
 
   <!-- ===== bed ===== -->
   ${stringLights(70, 520, 250, 26)}
@@ -56,7 +73,7 @@ export function paint({ phase, season }) {
     <ellipse cx="150" cy="634" rx="74" ry="30" fill="#fff" stroke="#f1dfe8" stroke-width="3"/>
     <ellipse cx="200" cy="626" rx="58" ry="26" fill="#ffe0ec" stroke="#f7c4d8" stroke-width="3"/>
     <path d="M230,640 C260,612 520,612 532,640 L540,720 Q380,742 222,722 Z" fill="url(#dBlanket)"/>
-    ${[[290, 670], [350, 690], [410, 662], [470, 694], [320, 712], [440, 718], [500, 666]].map(([x, y]) => `<path d="M${x},${y} c-4,-6 -12,-1 0,9 c12,-10 4,-15 0,-9 Z" fill="#fff" opacity=".75"/>`).join('')}
+    ${[[290, 670], [350, 690], [410, 662], [470, 694], [320, 712], [440, 718], [500, 666]].map(([x, y]) => (has('bedding_silk') ? `<path d="M${x},${y - 6} l3,6 l7,1 l-5,4 l1,7 l-6,-3 l-6,3 l1,-7 l-5,-4 l7,-1 Z" fill="#fff6c9" opacity=".9"/>` : `<path d="M${x},${y} c-4,-6 -12,-1 0,9 c12,-10 4,-15 0,-9 Z" fill="#fff" opacity=".75"/>`)).join('')}
     <path d="M230,640 C260,620 380,618 532,640" fill="none" stroke="#fff" stroke-width="5" opacity=".5"/>
     <!-- plush bunny -->
     <g transform="translate(120,600)">
@@ -78,6 +95,7 @@ export function paint({ phase, season }) {
   <rect x="649" y="480" width="6" height="56" rx="3" fill="#e6b88f"/><rect x="666" y="480" width="6" height="56" rx="3" fill="#e6b88f"/>
   <path d="M700,236 q-20,-40 0,-60 q30,-10 40,20 q-10,-6 -18,0 q10,20 -22,40 Z" fill="#ffd1e0"/>
   <rect x="680" y="196" width="70" height="42" rx="8" fill="#ffe7c4"/><rect x="690" y="186" width="52" height="16" rx="6" fill="#ffd59a"/>
+  ${has('lamp_moon') ? `${dark ? '<circle cx="606" cy="204" r="110" fill="url(#dLamp)"/>' : ''}<rect x="590" y="226" width="32" height="10" rx="4" fill="#d9c2b0"/><circle cx="606" cy="204" r="24" fill="#fff6d6"/><circle cx="597" cy="198" r="5" fill="#efe2b8"/><circle cx="613" cy="212" r="3.5" fill="#efe2b8"/><circle cx="606" cy="204" r="34" fill="#fff2b8" opacity="${dark ? 0.45 : 0.18}" class="amb-pulse"/>` : ''}
 
   <!-- ===== window ===== -->
   <rect x="816" y="166" width="308" height="398" rx="14" fill="#fff"/>
@@ -97,6 +115,11 @@ export function paint({ phase, season }) {
   <g transform="translate(1060,556)"><path d="M-40,-30 Q0,10 40,-30 Z" fill="#f2e3d0"/>
     <circle cx="-16" cy="-34" r="14" fill="#ff9a2e"/><circle cx="10" cy="-36" r="14" fill="#ffa53f"/><circle cx="-2" cy="-50" r="14" fill="#ff9a2e"/>
     <path d="M-2,-64 q6,-8 14,-6 q-6,8 -14,6 Z" fill="#4caf50"/></g>
+  ${ny ? newYearTree(1128, 792) : has('plant_monstera') ? `<g>${pottedPlant(1128, 792, 1.55, '#f2c9a0')}<path d="M1128,700 C1080,640 1060,600 1072,560 C1100,590 1120,640 1130,700 Z M1128,700 C1170,630 1200,610 1214,590 C1200,640 1170,680 1132,704 Z" fill="#3e9a63"/></g>` : ''}
+  ${has('poster_sea') ? `<g><rect x="1514" y="188" width="150" height="170" rx="6" fill="#fff" stroke="#e8d3c8" stroke-width="4"/><rect x="1526" y="200" width="126" height="146" fill="#bfe8ff"/>
+    <circle cx="1620" cy="236" r="16" fill="#fff3b0"/><path d="M1526,290 C1560,270 1610,284 1652,268 L1652,346 L1526,346 Z" fill="#4fb3e8"/><path d="M1526,318 L1652,318 L1652,346 L1526,346 Z" fill="#ffe6c9"/>
+    <path d="M1546,318 C1544,292 1552,272 1562,260 M1562,260 c-14,-2 -22,6 -24,12 M1562,260 c10,-8 22,-6 26,0" stroke="#3f9a5a" stroke-width="4" fill="none"/>
+    <text x="1589" y="372" text-anchor="middle" font-family="Marck Script" font-size="18" fill="#c4859f">Сухум</text></g>` : ''}
   <!-- radiator -->
   <rect x="860" y="626" width="220" height="120" rx="12" fill="#fffaf6" stroke="#ead8cd" stroke-width="3"/>
   ${[0, 1, 2, 3, 4, 5, 6].map((i) => `<rect x="${874 + i * 29}" y="636" width="20" height="100" rx="10" fill="#f6ebe4"/>`).join('')}

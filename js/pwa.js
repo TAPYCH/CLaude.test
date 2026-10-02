@@ -7,10 +7,23 @@ export function initPwa() {
     deferred = e;
   });
   if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    const hadController = !!navigator.serviceWorker.controller;
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js').catch(() => {
-        /* offline support is optional (e.g. sandboxed previews) */
-      });
+      navigator.serviceWorker
+        .register('./sw.js')
+        .then((reg) => {
+          // look for a new version whenever the app comes back to the foreground
+          document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) reg.update().catch(() => {});
+          });
+        })
+        .catch(() => {
+          /* offline support is optional (e.g. sandboxed previews) */
+        });
+    });
+    // a new version took over: tell the game (it offers a reload at a safe moment)
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (hadController) window.dispatchEvent(new window.Event('app-update'));
     });
   }
 }

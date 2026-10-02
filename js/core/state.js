@@ -63,6 +63,8 @@ export function freshState() {
     sideDone: {},
     dreams: {},
     lab: { owned: false, upgrades: [], orders: 0 },
+    decor: [],
+    login: null,
     daily: { day: -1, tasks: [] },
     achievements: {},
     stats: {},

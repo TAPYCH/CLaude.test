@@ -292,6 +292,11 @@ export function applyLite() {
   document.body.classList.toggle('lite', !!lite);
 }
 window.addEventListener('lite-change', applyLite);
+window.addEventListener('app-update', () => {
+  if (!S.started || document.querySelector('.title-screen')) return location.reload();
+  save();
+  toast({ icon: '✨', title: 'Вышло обновление игры', text: 'Нажми, чтобы перезапустить — прогресс сохранён', time: 12000, onClick: () => (save(), location.reload()) });
+});
 
 async function boot() {
   initPwa();

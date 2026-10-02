@@ -264,5 +264,6 @@ export const DREAMS = [
   { id: 'chef', icon: '👩‍🍳', title: 'Хозяюшка', desc: 'Приготовлено блюд', measure: (S) => (S.stats.act_cook || 0) + (S.stats.act_helpCook || 0) + (S.stats.mg_khachapuri_played || 0), tiers: [5, 15, 35], rewards: [500, 1500, 3500] },
   { id: 'social', icon: '💞', title: 'Душа компании', desc: 'Разговоров и звонков', measure: (S) => ['friendChat', 'chatGuests', 'momTalk', 'amraChat', 'callMom', 'grandmaTea', 'grandmaTalk', 'callLover'].reduce((a, k) => a + (S.stats['act_' + k] || 0), 0), tiers: [10, 30, 70], rewards: [500, 1500, 4000] },
   { id: 'money', icon: '💰', title: 'Финансовая независимость', desc: 'Заработано всего, ₽', measure: (S) => Math.round(S.stats.earned || 0), tiers: [10000, 40000, 120000], rewards: [1000, 3000, 10000] },
+  { id: 'cozy', icon: '🛋️', title: 'Уютное гнёздышко', desc: 'Вещей для уюта в комнате', measure: (S) => (S.decor || []).length, tiers: [1, 3, 5], rewards: [300, 900, 2000] },
   { id: 'games', icon: '🎮', title: 'Мастер мини-игр', desc: 'Звёзд в мини-играх', measure: (S) => S.stats.starsTotal || 0, tiers: [15, 50, 120], rewards: [600, 2000, 5000] },
 ];
