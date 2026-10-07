@@ -486,6 +486,7 @@ const MG_REWARD = {
     return { money: (res.coins || 0) * 10, xp: { fitness: 20 + res.stars * 10 }, needs: { fun: 10, energy: -12, hygiene: -10 } };
   },
   petplay: (res) => ({ needs: { fun: 14 }, pet: 40 }),
+  clicker: (res) => ({ money: res.stars * 150, needs: { fun: 6 + res.stars * 5, social: 4 + res.stars * 3 } }),
 };
 
 export function applyRewards(rw) {
@@ -559,6 +560,16 @@ export async function playPetGame() {
   try {
     await minigameAction('petPlay', { minigame: 'petplay', minutes: 20 }, 'pet');
     bus.emit('petPlay', {});
+  } finally {
+    game.busy = false;
+  }
+}
+
+export async function playClicker() {
+  if (game.busy) return;
+  game.busy = true;
+  try {
+    await minigameAction('clicker', { minigame: 'clicker', minutes: 20 });
   } finally {
     game.busy = false;
   }

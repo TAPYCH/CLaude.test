@@ -87,6 +87,8 @@ export function runMinigame(def, opts = {}) {
 
     root.querySelector('[data-quit]').addEventListener('click', async () => {
       sfx('click');
+      // games that save as they go (the clicker) finish with their results instead of a "lose progress?" prompt
+      if (state === 'play' && game.quit) return game.quit();
       if (state === 'play') {
         const prev = state;
         state = 'paused';

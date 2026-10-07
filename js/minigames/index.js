@@ -13,6 +13,7 @@ const LOADERS = {
   dance: () => import('./dance.js'),
   fashion: () => import('./fashion.js'),
   puzzle: () => import('./puzzle.js'),
+  clicker: () => import('./clicker.js'),
 };
 
 export async function playMinigame(id, opts) {

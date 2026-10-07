@@ -10,7 +10,7 @@ import { SCENES } from '../data/scenes.js';
 import { PET_TYPES, renderPet } from '../art/pets.js';
 import { renderLanaHead, renderLana } from '../art/character.js';
 import { currentQuest, currentChapter, questProgressText, questFraction, sideDef, dreamValue, sendReply, markRead, unreadFor } from '../core/progress.js';
-import { goScene, travel, excursion, TRAVEL, adoptPet, feedPet, pauseTime, resumeTime, playPetGame, rentLab, buyEquipment, buyDecor, baristaRank, labBonus } from '../game.js';
+import { goScene, travel, excursion, TRAVEL, adoptPet, feedPet, pauseTime, resumeTime, playPetGame, playClicker, rentLab, buyEquipment, buyDecor, baristaRank, labBonus } from '../game.js';
 import { DECOR } from '../data/decor.js';
 import { openWardrobe } from './wardrobe.js';
 import { el, app, esc, wait, vibrate, setHaptics } from './dom.js';
@@ -21,6 +21,7 @@ import { updateHud } from './hud.js';
 import { rebuildPet, setExpression } from './world.js';
 import { bus } from '../core/bus.js';
 import { install, canInstall } from '../pwa.js';
+import { CONFIG } from '../config.js';
 
 const APPS = [
   { id: 'path', name: 'Мой путь', icon: '🧭', bg: 'linear-gradient(160deg,#ffb8c9,#ff7aa2)' },
@@ -33,6 +34,7 @@ const APPS = [
   { id: 'achievements', name: 'Награды', icon: '🏆', bg: 'linear-gradient(160deg,#fff0a8,#ffc23d)' },
   { id: 'profile', name: 'Я', icon: '💖', bg: 'linear-gradient(160deg,#ffd1e8,#f79ac0)' },
   { id: 'album', name: 'Альбом', icon: '📸', bg: 'linear-gradient(160deg,#e6e1ff,#b6a6ff)' },
+  { id: 'clicker', name: CONFIG.clicker.name, icon: `<img class="ai-photo" src="${CONFIG.clicker.photo}" alt="">`, bg: 'linear-gradient(160deg,#9fd3ff,#3f86d8)' },
   { id: 'lab', name: 'Лаборатория', icon: '🦷', bg: 'linear-gradient(160deg,#b8f0e6,#3fbfae)', when: () => S.flags.diploma },
   { id: 'settings', name: 'Настройки', icon: '⚙️', bg: 'linear-gradient(160deg,#eef0f4,#c4c9d6)' },
 ];
@@ -128,6 +130,11 @@ async function openApp(id) {
   if (id === 'wardrobe') {
     closePhone();
     await openWardrobe();
+    return;
+  }
+  if (id === 'clicker') {
+    closePhone();
+    await playClicker();
     return;
   }
   const fn = { path: appPath, lab: appLab, map: appMap, shop: appShop, pets: appPets, messages: appMessages, quests: appQuests, achievements: appAchievements, profile: appProfile, album: appAlbum, settings: appSettings }[id];
@@ -836,7 +843,7 @@ function appProfile() {
     <div class="section-title">Статистика</div>
     <div class="card" style="font-weight:800;font-size:14px;line-height:1.9">
       📅 Дней в игре: ${S.day + 1}<br/>🎓 Пар посещено: ${S.attendance}<br/>💸 Заработано: ${money(S.stats.earned || 0)}<br/>
-      🦷 Коронок сделано: ${S.stats.crowns || 0}<br/>☕ Смен в «Пенке»: ${S.stats.mg_barista || 0}<br/>🍊 Мандаринов собрано: ${S.stats.mandarins || 0}<br/>🧳 Поездок: ${S.stats.trips || 0}<br/>💌 Просьб выполнено: ${S.stats.sideDone || 0}<br/>👗 Вещей в гардеробе: ${S.owned.length}
+      🦷 Коронок сделано: ${S.stats.crowns || 0}<br/>☕ Смен в «Пенке»: ${S.stats.mg_barista || 0}<br/>🍊 Мандаринов собрано: ${S.stats.mandarins || 0}<br/>🧳 Поездок: ${S.stats.trips || 0}<br/>💌 Просьб выполнено: ${S.stats.sideDone || 0}<br/>👗 Вещей в гардеробе: ${S.owned.length}${S.clicker.taps ? `<br/>👆 Тапов в «${esc(CONFIG.clicker.name)}-кликере»: ${S.clicker.taps.toLocaleString('ru-RU')}` : ''}
     </div>
     <div class="section-title">Запасы</div>
     <div class="card" style="font-weight:800;font-size:14px;line-height:1.9">🛒 Продукты: ${S.inventory.groceries} · 🍲 Порции: ${S.inventory.meals || 0} · 🥪 Перекус: ${S.inventory.snacks} · 🥫 Корм: ${S.inventory.petFood}${S.inventory.sweets ? ` · 🍬 Конфеты: ${S.inventory.sweets}` : ''}</div>`;

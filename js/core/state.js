@@ -64,6 +64,7 @@ export function freshState() {
     dreams: {},
     lab: { owned: false, upgrades: [], orders: 0 },
     decor: [],
+    clicker: { hearts: 0, total: 0, taps: 0, up: {}, last: 0 },
     login: null,
     daily: { day: -1, tasks: [] },
     achievements: {},
@@ -92,6 +93,8 @@ function migrate(data) {
   out.salon = { ...base.salon, ...(data.salon || {}) };
   out.outfit = { ...base.outfit, ...(data.outfit || {}) };
   out.lab = { ...base.lab, ...(data.lab || {}) };
+  out.clicker = { ...base.clicker, ...(data.clicker || {}) };
+  out.clicker.up = { ...(out.clicker.up || {}) };
   // v1 saves stored only the quest position; map it to the (longer) v2 story by quest id
   if (data.quest && !data.quest.id) {
     const id = LEGACY_ORDER[data.quest.index];

@@ -1,5 +1,6 @@
 // Achievements. `check(S)` is evaluated after relevant events; some are unlocked explicitly by id.
 import { levelOf } from '../core/state.js';
+import { CONFIG } from '../config.js';
 
 export const ACHIEVEMENTS = [
   { id: 'hello', icon: '👋', name: 'Привет, Лана!', desc: 'Начать новую жизнь', check: (S) => S.started },
@@ -35,6 +36,8 @@ export const ACHIEVEMENTS = [
   { id: 'dance3', icon: '💃', name: 'Королева танцпола', desc: '3 звезды в танцах', check: (S) => (S.stats.mg3_dance || 0) >= 1 },
   { id: 'runway', icon: '📸', name: 'Звезда подиума', desc: '3 звезды на фотосессии', check: (S) => (S.stats.mg3_fashion || 0) >= 1 },
   { id: 'puzzle3', icon: '🧩', name: 'Пазломания', desc: 'Собрать открытку на 3 звезды', check: (S) => (S.stats.mg3_puzzle || 0) >= 1 },
+  { id: 'clicker', icon: '👆', name: 'Тык-тык', desc: `Тапнуть фото в «${CONFIG.clicker.name}-кликере» 1 000 раз`, check: (S) => (S.clicker.taps || 0) >= 1000 },
+  { id: 'clickerLove', icon: '💗', name: 'Море любви', desc: 'Собрать миллион ❤️ в кликере', check: (S) => (S.clicker.total || 0) >= 1e6 },
   { id: 'cozy', icon: '🛋️', name: 'Уютное гнёздышко', desc: 'Обставить комнату полностью', check: (S) => (S.decor || []).length >= 5 },
   { id: 'olymp', icon: '🥇', name: 'Олимпийская чемпионка', desc: 'Победить на олимпиаде', check: (S) => !!S.flags.olympiadWon },
   { id: 'streak', icon: '🔥', name: 'Неделя с Ланой', desc: 'Заходить в игру 7 дней подряд', check: (S) => !!S.login && S.login.streak >= 7 },

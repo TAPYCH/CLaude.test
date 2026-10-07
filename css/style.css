@@ -1022,6 +1022,38 @@ svg { display: block; }
   .mgf.runway .mgf-stage { grid-column: 1 / -1; }
 }
 
+/* ================================================================ minigame: clicker */
+.app-icon .ai .ai-photo { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; border-radius: inherit; border: 3px solid #f3d27a; box-sizing: border-box; }
+.dialog .big-ico .mgc-ico { display: block; width: 96px; height: 108px; border-radius: 50%; object-fit: cover; border: 4px solid #e3b84e; box-shadow: var(--shadow-m); }
+.mgc-shop { position: absolute; left: calc(10px + var(--safe-l)); right: calc(10px + var(--safe-r)); bottom: calc(10px + var(--safe-b)); z-index: 2; max-width: 620px; margin: 0 auto; padding: 10px; border-radius: 22px; background: rgba(255, 255, 255, 0.94); box-shadow: var(--shadow-l); }
+.mgc-head { display: flex; justify-content: space-between; align-items: baseline; margin: 0 4px 8px; font-weight: 900; }
+.mgc-head b { font-size: 16px; color: var(--ink); }
+.mgc-head span { font-size: 13px; color: var(--ink-soft); }
+.mgc-ups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.mgc-up { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 7px 8px; border: 0; border-radius: 16px; background: #fff; box-shadow: 0 3px 0 #dbe7f6, var(--shadow-s); font: inherit; color: var(--ink); text-align: left; cursor: pointer; transition: transform 0.12s, opacity 0.2s; }
+.mgc-up:active { transform: translateY(2px) scale(0.98); }
+.mgc-ui { position: relative; flex: none; width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center; font-size: 22px; background: linear-gradient(160deg, #e6f3ff, #cfe4fb); }
+.mgc-ui i { position: absolute; top: -5px; right: -6px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--lav); color: #fff; font-style: normal; font-size: 11px; font-weight: 900; line-height: 18px; text-align: center; box-sizing: border-box; }
+.mgc-ui i:empty { display: none; }
+.mgc-ut { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.mgc-ut b, .mgc-ut small, .mgc-ut em { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mgc-ut b { font-size: 13.5px; line-height: 1.2; }
+.mgc-ut small { font-size: 11.5px; font-weight: 700; color: var(--ink-soft); line-height: 1.25; }
+.mgc-ut em { font-style: normal; font-size: 12.5px; font-weight: 900; color: var(--pink); line-height: 1.25; }
+.mgc-up.no { opacity: 0.55; }
+.mgc-up.max { opacity: 1; }
+.mgc-up.max em { color: var(--mint); }
+.mgc-up.bought { animation: mgc-bought 0.45s var(--ease-bounce); }
+.mgc-up.shake { animation: shake 0.4s; }
+@keyframes mgc-bought { 40% { transform: scale(1.06); box-shadow: 0 0 0 3px var(--mint), var(--shadow-s); } }
+@media (orientation: landscape) and (max-height: 520px) {
+  .mgc-shop { left: auto; top: calc(62px + var(--safe-t)); bottom: auto; width: min(380px, 48vw); max-height: calc(100% - 72px - var(--safe-t) - var(--safe-b)); margin: 0; overflow-y: auto; }
+}
+@media (max-width: 360px) {
+  .mgc-ui { width: 34px; height: 34px; font-size: 19px; }
+  .mgc-ut b { font-size: 12.5px; }
+}
+
 /* ================================================================ ambient scene life */
 .amb-cloud { animation: amb-cloud 36s ease-in-out infinite alternate; }
 @keyframes amb-cloud { from { transform: translateX(-46px); } to { transform: translateX(46px); } }
