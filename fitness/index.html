@@ -1,0 +1,1586 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Курс Масса-12</title>
+<meta name="description" content="12 недель домашних тренировок на массу: программа, техника, питание, сон и самозащита.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Unbounded:wght@500;700;800&display=swap">
+<style>
+/* Layout: тренировочный журнал. Шапка со стойкой блинов (фазы = цветные блины), липкие вкладки,
+   одна колонка до 920px. Карточки только у дней и упражнений — всё остальное открытый текст. */
+:root{
+  --bg:#ECEEF0; --surface:#FFFFFF; --surface-2:#E1E5E9; --ink:#14171B; --muted:#57606A; --line:#D0D6DC;
+  --accent:#1E4FC2; --accent-soft:#DCE5F9; --on-accent:#FFFFFF;
+  --plate-green:#2B8854; --plate-yellow:#D49F00; --plate-red:#C7302A; --plate-white:#F7F7F4;
+  --plate-edge:#1A1D21; --plate-ink:#FFFFFF; --plate-ink-dark:#1A1D21; --plate-rim:rgb(255 255 255 / .28);
+  --rack:#2A2F35;
+  --warn:#8A5700; --warn-bg:#FFF0CF; --danger:#AA241E; --danger-bg:#FBE3E0; --ok:#1C6E42; --ok-bg:#DAF0E2;
+  --shadow:0 1px 2px rgb(20 24 28 / .06), 0 6px 18px rgb(20 24 28 / .07);
+  --font-display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --font-body:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --r:14px; --r-sm:9px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1114; --surface:#161A1F; --surface-2:#20262D; --ink:#E7EBEE; --muted:#9BA4AE; --line:#2B323A;
+    --accent:#7AA2FF; --accent-soft:#1B2A4A; --on-accent:#0B1220;
+    --plate-green:#3FAE72; --plate-yellow:#E9BA2E; --plate-red:#E5524B; --plate-white:#E9ECEF;
+    --plate-edge:#0B0D10; --plate-ink:#FFFFFF; --plate-ink-dark:#14171B; --plate-rim:rgb(255 255 255 / .22);
+    --rack:#C9D0D7;
+    --warn:#F3C46A; --warn-bg:#352A10; --danger:#FF8F86; --danger-bg:#3A1714; --ok:#72D39D; --ok-bg:#11301F;
+    --shadow:0 1px 2px rgb(0 0 0 / .4), 0 6px 18px rgb(0 0 0 / .35);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1114; --surface:#161A1F; --surface-2:#20262D; --ink:#E7EBEE; --muted:#9BA4AE; --line:#2B323A;
+  --accent:#7AA2FF; --accent-soft:#1B2A4A; --on-accent:#0B1220;
+  --plate-green:#3FAE72; --plate-yellow:#E9BA2E; --plate-red:#E5524B; --plate-white:#E9ECEF;
+  --plate-edge:#0B0D10; --plate-ink:#FFFFFF; --plate-ink-dark:#14171B; --plate-rim:rgb(255 255 255 / .22);
+  --rack:#C9D0D7;
+  --warn:#F3C46A; --warn-bg:#352A10; --danger:#FF8F86; --danger-bg:#3A1714; --ok:#72D39D; --ok-bg:#11301F;
+  --shadow:0 1px 2px rgb(0 0 0 / .4), 0 6px 18px rgb(0 0 0 / .35);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+img{max-width:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:920px;margin-inline:auto;padding-inline:16px}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+h1,h2,h3{text-wrap:balance}
+h2{font-family:var(--font-display);font-weight:700;font-size:clamp(1.3rem,4.4vw,1.85rem);line-height:1.2;letter-spacing:-.01em;margin:2.4rem 0 .7rem}
+h3{font-size:1.12rem;line-height:1.35;margin:1.8rem 0 .5rem}
+section > h2:first-child{margin-top:.4rem}
+p,li,dd{max-width:68ch}
+p{margin:.6rem 0}
+ul,ol{padding-left:1.25rem;margin:.6rem 0}
+li{margin:.3rem 0}
+strong{font-weight:700}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.small{font-size:.88rem}
+.eyebrow{font-family:var(--font-mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
+
+/* ---------- шапка ---------- */
+.top{padding-block:28px 6px}
+.display{font-family:var(--font-display);font-weight:800;font-size:clamp(2.7rem,12vw,5.2rem);line-height:.95;letter-spacing:-.03em;margin:.5rem 0 .6rem}
+.display .dash{color:var(--accent)}
+.lede{font-size:1.06rem;max-width:62ch;margin:0 0 6px}
+.rack{display:flex;align-items:flex-end;gap:0;margin-top:18px;--pmax:min(21vw,118px)}
+.plate-btn{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:8px;background:none;border:0;padding:0;color:inherit;cursor:pointer;font:inherit}
+.plate{position:relative;width:calc(var(--d) * var(--pmax));aspect-ratio:1;max-width:100%;border-radius:50%;
+  background:radial-gradient(circle,var(--bg) 0 7%,var(--plate-edge) 7% 12%,var(--c) 12% 62%,var(--plate-rim) 62% 65%,var(--c) 65% 100%);
+  box-shadow:inset 0 0 0 2px rgb(0 0 0 / .12);transition:transform .2s ease;margin-bottom:-1px}
+.plate b{position:absolute;left:0;right:0;bottom:15%;text-align:center;font-family:var(--font-display);font-weight:700;font-size:calc(var(--d) * 1.05rem);color:var(--plate-ink);line-height:1}
+.plate.p-green{--c:var(--plate-green)} .plate.p-yellow{--c:var(--plate-yellow)} .plate.p-red{--c:var(--plate-red)}
+.plate.p-white{--c:var(--plate-white);box-shadow:inset 0 0 0 1.5px var(--plate-edge)}
+.plate.p-yellow b,.plate.p-white b{color:var(--plate-ink-dark)}
+.plate-btn:hover .plate{transform:translateY(-4px)}
+.plate-cap{width:100%;border-top:5px solid var(--rack);padding:8px 4px 0;text-align:center;font-size:.8rem;line-height:1.3;color:var(--muted)}
+.plate-cap b{display:block;color:var(--ink);font-family:var(--font-mono);font-size:.78rem}
+.plate-btn[aria-current="true"] .plate-cap{color:var(--ink)}
+.plate-btn[aria-current="true"] .plate-cap b{color:var(--accent)}
+
+/* ---------- вкладки ---------- */
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--bg);border-bottom:1px solid var(--line);margin-top:18px}
+.tabs-inner{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tabs-inner::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;background:none;border:0;border-bottom:3px solid transparent;padding:13px 12px 11px;font:600 .95rem var(--font-body);color:var(--muted);cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab:hover{color:var(--ink)}
+main{padding-block:26px 110px}
+
+/* ---------- общие блоки ---------- */
+.callout{background:var(--warn-bg);border-radius:var(--r-sm);padding:14px 16px;margin:1rem 0;max-width:72ch}
+.callout > :first-child{margin-top:0} .callout > :last-child{margin-bottom:0}
+.callout .tag{display:inline-block;font-family:var(--font-mono);font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--warn);margin-bottom:4px}
+.callout.danger{background:var(--danger-bg)} .callout.danger .tag{color:var(--danger)}
+.callout.ok{background:var(--ok-bg)} .callout.ok .tag{color:var(--ok)}
+.callout.info{background:var(--accent-soft)} .callout.info .tag{color:var(--accent)}
+.table-wrap{overflow-x:auto;margin:1rem 0;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.94rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.78rem;font-family:var(--font-mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tfoot td{font-weight:700;background:var(--surface-2)}
+.rules{display:grid;gap:14px;margin:1rem 0}
+.rule{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:baseline}
+.rule > .k{font-family:var(--font-mono);font-weight:600;color:var(--accent);font-size:.85rem;white-space:nowrap}
+.rule > div{min-width:0}
+.rule p{margin:.15rem 0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:1rem 0}
+.grid2 > *{min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.panel h3{margin-top:0}
+.panel > :last-child{margin-bottom:0}
+dl.gloss{display:grid;grid-template-columns:minmax(120px,max-content) 1fr;gap:8px 18px;margin:1rem 0}
+dl.gloss dt{font-weight:700}
+dl.gloss dd{margin:0;min-width:0}
+@media (max-width:520px){dl.gloss{grid-template-columns:1fr;gap:2px}dl.gloss dd{margin-bottom:10px}}
+.timeline{list-style:none;padding:0;margin:1rem 0;border-left:2px solid var(--line)}
+.timeline li{position:relative;padding:4px 0 10px 18px;margin:0}
+.timeline li::before{content:"";position:absolute;left:-6px;top:12px;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid var(--accent)}
+.timeline .t{font-family:var(--font-mono);font-weight:600;margin-right:8px}
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 .9rem var(--font-body);padding:9px 14px;border-radius:999px;cursor:pointer;text-decoration:none}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.status{display:inline-block;font-family:var(--font-mono);font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;vertical-align:2px}
+.status.s-ok{background:var(--ok-bg);color:var(--ok)} .status.s-warn{background:var(--warn-bg);color:var(--warn)} .status.s-no{background:var(--danger-bg);color:var(--danger)}
+
+/* ---------- программа ---------- */
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.85rem;color:var(--muted);margin:.4rem 0 .8rem}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;background:var(--c);box-shadow:inset 0 0 0 1px rgb(0 0 0 / .15)}
+.weeks{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:6px;margin:.6rem 0 1rem}
+@media (max-width:600px){.weeks{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.wk{border:1px solid var(--line);background:var(--surface);border-radius:var(--r-sm);padding:7px 0 6px;font:600 .95rem var(--font-mono);color:var(--ink);cursor:pointer;border-bottom:5px solid var(--c);position:relative}
+.wk[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink);border-bottom-color:var(--c)}
+.wk .wk-done{position:absolute;top:2px;right:4px;font-size:.6rem;color:var(--ok)}
+.wk[aria-pressed="true"] .wk-done{color:var(--bg)}
+.progress{display:flex;align-items:center;gap:12px;margin:.4rem 0 0}
+.bar{flex:1;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.bar > i{display:block;height:100%;background:var(--ok);border-radius:99px;transition:width .3s}
+.week-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin:1.2rem 0 .3rem}
+.week-head h2{margin:0}
+.chip{display:inline-block;font-family:var(--font-mono);font-size:.78rem;line-height:1.2;padding:4px 8px;border-radius:6px;background:var(--surface-2);color:var(--ink);white-space:nowrap}
+.chip.phase{background:var(--c);color:var(--plate-ink)}
+.chip.phase.dark-ink{color:var(--plate-ink-dark)}
+.task{margin:.3rem 0 1rem}
+details.fold{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);margin:.8rem 0}
+details.fold > summary{cursor:pointer;list-style:none;padding:13px 16px;font-weight:700;display:flex;justify-content:space-between;gap:12px}
+details.fold > summary::-webkit-details-marker{display:none}
+details.fold > summary::after{content:"+";font-family:var(--font-mono);color:var(--muted)}
+details.fold[open] > summary::after{content:"−"}
+details.fold > .fold-body{padding:0 16px 14px}
+.days{display:grid;gap:14px;margin-top:1rem}
+.day{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.day.rest{box-shadow:none;background:transparent;border-style:dashed}
+.day.today{border-color:var(--accent);border-width:2px}
+.day-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.day.rest .day-head{border-bottom:0}
+.day-head .dname{font-family:var(--font-mono);font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;width:100%}
+.day-head .dname .now{color:var(--accent);font-weight:600}
+.day-head h3{font-family:var(--font-display);font-weight:700;font-size:1.12rem;margin:0}
+.day-head .focus{color:var(--muted);font-size:.92rem;flex:1 1 180px;min-width:0}
+.done-btn{margin-left:auto;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 12px;font:600 .85rem var(--font-body);cursor:pointer;white-space:nowrap}
+.done-btn[aria-pressed="true"]{background:var(--ok-bg);color:var(--ok);border-color:transparent}
+.day.is-done .day-head{background:var(--ok-bg)}
+.ex-list{list-style:none;margin:0;padding:4px 0}
+.ex-row{display:grid;grid-template-columns:2.1rem 1fr;gap:2px 8px;padding:11px 16px;margin:0;border-bottom:1px solid var(--line);max-width:none}
+.ex-row:last-child{border-bottom:0}
+.ex-row .n{font-family:var(--font-mono);color:var(--muted);font-size:.85rem;padding-top:2px}
+.ex-row > div{min-width:0}
+.ex-link{background:none;border:0;padding:0;font:600 1rem var(--font-body);color:var(--ink);text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.ex-link:hover{text-decoration-color:var(--accent);color:var(--accent)}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 2px}
+.meta .chip.sets{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.note{font-size:.88rem;color:var(--muted);margin:4px 0 0;max-width:none}
+.alt{font-size:.86rem;margin:4px 0 0}
+.alt .ex-link{font-size:.86rem;font-weight:600}
+.rest-body{padding:0 16px 14px;color:var(--muted);font-size:.95rem}
+.rest-body p{margin:.2rem 0}
+.reset-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:1.4rem 0 0}
+
+/* ---------- техника ---------- */
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:1rem 0 .6rem}
+.fchip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;font:500 .88rem var(--font-body);cursor:pointer}
+.fchip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.search{width:100%;max-width:420px;font:1rem var(--font-body);padding:10px 14px;border-radius:var(--r-sm);border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.lib{display:grid;gap:10px;margin-top:1rem}
+details.ex{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);scroll-margin-top:70px}
+details.ex > summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:start}
+details.ex > summary::-webkit-details-marker{display:none}
+details.ex > summary .nm{font-weight:700;font-size:1.03rem}
+details.ex > summary .mu{grid-column:1;color:var(--muted);font-size:.88rem}
+details.ex > summary .gtag{grid-row:1 / span 2;grid-column:2;font-family:var(--font-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding-top:4px}
+details.ex[open] > summary{border-bottom:1px solid var(--line)}
+details.ex.flash{animation:flash 1.4s ease}
+@keyframes flash{0%{box-shadow:0 0 0 3px var(--accent)}100%{box-shadow:0 0 0 0 transparent}}
+.ex-body{padding:4px 16px 16px}
+.ex-body h4{font-family:var(--font-mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:1rem 0 .3rem;font-weight:600}
+.ex-body ol,.ex-body ul{margin:.2rem 0}
+.ex-body .gear{font-size:.9rem;margin:.6rem 0 0}
+.ex-body .levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:.8rem}
+.ex-body .levels > div{background:var(--surface-2);border-radius:var(--r-sm);padding:10px 12px;font-size:.92rem;min-width:0}
+.ex-body .levels b{display:block;font-family:var(--font-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:2px}
+.ex-body .btn{margin-top:14px}
+.empty{color:var(--muted);padding:12px 0}
+
+/* ---------- питание ---------- */
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:1rem 0}
+.calc label{display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:var(--muted);min-width:0}
+.calc input,.calc select{font:1rem var(--font-mono);padding:9px 10px;border-radius:var(--r-sm);border:1px solid var(--line);background:var(--surface);color:var(--ink);width:100%}
+.out{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:1rem 0}
+.out > div{background:var(--surface);padding:12px 14px;min-width:0}
+.out .v{font-family:var(--font-display);font-weight:700;font-size:1.45rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.out .v small{font-family:var(--font-body);font-size:.8rem;font-weight:500;color:var(--muted)}
+.out .l{font-size:.82rem;color:var(--muted)}
+.out .main{background:var(--accent-soft)}
+.out .main .v{color:var(--accent)}
+.recipes{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:1rem 0}
+.recipe{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;min-width:0}
+.recipe h4{margin:0 0 4px;font-size:1rem}
+.recipe .kc{font-family:var(--font-mono);font-size:.8rem;color:var(--muted)}
+.recipe ul{padding-left:1.1rem}
+
+/* ---------- самозащита ---------- */
+.ladder{counter-reset:step;list-style:none;padding:0;margin:1rem 0;display:grid;gap:10px}
+.ladder > li{counter-increment:step;display:grid;grid-template-columns:2.4rem 1fr;gap:4px 12px;margin:0;max-width:none}
+.ladder > li::before{content:counter(step);font-family:var(--font-display);font-weight:700;font-size:1.3rem;color:var(--accent);line-height:1.3}
+.ladder > li > div{min-width:0}
+.ladder h3{margin:0 0 .2rem}
+.ladder p{margin:.2rem 0}
+.targets{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:1rem 0}
+.targets > div{border-radius:var(--r);padding:14px 16px;min-width:0}
+.targets .yes{background:var(--ok-bg)} .targets .no{background:var(--danger-bg)}
+.targets h3{margin:0 0 .4rem;font-size:1rem}
+.targets .yes h3{color:var(--ok)} .targets .no h3{color:var(--danger)}
+
+/* ---------- FAQ ---------- */
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;padding:14px 0;font-weight:700;display:flex;justify-content:space-between;gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--font-mono);color:var(--muted)}
+.faq details[open] summary::after{content:"−"}
+.faq details > div{padding:0 0 14px}
+
+/* ---------- таймер ---------- */
+.timer-fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;align-items:center;gap:8px;background:var(--accent);color:var(--on-accent);border:0;border-radius:999px;padding:12px 16px;font:600 .95rem var(--font-body);box-shadow:var(--shadow);cursor:pointer}
+.timer-fab .tv{font-family:var(--font-mono)}
+.timer-fab svg{width:18px;height:18px}
+.timer-panel{position:fixed;right:16px;left:auto;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:40;width:min(320px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:16px}
+.timer-panel h3{margin:0 0 6px;font-size:1rem}
+.t-display{font-family:var(--font-display);font-weight:700;font-size:3rem;line-height:1;text-align:center;margin:8px 0 12px;font-variant-numeric:tabular-nums}
+.t-display.end{color:var(--ok)}
+.t-presets{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.t-presets button,.t-ctrl button{border:1px solid var(--line);background:var(--surface-2);color:var(--ink);border-radius:var(--r-sm);padding:8px 0;font:600 .85rem var(--font-mono);cursor:pointer}
+.t-presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.t-ctrl{display:grid;grid-template-columns:2fr 1fr 1fr;gap:6px;margin-top:8px}
+.t-ctrl .go{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">12 недель · дома · штанга 5–15&nbsp;кг · гантели 2&nbsp;×&nbsp;3&nbsp;кг</p>
+    <h1 class="display">Масса<span class="dash">-</span>12</h1>
+    <p class="lede">Курс набора мышечной массы под твои данные: 16 лет, 177 см, 58 кг, 3 × 60 отжиманий. Тренировки на каждый день с техникой, питание в граммах, сон, режим и самозащита, которая работает в жизни, а не в кино.</p>
+    <div class="rack" aria-label="Фазы курса">
+      <button class="plate-btn" type="button" data-phase="0" aria-label="Фаза 1, недели 1–4: Фундамент">
+        <span class="plate p-green" style="--d:.72"><b>10</b></span>
+        <span class="plate-cap"><b>Нед. 1–4</b>Фундамент</span>
+      </button>
+      <button class="plate-btn" type="button" data-phase="1" aria-label="Фаза 2, недели 5–8: Рост">
+        <span class="plate p-yellow" style="--d:.89"><b>15</b></span>
+        <span class="plate-cap"><b>Нед. 5–8</b>Рост</span>
+      </button>
+      <button class="plate-btn" type="button" data-phase="2" aria-label="Фаза 3, недели 9–11: Пик">
+        <span class="plate p-red" style="--d:1"><b>25</b></span>
+        <span class="plate-cap"><b>Нед. 9–11</b>Пик</span>
+      </button>
+      <button class="plate-btn" type="button" data-phase="3" aria-label="Неделя 12: разгрузка и замеры">
+        <span class="plate p-white" style="--d:.51"><b>5</b></span>
+        <span class="plate-cap"><b>Нед. 12</b>Замеры</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Разделы курса">
+  <div class="wrap tabs-inner" role="tablist">
+    <button class="tab" role="tab" type="button" data-tab="start" aria-selected="true">Старт</button>
+    <button class="tab" role="tab" type="button" data-tab="program" aria-selected="false">Программа</button>
+    <button class="tab" role="tab" type="button" data-tab="technique" aria-selected="false">Техника</button>
+    <button class="tab" role="tab" type="button" data-tab="food" aria-selected="false">Питание</button>
+    <button class="tab" role="tab" type="button" data-tab="sleep" aria-selected="false">Сон и режим</button>
+    <button class="tab" role="tab" type="button" data-tab="defense" aria-selected="false">Самозащита</button>
+    <button class="tab" role="tab" type="button" data-tab="faq" aria-selected="false">Вопросы</button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ======================= СТАРТ ======================= -->
+<section data-panel="start" role="tabpanel">
+  <h2>Твоя отправная точка</h2>
+  <p>Сначала разберём, с чем мы работаем. От этого зависит вся программа: какие упражнения, сколько повторов и сколько еды.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Замер</th><th class="num">Сейчас</th><th class="num">Через 12 недель</th><th class="num">Через год</th></tr></thead>
+      <tbody>
+        <tr><td>Вес</td><td class="num">58 кг</td><td class="num">62–64 кг</td><td class="num">66–70 кг</td></tr>
+        <tr><td>Грудь</td><td class="num">85 см</td><td class="num">88–91 см</td><td class="num">92–96 см</td></tr>
+        <tr><td>Бицепс (в напряжении)</td><td class="num">29 см</td><td class="num">30,5–32 см</td><td class="num">33–35 см</td></tr>
+        <tr><td>Предплечье</td><td class="num">25 см</td><td class="num">25,5–26,5 см</td><td class="num">27–28 см</td></tr>
+        <tr><td>Шея</td><td class="num">35 см</td><td class="num">35,5–36,5 см</td><td class="num">37–38 см</td></tr>
+        <tr><td>Талия</td><td class="num">70 см</td><td class="num">70–72 см</td><td class="num">71–74 см</td></tr>
+        <tr><td>Бёдра (обхват)</td><td class="num">80 см</td><td class="num">82–84 см</td><td class="num">84–88 см</td></tr>
+        <tr><td>Голень</td><td class="num">34 см</td><td class="num">34,5–35,5 см</td><td class="num">36–37 см</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small muted">Прогноз — это ориентир при честном выполнении программы, питания и сна, а не обещание. У всех генетика разная: кто-то прибавит больше, кто-то меньше.</p>
+
+  <h3>Что говорят твои цифры</h3>
+  <div class="rules">
+    <div class="rule"><span class="k">ИМТ 18,5</span><div><p>Это самая нижняя граница нормы веса. Тебе не нужна «сушка»: жира почти нет, талия 70 см, рельеф уже есть. Тебе нужна <strong>масса</strong>. Если набирать её спокойно, по 0,3–0,5 кг в неделю, она будет рельефной, потому что рельеф — это мышцы при низком жире, а жир у тебя уже низкий.</p></div></div>
+    <div class="rule"><span class="k">3 × 60</span><div><p>Отличная выносливость. Но 60 повторов — это уже кардио для груди, а не сигнал расти. Мышцы лучше всего растут, когда отказ наступает в диапазоне примерно 8–20 повторов. Поэтому дальше мы делаем отжимания <strong>тяжелее</strong>, а не дольше: ноги на стуле, рюкзак с грузом, лучные, псевдопланш.</p></div></div>
+    <div class="rule"><span class="k">16 лет</span><div><p>У тебя лучший гормональный фон в жизни для роста мышц, и ты, скорее всего, ещё растёшь в высоту. Это огромный плюс. Но есть и цена: еды и сна тебе нужно больше, чем взрослому. Часть калорий уходит на рост костей.</p></div></div>
+    <div class="rule"><span class="k">3 + 15 кг</span><div><p>Снаряды лёгкие, поэтому главные инструменты здесь другие: упражнения на одной ноге и одной руке, медленный темп, паузы, рюкзак с книгами или бутылками. 15 кг в болгарском выпаде на одной ноге ощущаются совсем не так, как на двух.</p></div></div>
+  </div>
+  <div class="callout info"><span class="tag">Про «бедро 80 см»</span><p>Если 80 см — это обхват таза по ягодицам, всё нормально. Обхват одного бедра меряют под ягодичной складкой, и у парня твоей комплекции там обычно 45–55 см. Добавь этот замер, ноги тоже будут расти.</p></div>
+
+  <h3>Как быстро можно стать большим</h3>
+  <p>Самый быстрый путь — не самый жёсткий, а тот, который ты выдержишь без пропусков. Реальный ориентир: <strong>+4–6 кг за 12 недель</strong>, из них большая часть — мышцы и вода в мышцах. За год — <strong>+8–12 кг</strong> (часть этого даст естественный рост). По-настоящему «огромными» становятся за 3–5 лет стабильной работы. Ты начинаешь в идеальном возрасте, и через год тебя будет не узнать.</p>
+  <p>Быстрее не бывает без химии, а химия в 16 лет — это остановка роста в высоту и выключенные собственные гормоны. Об этом подробно во вкладке «Питание», в разделе про добавки.</p>
+
+  <h2>Как пользоваться курсом</h2>
+  <ol>
+    <li><strong>Прочитай правила ниже.</strong> Это 10 минут, но без них программа работает вполсилы.</li>
+    <li><strong>Сделай стартовый тест</strong> (ниже) и запиши результаты в заметки телефона.</li>
+    <li><strong>Настрой питание</strong> во вкладке «Питание»: калькулятор уже заполнен твоими данными.</li>
+    <li><strong>Открывай «Программу»</strong> в день тренировки. Карточка сегодняшнего дня подсвечена. Нажми на название упражнения, чтобы открыть технику.</li>
+    <li><strong>Включай таймер отдыха</strong> кнопкой в правом нижнем углу.</li>
+    <li><strong>Отмечай тренировку выполненной.</strong> Отметки сохраняются в этом браузере.</li>
+    <li><strong>Каждое воскресенье</strong> взвешивайся утром натощак. <strong>Каждые 4 недели</strong> — замеры и фото.</li>
+  </ol>
+
+  <h3>Стартовый тест</h3>
+  <p>Сделай в первый день, отдохнув от тренировок хотя бы сутки. Этот же тест повторишь в неделю 12 и сравнишь.</p>
+  <ul>
+    <li><strong>Отжимания классические</strong> — 1 подход на максимум с чистой техникой.</li>
+    <li><strong>Подтягивания</strong> — максимум (если есть турник). Если нет — тяга под столом на максимум.</li>
+    <li><strong>Пистолетик на стул</strong> — максимум на каждую ногу.</li>
+    <li><strong>Лодочка</strong> — максимум времени.</li>
+    <li><strong>Вес, все замеры и 3 фото</strong> (спереди, сбоку, сзади) в одном месте при одном свете.</li>
+  </ul>
+
+  <h2>Правила, на которых всё держится</h2>
+  <div class="rules">
+    <div class="rule"><span class="k">Прогрессия</span><div><p>Мышца растёт, только если нагрузка постепенно растёт. Каждую неделю чуть больше: +1–2 повтора, медленнее темп, сложнее вариант или тяжелее рюкзак. Записывай каждый подход. Если не записываешь, ты не знаешь, растёт ли нагрузка.</p></div></div>
+    <div class="rule"><span class="k">Двойная прогрессия</span><div><p>У каждого упражнения есть диапазон, например 12–20. Начинаешь с варианта, где выходит около 12. Каждую неделю добавляешь повторы. Сделал 20 во всех подходах с чистой техникой — переходи на вариант сложнее или добавь 1–2 кг в рюкзак и снова начни с 12.</p></div></div>
+    <div class="rule"><span class="k">Близко к отказу</span><div><p>Отказ — это момент, когда следующий повтор с правильной техникой сделать уже нельзя. В фазе 1 останавливайся за 2 повтора до отказа (RIR 2), в фазе 2 — за 1, в фазе 3 последний подход — до отказа. С лёгкими снарядами это главное условие роста.</p></div></div>
+    <div class="rule"><span class="k">Темп 3-1-1-0</span><div><p>Четыре цифры: 3 секунды опускание → 1 секунда пауза внизу → 1 секунда подъём → 0 секунд пауза вверху. Медленное опускание и пауза в растянутом положении — главный способ сделать лёгкий вес тяжёлым. «X» — подъём взрывом или с помощью рук.</p></div></div>
+    <div class="rule"><span class="k">Амплитуда</span><div><p>Полная амплитуда, особенно нижняя, растянутая часть движения. Половинки «для количества» дают половину результата.</p></div></div>
+    <div class="rule"><span class="k">Отдых</span><div><p>Между подходами в тяжёлых упражнениях 90 секунд – 2 минуты, в лёгких (махи, бицепс, икры) 45–60 секунд. Мышцы растут не на тренировке, а между тренировками.</p></div></div>
+    <div class="rule"><span class="k">Еда и сон</span><div><p>Это половина результата. Без лишних калорий и 8,5–10 часов сна программа не работает, как бы ты ни старался.</p></div></div>
+  </div>
+
+  <h3>Словарь</h3>
+  <dl class="gloss">
+    <dt>Подход × повторы</dt><dd>«4 × 12–20» — 4 подхода по 12–20 повторений.</dd>
+    <dt>Макс − 1</dt><dd>Делай столько, сколько можешь, минус один повтор. Чистая техника, без рывков.</dd>
+    <dt>RIR</dt><dd>«Повторов в запасе». RIR 2 — остановился, когда мог сделать ещё 2.</dd>
+    <dt>Негатив</dt><dd>Только опускание, медленно, на 4–6 секунд. Вверх возвращаешься любым способом. Так осваивают то, что пока не получается целиком.</dd>
+    <dt>1,5 повтора</dt><dd>Полностью вниз → до середины → снова вниз → полностью вверх. Это один повтор. Вдвое больше времени в самой тяжёлой части.</dd>
+    <dt>Механический дроп</dt><dd>Дошёл до отказа — без отдыха переходишь на более лёгкий вариант или частичную амплитуду и добиваешь ещё 8–15 повторов.</dd>
+    <dt>Миорепсы</dt><dd>Основной подход почти до отказа, потом 5 глубоких вдохов (10–15 с), ещё 3–5 повторов, снова 5 вдохов и 3–5 повторов. Всего 3–4 мини-подхода.</dd>
+    <dt>«21»</dt><dd>7 повторов в нижней половине амплитуды, 7 в верхней и 7 полных без отдыха.</dd>
+    <dt>Разгрузка</dt><dd>Неделя с половиной подходов и лёгкой работой. Суставы и нервная система восстанавливаются, после неё ты сильнее.</dd>
+    <dt>Крепатура</dt><dd>Ноющая боль в мышцах через 1–2 дня после новой нагрузки. Нормальна, не опасна и не обязательна для роста.</dd>
+  </dl>
+
+  <h2>Что докупить, когда появится возможность</h2>
+  <p>Программа работает и без этого. Но вот что даст самый большой скачок, по порядку:</p>
+  <ol>
+    <li><strong>Турник</strong> в дверной проём или настенный. Это покупка номер один. Без него спина и бицепс — самые отстающие части, а с ним открываются подтягивания и подъёмы ног в висе.</li>
+    <li><strong>Набор резиновых петель</strong> (эспандеров). Помогают в подтягиваниях, добавляют сопротивление к отжиманиям и приседам.</li>
+    <li><strong>Больше блинов к штанге</strong> или разборные гантели до 10–20 кг. Тогда выпады, жимы и тяги пойдут в рост ещё быстрее.</li>
+    <li><strong>Настенные брусья.</strong> Безопаснее и удобнее, чем стулья.</li>
+    <li><strong>Коврик и скакалка.</strong> Скакалка — лучшее кардио для бокса и разминки.</li>
+  </ol>
+
+  <div class="callout danger">
+    <span class="tag">Стоп-сигналы</span>
+    <p>Немедленно прекрати тренировку, скажи родителям и сходи к врачу, если появилось что-то из этого: боль или давление в груди; обморок или почти обморок; сердце колотится неровно или очень быстро в покое; одышка, которая не соответствует нагрузке; острая боль в суставе или спине, щелчок с болью; онемение руки или ноги.</p>
+    <p>Перед стартом хорошая идея — сходить к педиатру или спортивному врачу: ЭКГ, общий анализ крови, витамин D. Обязательно сходи, если у тебя бывали обмороки, есть астма, проблемы с сердцем или кто-то из родственников внезапно умер молодым от болезни сердца.</p>
+  </div>
+</section>
+
+<!-- ======================= ПРОГРАММА ======================= -->
+<section data-panel="program" role="tabpanel" hidden>
+  <h2>Программа на 12 недель</h2>
+  <p>5 тренировок в неделю по 45–65 минут: два дня на верх, два на ноги и день рук. Каждая мышца получает нагрузку 2 раза в неделю, а это лучшая частота для роста. Среда и воскресенье — отдых.</p>
+  <div class="legend" aria-label="Цвета фаз">
+    <span><i class="dot" style="--c:var(--plate-green)"></i>Фаза 1 · фундамент</span>
+    <span><i class="dot" style="--c:var(--plate-yellow)"></i>Фаза 2 · рост</span>
+    <span><i class="dot" style="--c:var(--plate-red)"></i>Фаза 3 · пик</span>
+    <span><i class="dot" style="--c:var(--plate-white)"></i>Разгрузка и замеры</span>
+  </div>
+  <div class="weeks" id="weeks" role="group" aria-label="Выбор недели"></div>
+  <div class="progress"><div class="bar"><i id="progBar" style="width:0%"></i></div><span class="mono small" id="progTxt">0 из 60</span></div>
+
+  <div id="weekView"></div>
+
+  <details class="fold" open>
+    <summary>Разминка перед каждой тренировкой · 8 минут</summary>
+    <div class="fold-body">
+      <ol>
+        <li><strong>2 минуты</strong> — бег на месте, прыжки «звёздочкой» или скакалка, до лёгкого пота.</li>
+        <li><strong>Круги руками</strong> вперёд и назад по 10, вращения в плечах.</li>
+        <li><strong>Выкруты с полотенцем</strong> × 10: широкий хват, прямые руки проходят над головой за спину и обратно.</li>
+        <li><strong>«Кошка-корова»</strong> × 8 на четвереньках: спина круглая — прогнутая.</li>
+        <li><strong>Приседания без веса</strong> × 15. В дни ног добавь выпады назад × 8 на ногу и 5 глубоких «казачьих» приседаний в каждую сторону.</li>
+        <li><strong>Запястья</strong> 30 секунд: круги, упор на ладони пальцами вперёд и назад. Особенно важно перед отжиманиями.</li>
+        <li><strong>1–2 лёгких подхода</strong> первого упражнения на 50% усилий.</li>
+      </ol>
+      <p class="small muted">После тренировки: 3–5 минут спокойной растяжки тех мышц, которые работали, по 20–30 секунд на позицию.</p>
+    </div>
+  </details>
+
+  <details class="fold">
+    <summary>Если нет турника</summary>
+    <div class="fold-body">
+      <p>Везде, где в программе стоят подтягивания, рядом указана замена. Основная — <strong>тяга под столом</strong> (австралийские подтягивания) на крепком тяжёлом столе. Если и стола подходящего нет — <strong>тяга штанги в наклоне</strong> с медленным опусканием и паузой. Бицепс без турника добирай подъёмом штанги.</p>
+      <p>Но честно: турник — самая выгодная покупка для этой программы. Он недорогой, вешается за 10 минут, и с ним спина начнёт догонять грудь.</p>
+    </div>
+  </details>
+
+  <details class="fold">
+    <summary>Если пропустил тренировку или устал</summary>
+    <div class="fold-body">
+      <ul>
+        <li><strong>Пропустил один день</strong> — сделай его завтра, а отдых перенеси. Две тренировки за день не делай.</li>
+        <li><strong>Пропустил неделю</strong> — повтори прошлую неделю, а не прыгай вперёд.</li>
+        <li><strong>Две недели подряд падают результаты, плохо спишь, всё болит</strong> — сделай внеплановую разгрузку (как неделя 12), проверь сон и еду.</li>
+        <li><strong>Болеешь с температурой</strong> — никаких тренировок. После выздоровления 2–3 дня работай на 50%.</li>
+      </ul>
+    </div>
+  </details>
+
+  <div class="reset-row">
+    <button class="btn" type="button" id="resetBtn">Сбросить отметки</button>
+    <span id="resetConfirm" hidden><span class="small">Удалить все отметки о тренировках?</span>
+      <button class="btn" type="button" id="resetYes">Да, сбросить</button>
+      <button class="btn" type="button" id="resetNo">Отмена</button></span>
+  </div>
+</section>
+
+<!-- ======================= ТЕХНИКА ======================= -->
+<section data-panel="technique" role="tabpanel" hidden>
+  <h2>Техника упражнений</h2>
+  <p>Каждое упражнение: зачем оно, как делать по шагам, как дышать, типичные ошибки и как сделать легче или тяжелее. Под каждым есть кнопка с подборкой видео на YouTube. Посмотри 2–3 ролика перед первым выполнением, а потом снимай себя на телефон сбоку и сравнивай.</p>
+  <div class="callout"><span class="tag">Главное правило</span><p>Техника важнее веса и количества. Плохой повтор не засчитывается. Если техника ломается — подход закончен.</p></div>
+  <div class="filters" id="filters" role="group" aria-label="Фильтр по мышцам"></div>
+  <label for="exSearch" class="small muted">Поиск по названию или мышце</label><br>
+  <input id="exSearch" class="search" type="search" placeholder="Например: бицепс, отжимания, икры">
+  <div class="lib" id="lib"></div>
+</section>
+
+<!-- ======================= ПИТАНИЕ ======================= -->
+<section data-panel="food" role="tabpanel" hidden>
+  <h2>Питание: из чего строятся мышцы</h2>
+  <p>Тренировка — это сигнал «расти». Еда — строительный материал. Если тело не получает лишних калорий, оно не будет строить новые мышцы, сколько ни отжимайся: ему просто не из чего. У худых ребят, которые «качаются и не растут», в 9 случаях из 10 дело в еде, а не в программе.</p>
+
+  <h3>Калькулятор калорий</h3>
+  <p class="small muted">Уже заполнен твоими данными. Формула Миффлина — Сан Жеора × коэффициент активности + профицит на рост мышц.</p>
+  <form class="calc" id="calcForm" onsubmit="return false">
+    <label for="cWeight">Вес, кг<input id="cWeight" type="number" inputmode="decimal" min="35" max="150" step="0.5" value="58"></label>
+    <label for="cHeight">Рост, см<input id="cHeight" type="number" inputmode="numeric" min="130" max="220" value="177"></label>
+    <label for="cAge">Возраст<input id="cAge" type="number" inputmode="numeric" min="12" max="60" value="16"></label>
+    <label for="cAct">Активность<select id="cAct">
+      <option value="1.55">3 тренировки в неделю</option>
+      <option value="1.7" selected>Эта программа (5 дней)</option>
+      <option value="1.85">Программа + секция</option>
+    </select></label>
+    <label for="cSurplus">Темп набора<select id="cSurplus">
+      <option value="300">Спокойно (+300)</option>
+      <option value="400" selected>Оптимально (+400)</option>
+      <option value="500">Вес стоит 2 недели (+500)</option>
+    </select></label>
+  </form>
+  <div class="out" aria-live="polite">
+    <div class="main"><div class="v" id="oKcal">3150</div><div class="l">ккал в день</div></div>
+    <div><div class="v" id="oP">128 <small>г</small></div><div class="l">белок</div></div>
+    <div><div class="v" id="oF">93 <small>г</small></div><div class="l">жиры</div></div>
+    <div><div class="v" id="oC">450 <small>г</small></div><div class="l">углеводы</div></div>
+    <div><div class="v" id="oW">2,8 <small>л</small></div><div class="l">вода</div></div>
+  </div>
+  <p class="small muted" id="oNote">Поддержание веса ≈ 2 740 ккал. Цель: +0,3–0,5 кг в неделю.</p>
+
+  <div class="callout ok"><span class="tag">Как подстраивать</span>
+    <p>Взвешивайся каждое воскресенье утром, после туалета, до еды. Смотри на изменение за 2 недели:</p>
+    <ul>
+      <li><strong>Меньше +0,5 кг за 2 недели</strong> → добавь 200–300 ккал (стакан молока и банан или ещё один гейнер).</li>
+      <li><strong>+0,6–1 кг за 2 недели</strong> → идеально, ничего не меняй.</li>
+      <li><strong>Больше +1,2 кг за 2 недели</strong> и быстро растёт талия → убери 150–200 ккал.</li>
+    </ul>
+  </div>
+
+  <h3>Пример дня ≈ 3 260 ккал</h3>
+  <p>Обычные продукты из любого магазина. Вес круп и макарон — в сухом виде, мяса — в сыром.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Время</th><th>Приём</th><th>Что съесть</th><th class="num">ккал</th><th class="num">Белок</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">07:00</td><td>Завтрак</td><td>Овсянка 80 г на молоке 2,5% 250 мл, банан, ложка мёда; 2 варёных яйца</td><td class="num">755</td><td class="num">33 г</td></tr>
+        <tr><td class="mono">10:30</td><td>Перекус в школе</td><td>2 бутерброда: хлеб 80 г и сыр 30 г; яблоко</td><td class="num">380</td><td class="num">14 г</td></tr>
+        <tr><td class="mono">13:30</td><td>Обед</td><td>Гречка 90 г; куриное бедро без кожи 130 г; овощи 200 г с 1 ст. л. масла; кусок хлеба</td><td class="num">675</td><td class="num">41 г</td></tr>
+        <tr><td class="mono">16:30</td><td>До тренировки</td><td>Гейнер «Классика»: молоко 300 мл, банан, овсяные хлопья 40 г, арахисовая паста 15 г, 2 ч. л. мёда</td><td class="num">550</td><td class="num">19 г</td></tr>
+        <tr><td class="mono">19:00</td><td>Ужин после тренировки</td><td>Рис или макароны 100 г; говядина, котлеты или рыба 130 г; салат 150 г с 1 ч. л. масла</td><td class="num">660</td><td class="num">36 г</td></tr>
+        <tr><td class="mono">21:45</td><td>Перед сном</td><td>Кефир 2,5% 300 мл и горсть кураги или изюма (30 г)</td><td class="num">245</td><td class="num">10 г</td></tr>
+      </tbody>
+      <tfoot><tr><td colspan="3">Итого: белки ≈ 150 г · жиры ≈ 100 г · углеводы ≈ 430 г</td><td class="num">≈ 3 265</td><td class="num">≈ 153 г</td></tr></tfoot>
+    </table>
+  </div>
+
+  <h3>Чем заменять</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>В меню</th><th>Можно взять вместо</th></tr></thead>
+      <tbody>
+        <tr><td>Курица 130 г</td><td>Индейка 130 г · минтай или хек 170 г · куриная печень 130 г · 4 яйца · консервированный тунец 1 банка · творог 5% 200 г</td></tr>
+        <tr><td>Гречка 90 г</td><td>Рис 90 г · макароны 90 г · булгур 90 г · картофель 400 г · хлеб 120 г</td></tr>
+        <tr><td>Говядина 130 г</td><td>Скумбрия 120 г · свиная вырезка 130 г · фарш 120 г · фасоль или чечевица 100 г сухой + яйцо</td></tr>
+        <tr><td>Кефир 300 мл</td><td>Молоко 300 мл · йогурт без сахара 300 г · ряженка 250 мл · творог 150 г</td></tr>
+        <tr><td>Арахисовая паста 15 г</td><td>Горсть орехов 20 г · семечки 20 г · сыр 25 г</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Правила набора массы</h3>
+  <div class="rules">
+    <div class="rule"><span class="k">Частота</span><div><p>Ешь каждые 3–4 часа, 5–6 раз в день. За 3 раза в день 3 000 ккал не съесть без мучений.</p></div></div>
+    <div class="rule"><span class="k">Белок</span><div><p>В каждом приёме есть белок: яйца, молочка, мясо, рыба, бобовые. Норма — около 2–2,5 г на кг веса, то есть 120–150 г в день. Больше не нужно: лучше потратить деньги на еду в целом.</p></div></div>
+    <div class="rule"><span class="k">Углеводы</span><div><p>Это топливо для тренировок. Крупы, макароны, картофель, хлеб, фрукты. Без них ты не вытянешь объём и мышцы будут плоскими.</p></div></div>
+    <div class="rule"><span class="k">Жиры</span><div><p>Около 1,5 г на кг: орехи, масло, яйца, рыба, сыр. Нужны для гормонов, включая тестостерон. Не бойся их.</p></div></div>
+    <div class="rule"><span class="k">Овощи</span><div><p>400–500 г овощей и фруктов в день. Больше еды — больше нагрузка на кишечник, а клетчатка держит его в порядке.</p></div></div>
+    <div class="rule"><span class="k">Завтрак</span><div><p>Не пропускай. Если утром не лезет — выпей стакан молока с бананом, а остальное съешь на перемене.</p></div></div>
+    <div class="rule"><span class="k">Вкусное</span><div><p>Сладкое и фастфуд — не больше 10–15% калорий, то есть одна «вкусняшка» в день нормально. Основа — нормальная еда.</p></div></div>
+    <div class="rule"><span class="k">Подготовка</span><div><p>В воскресенье свари крупу и мясо на 2–3 дня. Когда еда готова, ты её ешь. Когда нет — ешь чипсы.</p></div></div>
+  </div>
+
+  <h3>Домашний гейнер: 3 рецепта</h3>
+  <p>Магазинный гейнер — это в основном сахар и сухое молоко за большие деньги. Домашний лучше и дешевле. Всё в блендер на 30 секунд.</p>
+  <div class="recipes">
+    <div class="recipe"><h4>Классика</h4><div class="kc">≈ 550 ккал · 19 г белка</div>
+      <ul><li>Молоко 2,5% — 300 мл</li><li>Банан — 1 шт.</li><li>Овсяные хлопья — 40 г</li><li>Арахисовая паста — 15 г</li><li>Мёд — 2 ч. л.</li></ul></div>
+    <div class="recipe"><h4>Шоколадный</h4><div class="kc">≈ 600 ккал · 35 г белка</div>
+      <ul><li>Молоко 2,5% — 300 мл</li><li>Творог 5% — 120 г</li><li>Банан — 1 шт.</li><li>Какао-порошок — 1 ст. л.</li><li>Мёд — 1 ст. л.</li><li>Овсяные хлопья — 30 г</li></ul></div>
+    <div class="recipe"><h4>Ягодный</h4><div class="kc">≈ 500 ккал · 20 г белка</div>
+      <ul><li>Кефир 2,5% — 300 мл</li><li>Замороженные ягоды — 100 г</li><li>Овсяные хлопья — 40 г</li><li>Грецкие орехи — 20 г</li><li>Мёд — 1 ст. л.</li></ul></div>
+  </div>
+
+  <h3>Список покупок на неделю</h3>
+  <div class="grid2">
+    <div class="panel"><h3>Белок</h3><p>Яйца (2–3 десятка), молоко 3–4 л, кефир 2 л, творог 1 кг, сыр 300 г, куриные бёдра или голени 1,5 кг, говяжий фарш или говядина 700 г, рыба (минтай, скумбрия) 600 г, консервы (тунец, сардины), фасоль или чечевица.</p></div>
+    <div class="panel"><h3>Углеводы</h3><p>Овсяные хлопья 1 кг, гречка 1 кг, рис 1 кг, макароны 1 кг, картофель, хлеб, бананы 2 кг, яблоки, сухофрукты (курага, изюм), мёд.</p></div>
+    <div class="panel"><h3>Жиры</h3><p>Арахисовая паста без сахара, орехи или семечки, растительное масло. Жирная рыба 1–2 раза в неделю.</p></div>
+    <div class="panel"><h3>Овощи</h3><p>Капуста, морковь, огурцы, помидоры, свёкла, лук, замороженные смеси. Замороженные овощи не хуже свежих и дешевле зимой.</p></div>
+  </div>
+  <p class="small muted">Самое выгодное сочетание белка и калорий за свои деньги: яйца, молоко, творог, куриные бёдра, гречка, овсянка, макароны.</p>
+
+  <h3>Что пить</h3>
+  <ul>
+    <li><strong>Вода: 2,5–3,5 литра в день</strong> вместе с чаем. Во время тренировки — 0,5 л маленькими глотками. Правильный признак: моча светло-соломенная.</li>
+    <li><strong>Молоко и кефир: 0,5–0,8 л в день.</strong> Это не напиток, а еда: белок, кальций, калории. Для набора массы у подростков это один из лучших продуктов.</li>
+    <li><strong>Чай и кофе</strong> — можно, но кофеина до 100 мг в день (примерно 1 чашка кофе) и не позже 15:00, иначе сломается сон.</li>
+    <li><strong>Нельзя: энергетики</strong> (кофеин и сахар бьют по сердцу и сну), <strong>алкоголь</strong> (в 16 лет это незаконно и он прямо тормозит синтез белка и рост), <strong>курение и вейпы</strong> (дыхалка, сосуды, восстановление). Газировка — по праздникам, а не вместо воды.</li>
+  </ul>
+
+  <h3>Добавки: честно</h3>
+  <div class="rules">
+    <div class="rule"><span class="k"><span class="status s-ok">Не нужно</span></span><div><p><strong>Чтобы начать, не нужно ничего.</strong> Еда и сон дают 95% результата. Никакая банка не заменит 3 000 ккал и 9 часов сна.</p></div></div>
+    <div class="rule"><span class="k"><span class="status s-ok">Можно</span></span><div><p><strong>Протеин (сывороточный).</strong> По сути это концентрированный молочный белок, то есть еда, а не допинг. Нужен, только если не добираешь белок обычной едой. 1 порция в день, известный производитель с сертификатами. Волшебства нет.</p></div></div>
+    <div class="rule"><span class="k"><span class="status s-warn">По анализу</span></span><div><p><strong>Витамин D.</strong> В России и соседних странах зимой его не хватает у большинства. Лучше сдать анализ на 25(OH)D, и дозу подберёт врач. Рыба 2 раза в неделю закроет омега-3.</p></div></div>
+    <div class="rule"><span class="k"><span class="status s-warn">После 18</span></span><div><p><strong>Креатин.</strong> У взрослых это одна из самых изученных и безопасных добавок. Но педиатрические ассоциации (например, Американская академия педиатрии) не рекомендуют спортивные добавки до 18 лет. Подожди. Сейчас твои собственные гормоны работают сильнее любой банки.</p></div></div>
+    <div class="rule"><span class="k"><span class="status s-no">Никогда</span></span><div><p><strong>Стероиды, «сармы» (SARMs), прогормоны, «тестобустеры» с непонятным составом, жиросжигатели, гормон роста, инсулин.</strong> В 16 лет это особенно опасно: зоны роста в костях закрываются и ты <strong>перестаёшь расти в высоту навсегда</strong>; собственный тестостерон выключается; возможны бесплодие, увеличение груди (гинекомастия), акне, проблемы с сердцем и печенью, резкие перепады настроения. Многое из этого необратимо. Если кто-то в зале или в интернете предлагает «курсик» — это повод уйти, а не попробовать.</p></div></div>
+  </div>
+
+  <h3>Если еда не лезет</h3>
+  <ul>
+    <li><strong>Пей калории.</strong> Гейнер, молоко, кефир, сок съедаются легче, чем тарелка гречки.</li>
+    <li><strong>Добавляй плотную еду:</strong> ложка масла в кашу (90 ккал), арахисовая паста на хлеб (180 ккал), сухофрукты и орехи в кармане.</li>
+    <li><strong>Ешь из большой тарелки</strong> и накладывай сразу полную порцию, а не добавку.</li>
+    <li><strong>Не пей воду литрами прямо перед едой</strong> — место в желудке займёт вода.</li>
+    <li><strong>Гуляй 20–30 минут после школы</strong> — аппетит появляется.</li>
+    <li><strong>Школьная столовая:</strong> бери двойной гарнир и мясо. Не хватает — бутерброд из дома.</li>
+  </ul>
+</section>
+
+<!-- ======================= СОН И РЕЖИМ ======================= -->
+<section data-panel="sleep" role="tabpanel" hidden>
+  <h2>Сон: время, когда растут мышцы</h2>
+  <p>Тренировка — это сигнал, еда — материал, а сон — время стройки. Основной выброс гормона роста происходит в глубоком сне в первые часы ночи. Подросткам 13–18 лет медицинские сообщества рекомендуют <strong>8–10 часов сна</strong>. Для тебя при тренировках цель — <strong>8,5–9,5 часа</strong>. Спишь 6 часов — теряешь значительную часть результата, сколько бы ни ел.</p>
+
+  <h3>Правила сна</h3>
+  <ul>
+    <li><strong>Один режим каждый день.</strong> На выходных вставай не позже, чем на 1–1,5 часа от будней. Иначе в понедельник ты как после перелёта.</li>
+    <li><strong>Экран — за 30–60 минут до сна в сторону.</strong> Яркий свет и бесконечная лента сдвигают засыпание на час и больше.</li>
+    <li><strong>Тёмная прохладная комната:</strong> 18–20 °C, шторы плотные, проветрить перед сном.</li>
+    <li><strong>Кофеин не позже 15:00.</strong> Энергетики не пить совсем.</li>
+    <li><strong>Последняя тренировка заканчивается за 2,5–3 часа до сна,</strong> иначе будешь долго ворочаться.</li>
+    <li><strong>Утром — свет.</strong> 5–10 минут у окна или на улице сразу после подъёма помогают вечером засыпать вовремя.</li>
+    <li><strong>Дневной сон</strong> 20–30 минут после школы — можно, если вечером засыпаешь нормально.</li>
+    <li><strong>Перед сном — творог или кефир.</strong> Медленный белок на ночь.</li>
+  </ul>
+
+  <h2>Режим дня</h2>
+  <div class="grid2">
+    <div class="panel">
+      <h3>Учебный день</h3>
+      <ul class="timeline">
+        <li><span class="t">06:45</span>Подъём, стакан воды, свет из окна</li>
+        <li><span class="t">07:00</span>Завтрак</li>
+        <li><span class="t">07:40</span>Школа</li>
+        <li><span class="t">10:30</span>Перекус: бутерброды, яблоко</li>
+        <li><span class="t">13:30</span>Обед</li>
+        <li><span class="t">15:00</span>Уроки, отдых, можно 20 минут поспать</li>
+        <li><span class="t">16:30</span>Гейнер за 60–90 минут до тренировки</li>
+        <li><span class="t">17:45</span>Разминка и тренировка, 50–65 минут</li>
+        <li><span class="t">19:00</span>Ужин — главный приём после тренировки</li>
+        <li><span class="t">20:00</span>Уроки, свободное время</li>
+        <li><span class="t">21:45</span>Кефир или творог</li>
+        <li><span class="t">22:00</span>Телефон в сторону, душ, проветрить</li>
+        <li><span class="t">22:15</span>Сон — 8,5 часа до подъёма</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Выходные</h3>
+      <ul class="timeline">
+        <li><span class="t">08:00</span>Подъём (не позже 8:30)</li>
+        <li><span class="t">08:15</span>Завтрак</li>
+        <li><span class="t">11:00</span>Сб — «День рук» или секция</li>
+        <li><span class="t">12:30</span>Обед</li>
+        <li><span class="t">14:00</span>Прогулка, друзья, активный отдых</li>
+        <li><span class="t">16:00</span>Перекус или гейнер</li>
+        <li><span class="t">19:00</span>Ужин</li>
+        <li><span class="t">Вс</span>Взвешивание утром. Раз в 4 недели — замеры и фото. Готовка еды на 2–3 дня</li>
+        <li><span class="t">22:30</span>Сон</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Когда лучше тренироваться</h3>
+  <p><strong>Для тебя идеально 16:00–19:00.</strong> Ты уже поел в школе и после, температура тела и сила к вечеру на пике, а до сна остаётся достаточно времени. Утром тоже можно, если это единственное время. Регулярность важнее, чем часы. Тренировка в одно и то же время быстро становится привычкой.</p>
+  <p>Перед тренировкой: еда за 1–2 часа (гейнер или нормальный приём пищи). Не тренируйся на голодный желудок и сразу после огромной тарелки.</p>
+
+  <h2>Восстановление</h2>
+  <ul>
+    <li><strong>Дни отдыха — это часть программы,</strong> а не пропуск. В среду и воскресенье мышцы растут.</li>
+    <li><strong>Ходи пешком</strong> 6–10 тысяч шагов в день. Это ускоряет восстановление и не мешает массе.</li>
+    <li><strong>Растяжка 10 минут</strong> 2–3 раза в неделю: грудь, плечи, задняя поверхность бедра, сгибатели бедра. После тонны отжиманий плечи «заворачиваются» вперёд, растяжка груди это выравнивает.</li>
+    <li><strong>Осанка:</strong> на уроках и за телефоном держи плечи назад и вниз. Широкая спина видна, только если ты не сутулишься.</li>
+  </ul>
+
+  <div class="callout"><span class="tag">Признаки перегруза</span>
+    <p>Если 2 недели подряд держатся хотя бы 2–3 пункта: плохо засыпаешь, постоянно хочется спать, результаты падают, суставы ноют, раздражительность, часто болеешь, нет аппетита — сделай разгрузочную неделю (половина подходов), спи 9–10 часов и проверь, хватает ли еды.</p>
+  </div>
+</section>
+
+<!-- ======================= САМОЗАЩИТА ======================= -->
+<section data-panel="defense" role="tabpanel" hidden>
+  <h2>Самозащита: что работает на самом деле</h2>
+  <p>Ты просил технику, чтобы обезвредить противника за секунду. Скажу прямо, как сказал бы любой нормальный тренер по боксу или самбо: <strong>такой техники нет</strong>. В кино противник падает от одного касания. В жизни он пьяный и не чувствует боли, их трое, у одного нож в кармане, а ты стоишь на скользком асфальте.</p>
+  <p>Поэтому настоящая самозащита — это система: заметить, избежать, уйти, и только если иначе нельзя — защититься так, чтобы появился момент для побега. Цель не «победить», а <strong>вернуться домой целым и без уголовного дела</strong>. Ниже то, чему учат в секциях. Но прочитать мало: удар ставится сотнями повторов, а реакция появляется только в спарринге с тренером.</p>
+
+  <h3>Лестница самозащиты</h3>
+  <ol class="ladder">
+    <li><div><h3>Заметить заранее</h3>
+      <p>Большинство конфликтов видно за 10–30 секунд до начала. Признаки: к тебе подходят с «есть закурить / позвонить / ты с какого района», группа расходится и обходит с боков, человек сокращает дистанцию, прячет руки, оглядывается по сторонам. Вечером не иди с телефоном перед лицом и в наушниках на полную громкость. Держи дистанцию в 2 длины руки от незнакомца, который ведёт себя напряжённо.</p></div></li>
+    <li><div><h3>Не дать разгореться</h3>
+      <p>Спокойный ровный голос, короткие фразы: «Мне проблемы не нужны», «Я ухожу». Не оскорбляй, не спорь, не доказывай. Руки подняты перед собой открытыми ладонями: это стойка «забор». Со стороны она выглядит миролюбиво, но руки уже стоят между тобой и его лицом. Хотят телефон или деньги и есть оружие — <strong>отдай</strong>. Вещи не стоят жизни.</p></div></li>
+    <li><div><h3>Уйти</h3>
+      <p>Самый эффективный приём самозащиты в мире — бег. Беги к людям, свету, магазину, остановке, а не в тёмный двор. Твоя выносливость после этой программы будет на твоей стороне. Уйти — это не трусость, а победа: ты цел, он тебя не тронул, тебе не нужно объясняться в полиции.</p></div></li>
+    <li><div><h3>Защищаться, чтобы уйти</h3>
+      <p>Если на тебя уже нападают (замахнулись, схватили, ударили) и уйти некуда — действуй решительно и коротко: защита головы → один-два удара, чтобы противник отпрянул → шаг назад и в сторону → беги. Не стой и не «добивай». Каждая лишняя секунда — это риск для тебя и юридически уже не самооборона.</p></div></li>
+    <li><div><h3>После</h3>
+      <p>Уйди в людное место, позвони родителям. Если пострадал — в травмпункт (там фиксируют побои), затем заявление в полицию. Запомни приметы, время и место, где могут быть камеры, кто был свидетелем.</p></div></li>
+  </ol>
+
+  <h2>Базовая техника</h2>
+  <p class="small muted">Описание для правши. Левша делает всё зеркально.</p>
+
+  <div class="grid2">
+    <div class="panel">
+      <h3>Стойка</h3>
+      <ol>
+        <li>Левая нога впереди, правая сзади. Стопы на ширине плеч, но не на одной линии, а как по диагонали — так устойчиво во все стороны.</li>
+        <li>Колени мягкие, вес 50/50, правая пятка чуть приподнята.</li>
+        <li>Кулаки у скул, локти прикрывают рёбра.</li>
+        <li>Подбородок опущен, смотришь «исподлобья». Подбородок — главная цель противника, он должен быть спрятан за плечом и кулаком.</li>
+        <li>Двигайся короткими шагами, не скрещивая ноги: вперёд — сначала передняя нога, назад — сначала задняя.</li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h3>Защита головы</h3>
+      <ol>
+        <li>Кулаки или предплечья прижаты ко лбу и вискам, локти сведены перед лицом и корпусом.</li>
+        <li>Подбородок в грудь, корпус чуть наклонён вперёд, колени согнуты.</li>
+        <li>Так ты переживаешь серию ударов. Как только серия прервалась — отход назад и в сторону или контратака двойкой.</li>
+        <li>Самая важная привычка: <strong>после любого своего удара рука сразу возвращается к лицу.</strong></li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h3>Джеб (передней рукой)</h3>
+      <ol>
+        <li>Из стойки выбрасывай левую руку прямо вперёд по кратчайшей линии.</li>
+        <li>В конце кулак поворачивается ладонью вниз, плечо поднимается и прикрывает подбородок.</li>
+        <li>Правая рука всё это время у лица.</li>
+        <li>Назад кулак возвращается по той же линии, так же быстро, как вылетел.</li>
+      </ol>
+      <p class="small muted">Джеб держит дистанцию и сбивает атаку. Это самый важный удар в боксе.</p>
+    </div>
+    <div class="panel">
+      <h3>Двойка (джеб + прямой правой)</h3>
+      <ol>
+        <li>Джеб левой.</li>
+        <li>Сразу правой: толчок правой ногой, пятка разворачивается наружу («давишь окурок»), бедро и плечо доворачиваются вперёд.</li>
+        <li>Удар идёт прямо от подбородка, а не размахом сбоку. Сила — из ног и поворота корпуса, а не из руки.</li>
+        <li>Левая рука у лица. Правая сразу возвращается.</li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h3>Как сжимать кулак</h3>
+      <p>Пальцы плотно, большой палец снаружи, поверх среднего и указательного. Бей двумя костяшками (указательного и среднего пальцев), запястье прямое — кулак продолжает линию предплечья.</p>
+      <p>Без бинтов и перчаток кулак о твёрдую голову ломается очень легко. Самая частая травма — «перелом боксёра», пятая пястная кость под мизинцем. Поэтому на улице часто разумнее бить ладонью.</p>
+    </div>
+    <div class="panel">
+      <h3>Удар основанием ладони</h3>
+      <ol>
+        <li>Кисть отогнута назад, пальцы чуть согнуты, бьёшь нижней твёрдой частью ладони.</li>
+        <li>Траектория и механика как у прямого правой: поворот стопы, бедра, плеча.</li>
+        <li>Цель — нос или подбородок снизу вперёд. Голова противника отлетает, глаза слезятся, он на секунду теряет тебя из виду.</li>
+        <li>Этой секунды достаточно, чтобы отойти и бежать. Ладонь при этом почти не травмируется.</li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h3>Освобождение от захватов</h3>
+      <ul>
+        <li><strong>Схватили за запястье:</strong> резко проворачивай руку в сторону его большого пальца — это самое слабое место хвата — и тяни локоть к себе. Сразу отшаг.</li>
+        <li><strong>Схватили за одежду спереди:</strong> не тяни назад, его рука сильнее. Накрой его руку своей, толчок или удар ладонью в лицо, шаг назад, уход.</li>
+        <li><strong>Обхватили сзади:</strong> сразу присядь и расставь ноги шире, чтобы тебя не подняли. Наступи пяткой на его стопу, бей локтем назад. Хват ослаб — развернись и беги.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Если упал</h3>
+      <ul>
+        <li><strong>Падая,</strong> прижми подбородок к груди, чтобы не удариться затылком, и гаси падение предплечьями и ладонями о землю.</li>
+        <li><strong>На земле:</strong> лицом к противнику, руки защищают голову, ноги между вами — отталкивай его стопами.</li>
+        <li><strong>Технический подъём:</strong> опора на одну руку за спиной и противоположную ногу, вторую ногу проводишь назад под себя и встаёшь сразу в стойку, не поворачиваясь к нему спиной. Отрабатывай дома по 10 раз в каждую сторону.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Куда бить и куда нельзя</h2>
+  <div class="targets">
+    <div class="yes">
+      <h3>Цели для самообороны</h3>
+      <p class="small">Задача — чтобы противник на секунду отпрянул и ты ушёл.</p>
+      <ul>
+        <li><strong>Нос и лицо</strong> — ладонью или прямым: слёзы, дезориентация.</li>
+        <li><strong>Подбородок</strong> — прямым ударом.</li>
+        <li><strong>Солнечное сплетение, корпус</strong> — сбивает дыхание.</li>
+        <li><strong>Пах</strong> — коленом или ногой, если тебя схватили вплотную.</li>
+        <li><strong>Стопа</strong> — наступить пяткой при захвате сзади.</li>
+      </ul>
+    </div>
+    <div class="no">
+      <h3>Не бей никогда</h3>
+      <p class="small">Это убивает и калечит, и за это сажают.</p>
+      <ul>
+        <li><strong>Лежащего</strong> — ни руками, ни ногами. Человек на земле — оборона закончена.</li>
+        <li><strong>Ногами по голове.</strong></li>
+        <li><strong>Затылок, висок, горло, позвоночник.</strong></li>
+        <li><strong>Предметами</strong> — бутылкой, камнем, палкой.</li>
+        <li><strong>Того, кто уходит или убегает.</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout danger"><span class="tag">Один удар может стоить жизни</span>
+    <p>Человек падает после удара, и его затылок встречает асфальт или бордюр. Каждый год такие истории заканчиваются гибелью людей и реальными сроками для тех, кто ударил. Очень часто это подростки, которые «просто ударили один раз». Поэтому смысл техники — уйти, а не нокаутировать.</p>
+  </div>
+
+  <h3>Закон</h3>
+  <ul>
+    <li><strong>Защищаться можно.</strong> Это право называется необходимой обороной. Но ответ должен быть соразмерен угрозе.</li>
+    <li><strong>Оборона заканчивается,</strong> когда нападающий упал, отступает или убегает. Всё, что после — уже нападение с твоей стороны.</li>
+    <li><strong>Возраст ответственности.</strong> В России, Беларуси, Казахстане и большинстве стран СНГ за умышленный тяжкий и средней тяжести вред здоровью отвечают <strong>с 14 лет</strong>. Тебе 16.</li>
+    <li><strong>Нож, группа, оружие</strong> — отдай всё и беги. Отбирать нож пытаются только в кино. В жизни даже опытные бойцы получают порезы.</li>
+    <li><strong>Сам никогда не носи нож</strong> «для защиты». Его чаще всего используют против того, кто его принёс, а его наличие превращает драку в уголовное дело.</li>
+  </ul>
+
+  <h2>Как научиться по-настоящему</h2>
+  <p><strong>Запишись в секцию.</strong> Полгода в зале дадут больше, чем годы роликов. В 16 лет берут почти везде, а для многих это лучший возраст для старта.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Секция</th><th>Что даст</th></tr></thead>
+      <tbody>
+        <tr><td>Бокс</td><td>Руки, защита головы, дистанция, выносливость, умение держать удар. Быстрее всего даёт навык.</td></tr>
+        <tr><td>Кикбоксинг, тайский бокс</td><td>Плюс ноги, колени, клинч.</td></tr>
+        <tr><td>Самбо, дзюдо, бразильское джиу-джитсу</td><td>Борьба, падения, контроль на земле. Большинство уличных стычек заканчиваются в партере.</td></tr>
+        <tr><td>ММА</td><td>Всё вместе. Хорошо, если зал с нормальным тренером и без «рубилова» на каждой тренировке.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>Как совмещать с программой:</strong> 2–3 тренировки секции в неделю отлично сочетаются с массой. Убери «День рук» в субботу, оставь 4 силовые тренировки, добавь 300 ккал в дни секции. Бокс массу не «сжигает», если ты ешь.</p>
+
+  <h3>Что делать дома</h3>
+  <p>3 раунда боя с тенью по 2 минуты с минутой отдыха в среду и, если есть силы, после «Дня рук». Перед зеркалом, медленно и технично.</p>
+  <ol>
+    <li><strong>Раунд 1 — стойка и шаги.</strong> Вперёд, назад, влево, вправо, не скрещивая ноги и не выпрямляясь.</li>
+    <li><strong>Раунд 2 — удары.</strong> Джеб, двойка, джеб-джеб-двойка. После каждого удара рука к лицу.</li>
+    <li><strong>Раунд 3 — защита и выход.</strong> Закрылся → двойка → шаг назад и в сторону. Плюс «забор»: руки ладонями вперёд, спокойная фраза, отход.</li>
+  </ol>
+  <p>И 10 технических подъёмов с земли в каждую сторону.</p>
+</section>
+
+<!-- ======================= ВОПРОСЫ ======================= -->
+<section data-panel="faq" role="tabpanel" hidden>
+  <h2>Частые вопросы</h2>
+  <div class="faq">
+    <details><summary>Сколько ждать результата?</summary><div>
+      <p>Первые 2–4 недели растёт в основном сила: нервная система учится работать с мышцами. Видимые изменения — через 4–8 недель. Заметно для окружающих — через 3–6 месяцев. Зеркало врёт, потому что ты видишь себя каждый день. Фото раз в 4 недели при одном свете покажут правду.</p></div></details>
+    <details><summary>Почему лёгкие гантели вообще работают?</summary><div>
+      <p>Мышце важно не число на гантели, а насколько тяжело ей в конце подхода. Исследования показывают, что подходы примерно от 6 до 30 повторов дают похожий рост мышц, если доводить их близко к отказу. Поэтому мы используем медленный темп, паузы, тяжёлые варианты отжиманий и работу на одной ноге. Там, где 3 кг совсем мало (например, для ног), мы их просто не используем.</p></div></details>
+    <details><summary>Можно тренироваться каждый день?</summary><div>
+      <p>Нет. Мышцы растут во время отдыха. 5 дней в этой программе — разумный максимум. Хочешь двигаться больше — гуляй, играй в футбол, делай бой с тенью. Это не мешает.</p></div></details>
+    <details><summary>Всё болит после тренировки. Тренироваться?</summary><div>
+      <p>Ноющая боль в мышцах (крепатура) нормальна первые 1–2 недели и при новых упражнениях. Разминка обычно её снимает, тренироваться можно. Острая, колющая боль в суставе — это не крепатура. Прекрати упражнение и не делай его, пока боль не пройдёт. Если не проходит неделю — к врачу.</p></div></details>
+    <details><summary>Вес не растёт. Что не так?</summary><div>
+      <p>В 99% случаев ты ешь меньше, чем думаешь. Запиши всё, что съел за 3 дня, в приложение-счётчик калорий. Потом добавь 300 ккал: стакан молока, банан и горсть орехов. Проверь сон: меньше 8 часов — рост медленнее.</p></div></details>
+    <details><summary>Тренировки с весом остановят рост в высоту?</summary><div>
+      <p>Нет, это миф. Силовые тренировки с правильной техникой безопасны для подростков, это подтверждают педиатрические и спортивные ассоциации. Рост реально могут остановить анаболические стероиды и хронический недостаток еды и сна. Травмы бывают от плохой техники и попыток поднять максимум «на раз». В этой программе такого нет.</p></div></details>
+    <details><summary>Кардио «сожжёт» массу?</summary><div>
+      <p>Умеренное — нет. Прогулки, футбол, бокс, скакалка полезны для сердца и восстановления. Просто ешь на 200–300 ккал больше в дни с дополнительной активностью.</p></div></details>
+    <details><summary>Мне нужен рельеф и кубики. Когда сушиться?</summary><div>
+      <p>Сейчас — никогда. Талия 70 см, жира почти нет. Рельеф получится сам, когда появятся мышцы. Небольшая прибавка в талии, 1–2 см за 12 недель, — нормальная часть набора. Если талия растёт быстрее, чем грудь и руки, убери 150–200 ккал.</p></div></details>
+    <details><summary>Заболел. Тренироваться?</summary><div>
+      <p>Правило шеи: если симптомы только выше шеи (лёгкий насморк) — можно лёгкую тренировку на 50%. Температура, ломота, кашель, боль в груди — полный отдых. После выздоровления 2–3 дня работай вполсилы. Тренировка с температурой опасна для сердца.</p></div></details>
+    <details><summary>Появились розовые полоски на коже плеч и груди</summary><div>
+      <p>Это растяжки (стрии). При быстром наборе веса у подростков они бывают часто. Со временем они бледнеют и становятся почти незаметными. Чтобы снизить риск, не набирай больше 0,5 кг в неделю.</p></div></details>
+    <details><summary>Что делать после 12 недель?</summary><div>
+      <p>Сравни тест и замеры с началом. Потом начни новый цикл с фазы 2 с новыми рекордами: тяжелее рюкзак, сложнее варианты. Если появился турник, больше блинов или секция — программу можно перестроить под новые возможности.</p></div></details>
+    <details><summary>Нужен ли мне врач?</summary><div>
+      <p>Да, сходить к педиатру или спортивному врачу перед стартом — хорошая идея: ЭКГ, общий анализ крови, витамин D. Обязательно, если были обмороки, боль в груди, сердцебиение, астма, или в семье кто-то внезапно умер молодым от болезни сердца. И обязательно расскажи родителям, что ты занимаешься по программе: им проще помочь с едой.</p></div></details>
+  </div>
+</section>
+</main>
+
+<button class="timer-fab" type="button" id="timerFab" aria-expanded="false" aria-controls="timerPanel">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6M12 2v3"/></svg>
+  <span class="tv" id="fabTxt">Отдых</span>
+</button>
+<div class="timer-panel" id="timerPanel" hidden role="dialog" aria-label="Таймер отдыха">
+  <h3>Таймер отдыха</h3>
+  <div class="t-display" id="tDisplay">1:30</div>
+  <div class="t-presets" role="group" aria-label="Время отдыха">
+    <button type="button" data-sec="45">0:45</button>
+    <button type="button" data-sec="60">1:00</button>
+    <button type="button" data-sec="90" aria-pressed="true">1:30</button>
+    <button type="button" data-sec="120">2:00</button>
+    <button type="button" data-sec="180">3:00</button>
+  </div>
+  <div class="t-ctrl">
+    <button type="button" class="go" id="tGo">Старт</button>
+    <button type="button" id="tPlus">+15 с</button>
+    <button type="button" id="tReset">Сброс</button>
+  </div>
+  <p class="small muted" style="margin:.6rem 0 0">В конце прозвучит сигнал. Звук включается после первого нажатия.</p>
+</div>
+
+<script>
+(function(){
+'use strict';
+var store = {
+  get: function(k, d){ try{ var v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set: function(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+var $ = function(s, r){ return (r || document).querySelector(s); };
+var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+/* ================= БИБЛИОТЕКА УПРАЖНЕНИЙ ================= */
+var GROUPS = { chest:'Грудь', back:'Спина', shoulders:'Плечи', arms:'Руки', legs:'Ноги', core:'Кор и шея' };
+var EX = {
+ pushup_decline:{ n:'Отжимания с ногами на возвышении', g:'chest', m:'Верх груди, передние дельты, трицепс', gear:'Стул, диван или кровать',
+  why:'Когда ноги выше головы, нагрузка смещается на верх груди и плечи. Именно эти зоны делают торс широким в футболке. Это главное упражнение фазы 1.',
+  steps:['Поставь носки на сиденье стула (высота 40–50 см), ладони на пол чуть шире плеч, пальцы вперёд.','Тело — прямая линия от пяток до макушки. Напряги ягодицы и пресс, как будто сейчас ударят в живот.','Локти уводи назад под углом 30–45° к корпусу. Сверху руки и тело похожи на стрелку, а не на букву «Т».','Опускайся 3 секунды, пока грудь почти не коснётся пола. Пауза 1 секунда внизу.','Мощно выжми себя вверх за 1 секунду, не «защёлкивая» локти.'],
+  breath:'Вдох на опускании, выдох на подъёме.',
+  err:['Провисает поясница или таз задран вверх.','Голова тянется к полу раньше груди.','Локти разведены в стороны на 90° — это прямой путь к боли в плечах.','Неполная амплитуда: опускаешься на треть.'],
+  easier:'Ноги на ступеньке пониже или классические отжимания.', harder:'Рюкзак с грузом, дефицит (руки на книгах), 1,5 повтора.',
+  q:'отжимания с ногами на возвышении техника' },
+ pushup_deficit:{ n:'Отжимания с дефицитом', g:'chest', m:'Грудь, передние дельты, трицепс', gear:'Две устойчивые стопки книг 10–15 см или шестигранные гантели',
+  why:'Обычные отжимания заканчиваются, когда грудь касается пола. С упорами ты опускаешься ниже уровня ладоней, и грудь растягивается под нагрузкой. Нагрузка в растянутом положении — один из сильнейших сигналов к росту.',
+  steps:['Поставь две устойчивые опоры чуть шире плеч. Гантели подойдут, только если они не катаются.','Упор лёжа на опорах, тело прямое.','Опускайся 3 секунды ниже уровня ладоней, пока не почувствуешь сильное растяжение груди без боли в плече.','Пауза 1 секунда в самой нижней точке, затем мощно выжми вверх.'],
+  breath:'Вдох вниз, выдох вверх.',
+  err:['Сразу слишком глубоко. Глубину увеличивай постепенно, неделя за неделей.','Плечи «падают» вперёд в нижней точке.','Неустойчивые опоры.'],
+  safe:'Если в нижней точке колет в передней части плеча — уменьши глубину.',
+  easier:'Ниже опоры.', harder:'Ноги на стуле и рюкзак.',
+  q:'отжимания с дефицитом на упорах техника' },
+ pushup_weighted:{ n:'Отжимания с рюкзаком', g:'chest', m:'Грудь, трицепс, передние дельты, пресс', gear:'Рюкзак; книги, бутылки с водой (1,5 л = 1,5 кг, 5 л = 5 кг) или блины от штанги',
+  why:'Когда 20+ повторов даются легко, рост замедляется. Рюкзак — домашний способ добавить вес и вернуть тебя в диапазон 8–15 повторов.',
+  steps:['Уложи груз плотно, чтобы ничего не болталось, и затяни лямки. Груз должен лежать на лопатках, а не на пояснице.','Если груза много, перехвати лямки на груди ремнём или скотчем, чтобы рюкзак не съезжал к шее.','Дальше техника как у обычных отжиманий: тело прямое, локти 30–45°, 3 секунды вниз, пауза, мощно вверх.','Записывай вес рюкзака. Это твой главный показатель прогресса в груди.'],
+  breath:'Вдох вниз, выдох вверх.',
+  err:['Рюкзак съезжает к голове и тянет шею.','Поясница прогибается под весом.','Слишком тяжело, и амплитуда становится короткой.'],
+  easier:'Меньше груза или руки на возвышении.', harder:'Ноги на стуле + рюкзак, ещё груз.',
+  q:'отжимания с утяжелением рюкзак' },
+ pushup_archer:{ n:'Лучные отжимания', g:'chest', m:'Грудь, трицепс, плечи (с акцентом на одну руку)', gear:'Пол, можно на полотенце',
+  why:'Шаг к отжиманиям на одной руке. Большая часть веса уходит на одну руку, вторая только страхует. Нагрузка на грудь почти удваивается без всяких гантелей.',
+  steps:['Поставь руки очень широко, примерно в 1,5–2 раза шире плеч. Пальцы смотрят в стороны или чуть вперёд.','Опускайся к одной руке: она сгибается, а вторая остаётся почти прямой, как тетива лука.','Грудь опускается рядом с рабочей ладонью. Выжми вверх рабочей рукой.','Делай все повторы на одну сторону, затем на другую, или чередуй.'],
+  breath:'Вдох вниз, выдох вверх.',
+  err:['Таз проворачивается и уходит вбок.','Прямая рука сгибается и забирает нагрузку.','Быстро и без контроля.'],
+  easier:'На коленях или «полулучные» (вторая рука сгибается наполовину).', harder:'Ноги на стуле, опускание 4–5 секунд.',
+  q:'лучные отжимания archer push up техника' },
+ pushup_pseudo:{ n:'Псевдопланш-отжимания', g:'chest', m:'Передние дельты, грудь, трицепс, пресс', gear:'Пол, коврик',
+  why:'Ладони стоят у пояса, а корпус наклонён вперёд, поэтому рычаг очень невыгодный. Это одно из самых тяжёлых упражнений для плеч и груди с собственным весом.',
+  steps:['Ладони на пол на уровне нижних рёбер или пояса, пальцы развёрнуты в стороны или назад: так легче запястьям.','Наклони корпус вперёд, чтобы плечи оказались впереди ладоней. Чем сильнее наклон, тем тяжелее.','Тело прямое, верх спины чуть округлён, ягодицы напряжены.','Опускайся медленно, сохраняя наклон, и выжимай вверх.'],
+  breath:'Вдох вниз, выдох вверх.',
+  err:['Наклон исчезает в нижней точке.','Таз задран «домиком».','Боль в запястьях: разомни их заранее и разверни пальцы.'],
+  safe:'Перед упражнением 1–2 минуты разминай запястья.',
+  easier:'Меньше наклон или на коленях.', harder:'Больше наклон, ноги на стуле, рюкзак.',
+  q:'псевдопланш отжимания техника' },
+ pushup_diamond:{ n:'Алмазные (узкие) отжимания', g:'arms', m:'Трицепс, внутренняя часть груди, передние дельты', gear:'Пол',
+  why:'Трицепс — это около двух третей объёма руки. Хочешь большие руки — качай трицепс не меньше бицепса.',
+  steps:['Ладони близко под грудью, большие и указательные пальцы образуют ромб. Если запястьям неудобно — ставь ладони на ширине кулака.','Тело прямое, локти идут назад вдоль корпуса, а не в стороны.','Опустись, пока грудь не коснётся рук.','Мощно выжми вверх, полностью разгибая локти и сжимая трицепс.'],
+  breath:'Вдох вниз, выдох вверх.',
+  err:['Локти разлетаются в стороны.','Таз проваливается.','Неполное разгибание рук наверху.'],
+  easier:'Руки на возвышении (диван, стол).', harder:'Рюкзак, ноги на стуле, 4 секунды вниз.',
+  q:'алмазные отжимания узкие техника трицепс' },
+ dips_chairs:{ n:'Отжимания на брусьях (стулья или угол столешницы)', g:'chest', m:'Низ груди, трицепс, передние дельты', gear:'Два тяжёлых устойчивых стула спинками друг к другу, угол кухонной столешницы или настенные брусья',
+  why:'Брусья называют «приседом для верха тела». Одно из лучших упражнений для массы груди и трицепса.',
+  steps:['Проверь опору: стулья не должны скользить и качаться. Лучше поставить их к стене или использовать угол кухонного гарнитура.','Обопрись на прямые руки, плечи опусти подальше от ушей, ноги согни и скрести.','Опускайся 3 секунды, пока плечо не станет параллельно полу. Глубже не надо.','Наклон корпуса вперёд — больше груди. Корпус вертикально — больше трицепса.','Выжми себя вверх до прямых рук.'],
+  breath:'Вдох вниз, выдох вверх.',
+  err:['Слишком глубоко: плечо ниже локтя перегружает плечевой сустав.','Плечи поднимаются к ушам.','Раскачка ногами.'],
+  safe:'Не используй лёгкие или складные стулья. Если ничего надёжного нет — делай алмазные отжимания.',
+  easier:'Только негатив: медленное опускание 5 секунд; или ноги на полу для поддержки.', harder:'Пауза внизу, темп 4-1-1, рюкзак (только на настоящих брусьях).',
+  q:'отжимания на брусьях техника для груди' },
+ pike:{ n:'Пайк-отжимания (уголком)', g:'shoulders', m:'Передние и средние дельты, трицепс, трапеции', gear:'Пол, позже стул под ноги',
+  why:'Твоя замена тяжёлому жиму над головой. Широкие, круглые плечи — главная деталь «большого» силуэта.',
+  steps:['Встань в «уголок»: таз высоко, руки на ширине плеч, ноги как можно ближе к рукам, спина прямая.','Опускайся макушкой к точке перед ладонями, так что руки и голова образуют треугольник.','Локти идут вперёд и немного в стороны, примерно на 45°.','Почти коснувшись головой пола, выжми себя вверх, толкая пол.','В фазе 2 ставь ноги на стул: тело ближе к вертикали, плечам тяжелее.'],
+  breath:'Вдох вниз, выдох вверх.',
+  err:['Голова опускается прямо между ладоней — получается обычное отжимание.','Таз опускается.','Локти разводятся на 90°.'],
+  easier:'Ноги дальше от рук, меньше амплитуда.', harder:'Ноги на стуле, ладони на книгах, негативы в стойке у стены.',
+  q:'пайк отжимания pike push up техника' },
+ hspu_neg:{ n:'Негативы отжиманий в стойке у стены', g:'shoulders', m:'Плечи, трицепс, трапеции', gear:'Стена, подушка или сложенное полотенце',
+  why:'Финальный уровень для плеч дома. В негативе ты работаешь с весом всего тела, даже если полностью отжаться в стойке пока не получается.',
+  steps:['Сначала научись стоять в стойке у стены 30 секунд: лицом от стены, руки на ширине плеч в 15–20 см от неё, махом ноги на стену.','Положи подушку под голову. Напряги всё тело.','Опускайся максимально медленно, 5 секунд, до касания подушки головой.','Опусти ноги на пол (выжимать вверх не нужно) и повтори.'],
+  breath:'Ровное дыхание, не задерживай надолго.',
+  err:['Резкое падение на голову.','Прогиб в пояснице «бананом».','Локти разлетаются в стороны.'],
+  safe:'Только если уверенно стоишь в стойке и делаешь 12+ пайк-отжиманий с ногами на стуле. Рядом не должно быть стекла и острых углов. Не делай, если есть проблемы с шеей или давлением. Закружилась голова — прекрати.',
+  easier:'Пайк-отжимания с ногами на стуле.', harder:'Полные отжимания в стойке у стены.',
+  q:'негативы отжиманий в стойке у стены обучение' },
+ ohp:{ n:'Жим штанги стоя (армейский жим)', g:'shoulders', m:'Передние и средние дельты, трицепс, верх груди, пресс', gear:'Штанга 10–15 кг',
+  why:'Плечи дают ширину. 15 кг немного, поэтому работаем медленно, на 10–15 повторов, с паузами и 1,5 повтора.',
+  steps:['Хват чуть шире плеч, штанга лежит на верху груди, локти немного впереди грифа.','Ноги на ширине таза, ягодицы и пресс напряжены: корпус как один кусок.','Выжми штангу вверх по прямой, убирая голову назад, чтобы гриф прошёл мимо подбородка.','Наверху «просунь» голову вперёд, гриф над макушкой.','Опускай 2–3 секунды обратно на грудь.'],
+  breath:'Вдох перед жимом, выдох наверху.',
+  err:['Прогиб в пояснице из-за расслабленного пресса.','Гриф уходит дугой вперёд.','Толчок ногами — это уже другое упражнение.'],
+  easier:'Меньше вес или жим сидя.', harder:'1,5 повтора (вниз до лба → вверх → вниз до груди → вверх), пауза 2 с у лба, сразу после подхода пайк-отжимания.',
+  q:'армейский жим штанги стоя техника' },
+ lateral:{ n:'Махи гантелями в стороны', g:'shoulders', m:'Средние дельты — ширина плеч', gear:'Гантели 3 кг',
+  why:'Средняя дельта — главная мышца широких плеч. Она маленькая и отлично растёт от лёгких весов на 15–25 повторов. Тут 3 кг — идеальный вес.',
+  steps:['Встань прямо, лёгкий наклон вперёд на 10–15°, гантели перед бёдрами, локти чуть согнуты.','Поднимай гантели через стороны, будто отталкиваешь стены, до уровня плеч. Движение ведёт локоть.','Кисть держи нейтрально, не выкручивай.','Пауза 1 секунда наверху, опускай 2 секунды, не бросай.','Плечи не тянутся к ушам: работают дельты, а не трапеции.'],
+  breath:'Выдох на подъёме, вдох на опускании.',
+  err:['Раскачка корпусом.','Подъём выше плеч с задранными трапециями.','Быстрое опускание.'],
+  easier:'Меньше амплитуда, по одной руке.', harder:'Механический дроп (после отказа ещё 10–15 частичных махов внизу), миорепсы, паузы 2 секунды.',
+  q:'махи гантелями в стороны техника средняя дельта' },
+ reardelt:{ n:'Разведения в наклоне (задняя дельта)', g:'shoulders', m:'Задние дельты, середина трапеций, ромбовидные', gear:'Гантели 3 кг',
+  why:'Задняя дельта даёт плечам объём сбоку и сзади и выпрямляет осанку после тонны отжиманий. Без неё плечи заваливаются вперёд.',
+  steps:['Наклонись почти параллельно полу (или ляг грудью на наклонную опору), спина прямая, колени согнуты.','Гантели висят под плечами, локти слегка согнуты.','Разводи руки в стороны и немного назад, как крылья. Думай «руки в стороны», а не «лопатки вместе».','Пауза 1 секунда наверху, опускай 2 секунды.'],
+  breath:'Выдох на подъёме.',
+  err:['Рывки корпусом.','Сведение лопаток вместо работы плеч.','Круглая спина.'],
+  easier:'Меньше амплитуда.', harder:'Паузы 2 секунды, частичные повторы после отказа.',
+  q:'разведения гантелей в наклоне задняя дельта техника' },
+ skull:{ n:'Французский жим штанги лёжа', g:'arms', m:'Трицепс, особенно длинная головка', gear:'Штанга 8–15 кг, пол или скамья',
+  why:'Длинная головка трицепса — самая большая. Она лучше всего растёт, когда растягивается, то есть когда штанга уходит за голову.',
+  steps:['Ляг на пол на коврик, ноги согнуты. Штанга на прямых руках над грудью, хват на ширине 20–30 см.','Не двигая плечами, сгибай локти и опускай гриф за голову, к полу за макушкой, 3 секунды.','Почувствуй растяжение трицепса.','Разогни руки обратно, сжимая трицепс наверху. Локти всё время смотрят в потолок.'],
+  breath:'Вдох вниз, выдох вверх.',
+  err:['Локти разъезжаются в стороны.','Плечи двигаются, и упражнение превращается в пуловер.','Гриф опускается ко лбу — опасно и хуже для трицепса.'],
+  safe:'Начни с 8–10 кг. Гриф никогда не идёт к лицу.',
+  easier:'Меньше вес.', harder:'Пауза в растяжении, 1,5 повтора, больше вес.',
+  q:'французский жим штанги лежа техника' },
+ table_ext:{ n:'Разгибания на руках у стола', g:'arms', m:'Трицепс', gear:'Тяжёлый устойчивый стол у стены, подоконник или столешница',
+  why:'Французский жим с собственным весом. Нагрузку легко регулировать: отходишь ногами дальше — тяжелее.',
+  steps:['Возьмись за край стола ладонями на ширине плеч. Руки прямые, тело прямое, наклонено к столу.','Сгибай только локти: голова уходит под уровень края стола, предплечья почти ложатся на столешницу.','Разгибай руки, отталкиваясь ладонями, пока они снова не станут прямыми.','Тело остаётся прямым, как доска.'],
+  breath:'Вдох вниз, выдох вверх.',
+  err:['Сгибаешься в тазу.','Локти разводятся.','Стол шатается. Проверь, что он не опрокинется!'],
+  safe:'Стол должен стоять у стены или быть очень тяжёлым.',
+  easier:'Встань ближе к столу (вертикальнее).', harder:'Опора ниже (диван, ступенька), ноги дальше.',
+  q:'разгибания рук с собственным весом трицепс у стола' },
+ pullup:{ n:'Подтягивания прямым хватом', g:'back', m:'Широчайшие, мышцы спины, бицепс, предплечья', gear:'Турник',
+  why:'Король упражнений для спины. Широкая спина делает фигуру буквой V. Если турника нет — это первая покупка.',
+  steps:['Хват сверху чуть шире плеч, большой палец обхватывает перекладину.','Вис на прямых руках, но плечи не висят у ушей: слегка опусти их.','Тянись грудью к перекладине, локти веди вниз и к рёбрам. Подбородок выше грифа.','Опускайся 2–3 секунды почти до прямых рук.'],
+  breath:'Выдох на подъёме, вдох на опускании.',
+  err:['Рывки и раскачка. Для массы это не годится.','Неполная амплитуда.','Тянешься только подбородком вперёд.'],
+  safe:'Проверь крепление дверного турника. Не прыгай на нём.',
+  easier:'Если меньше 5 раз — негативы: встань на стул в верхнюю точку и опускайся 5 секунд, 3–5 раз. Плюс тяга под столом.', harder:'Пауза 2 секунды наверху, рюкзак, лучные подтягивания.',
+  q:'подтягивания на турнике техника для спины' },
+ chinup:{ n:'Подтягивания обратным хватом', g:'back', m:'Бицепс, широчайшие, нижние трапеции', gear:'Турник',
+  why:'Лучшее упражнение для бицепса с собственным весом: 58 кг на бицепс — больше, чем любой снаряд у тебя дома.',
+  steps:['Хват снизу на ширине плеч.','Тянись грудью к перекладине, локти идут вниз вдоль корпуса.','Наверху сожми бицепс и спину, пауза 1 секунда.','Опускайся 3 секунды до прямых рук.'],
+  breath:'Выдох на подъёме, вдох на опускании.',
+  err:['Раскачка.','Неполное опускание.','Голова тянется вперёд вместо груди.'],
+  easier:'Негативы по 5 секунд.', harder:'Рюкзак, пауза в середине амплитуды.',
+  q:'подтягивания обратным хватом техника бицепс' },
+ inv_row:{ n:'Тяга под столом (австралийские подтягивания)', g:'back', m:'Середина спины, широчайшие, задние дельты, бицепс', gear:'Крепкий тяжёлый обеденный стол (не складной) или низкая перекладина',
+  why:'Горизонтальная тяга даёт толщину спины. Без турника это твоё главное упражнение на спину.',
+  steps:['Проверь стол: он должен быть тяжёлым и устойчивым. Ляг под ним, край стола над грудью.','Возьмись за край хватом сверху на ширине плеч. Тело прямое, пятки на полу.','Подтяни грудь к краю стола, сводя лопатки и ведя локти назад под углом около 45°.','Пауза 1 секунда, опускайся 2–3 секунды.'],
+  breath:'Выдох на подъёме.',
+  err:['Провисает таз.','Тянешься головой вперёд.','Стол шатается — немедленно прекрати.'],
+  safe:'Не используй складные и лёгкие столы. Нет надёжного стола — делай тягу штанги в наклоне.',
+  easier:'Согни колени, ноги ближе.', harder:'Ноги на стуле, пауза 2 секунды, хват снизу.',
+  q:'австралийские подтягивания под столом техника' },
+ bb_row:{ n:'Тяга штанги в наклоне', g:'back', m:'Широчайшие, середина спины, задние дельты, бицепс', gear:'Штанга 10–15 кг',
+  why:'Тяга даёт спине толщину. Вес лёгкий, поэтому главное — пауза наверху и медленное опускание.',
+  steps:['Ноги на ширине таза, колени немного согнуты. Наклонись, отводя таз назад, до 45° или ниже. Спина прямая.','Хват сверху чуть шире плеч, штанга висит под плечами.','Тяни гриф к низу живота, локти назад вдоль корпуса. Наверху сведи лопатки и держи 1–2 секунды.','Опускай 2–3 секунды до прямых рук, почувствуй растяжение спины.'],
+  breath:'Выдох на подъёме.',
+  err:['Круглая поясница.','Рывки корпусом.','Тянешь одними руками, лопатки не работают.'],
+  easier:'Меньше вес.', harder:'Пауза 2 секунды, 4 секунды вниз, хват снизу.',
+  q:'тяга штанги в наклоне техника' },
+ curl:{ n:'Подъём штанги на бицепс', g:'arms', m:'Бицепс, плечевая мышца', gear:'Штанга 10–15 кг',
+  why:'Классика для бицепса. 15 кг на 10–15 повторов с медленным опусканием — нормальная нагрузка для твоего уровня.',
+  steps:['Встань прямо, хват снизу на ширине плеч, локти прижаты к бокам.','Поднимай штангу, сгибая только локти. Корпус неподвижен.','Наверху сожми бицепс 1 секунду.','Опускай 3 секунды до почти прямых рук.'],
+  breath:'Выдох на подъёме.',
+  err:['Раскачка спиной.','Локти уходят вперёд.','Бросаешь вес вниз.'],
+  easier:'Меньше вес.', harder:'«21», опускание 5 секунд, пауза в середине.',
+  q:'подъем штанги на бицепс техника' },
+ hammer:{ n:'Молотки с гантелями', g:'arms', m:'Плечевая и плечелучевая мышцы, бицепс', gear:'Гантели 3 кг',
+  why:'Плечевая мышца лежит под бицепсом и буквально выталкивает его вверх, рука становится толще. С 3 кг работаем медленно: 4 секунды вниз.',
+  steps:['Гантели в опущенных руках, ладони смотрят друг на друга.','Сгибай руки, сохраняя хват «молотком», до плеч. Локти неподвижны.','Опускай 4 секунды.'],
+  breath:'Выдох на подъёме.',
+  err:['Раскачка.','Быстрое опускание: с 3 кг так нагрузки нет.'],
+  easier:'Опускание 2–3 секунды.', harder:'5 секунд вниз, по одной руке без отдыха, «молотки» к противоположному плечу.',
+  q:'молотки с гантелями техника' },
+ rev_curl:{ n:'Подъём штанги обратным хватом', g:'arms', m:'Плечелучевая мышца, разгибатели предплечья, плечевая', gear:'Штанга 8–15 кг',
+  why:'Толстые предплечья видны всегда, даже в футболке и рубашке.',
+  steps:['Хват сверху на ширине плеч, локти прижаты.','Сгибай руки, держа запястья прямыми.','Опускай 3 секунды.'],
+  breath:'Выдох на подъёме.',
+  err:['Запястья проваливаются вниз.','Раскачка.'],
+  easier:'Меньше вес.', harder:'Пауза в середине, полотенце на гриф (толще хват).',
+  q:'подъем штанги обратным хватом предплечья' },
+ wrist:{ n:'Сгибания и разгибания кистей', g:'arms', m:'Сгибатели и разгибатели предплечья', gear:'Штанга или гантели',
+  why:'Предплечья тренируются как икры: много повторов, полная амплитуда, жжение.',
+  steps:['Сядь, предплечья на бёдрах, кисти свисают за колени.','Сгибания: хват снизу, опусти штангу на пальцы, затем сожми кулаки и подними кисти максимально вверх.','Разгибания: хват сверху, поднимай тыльную сторону кисти вверх (вес легче).','20–30 повторов, жжение — нормально.'],
+  breath:'Ровное дыхание.',
+  err:['Короткая амплитуда.','Слишком тяжёлый вес в разгибаниях.'],
+  easier:'Гантели вместо штанги.', harder:'Паузы, больше повторов.',
+  q:'сгибания кистей со штангой предплечья' },
+ hang:{ n:'Вис на турнике / удержание штанги', g:'arms', m:'Хват, предплечья, плечевой пояс', gear:'Турник или штанга',
+  why:'Сила хвата нужна в подтягиваниях и в жизни. Вис к тому же разгружает позвоночник.',
+  steps:['Вис на прямых руках с активными плечами максимально долго.','Без турника: держи штангу 15 кг в опущенных руках, обмотав гриф полотенцем (толще — тяжелее).'],
+  breath:'Ровное дыхание.',
+  err:['Плечи «провалились» к ушам.'],
+  easier:'Ноги касаются пола.', harder:'Вис на одной руке с поддержкой второй.',
+  q:'вис на турнике хват упражнение' },
+ bss:{ n:'Болгарские сплит-приседания', g:'legs', m:'Квадрицепс, ягодицы, приводящие', gear:'Стул или диван сзади; штанга на спине, рюкзак или гантели',
+  why:'Лучшее упражнение для ног, когда нет тяжёлой штанги. Вся нагрузка идёт на одну ногу, поэтому 15 кг ощущаются совсем по-другому.',
+  steps:['Встань спиной к стулу на расстоянии большого шага, носок задней ноги на сиденье.','Передняя стопа полностью на полу. Корпус почти вертикально (наклон вперёд — больше ягодиц).','Опускайся 3 секунды прямо вниз, пока бедро передней ноги не станет параллельно полу или ниже. Колено идёт по направлению носка.','Пауза 1 секунда, встань, толкаясь всей стопой передней ноги.','Все повторы на одну ногу, затем на другую.'],
+  breath:'Вдох вниз, выдох вверх.',
+  err:['Слишком короткий шаг — пятка отрывается.','Колено заваливается внутрь.','Толкаешься задней ногой.'],
+  safe:'Штангу держи на трапециях, а не на шее. Теряешь баланс — бери рюкзак или гантели в руки.',
+  easier:'Без веса или выпады назад.', harder:'1,5 повтора, передняя нога на книге, штанга + рюкзак.',
+  q:'болгарские сплит приседания техника' },
+ box_pistol:{ n:'Пистолетик на табурет → пистолет', g:'legs', m:'Квадрицепс, ягодицы, мышцы-стабилизаторы', gear:'Табурет, стул или диван',
+  why:'Приседание на одной ноге — это приседание с весом своего тела на одну ногу. Без штанги это лучшая тяжёлая нагрузка для бёдер.',
+  steps:['Встань спиной к табурету на одной ноге, вторую вытяни вперёд. Руки вперёд для баланса. Гантели 3 кг в вытянутых руках работают как противовес и делают легче.','Медленно, 3 секунды, садись на табурет на одной ноге. Касайся его ягодицами, не плюхаясь.','Не расслабляясь, встань на одной ноге.','Со временем опора всё ниже: подушки, стопка книг, пока не сядешь полностью без неё.'],
+  breath:'Вдох вниз, выдох вверх.',
+  err:['Плюхаешься на опору.','Колено уходит внутрь.','Пятка отрывается от пола.'],
+  easier:'Выше опора, держись рукой за косяк.', harder:'Ниже опора, полный пистолет, пауза внизу.',
+  q:'пистолетик на одной ноге обучение на табурет' },
+ sl_rdl:{ n:'Румынская тяга на одной ноге', g:'legs', m:'Бицепс бедра, ягодицы, разгибатели спины', gear:'Штанга 10–15 кг или рюкзак',
+  why:'На одной ноге 15 кг дают отличную нагрузку на заднюю поверхность бедра без горы железа.',
+  steps:['Держи штангу в опущенных руках. Встань на одну ногу, колено чуть согнуто.','Наклоняйся вперёд, отводя свободную ногу назад: корпус и нога образуют прямую линию, как «ласточка».','Опускай штангу вдоль ноги до сильного растяжения задней поверхности бедра (обычно чуть ниже колена).','Вернись, толкая таз вперёд и сжимая ягодицу.'],
+  breath:'Вдох вниз, выдох вверх.',
+  err:['Круглая спина.','Таз разворачивается в сторону.','Опорное колено сгибается всё сильнее, и упражнение превращается в присед.'],
+  easier:'Касайся стены свободной рукой.', harder:'Пауза внизу, медленнее.',
+  q:'румынская тяга на одной ноге техника' },
+ rdl:{ n:'Румынская тяга штанги', g:'legs', m:'Бицепс бедра, ягодицы, разгибатели спины', gear:'Штанга 15 кг',
+  why:'На двух ногах 15 кг — лёгкий вес, поэтому работаем очень медленно, с паузой и на 15–20 повторов.',
+  steps:['Ноги на ширине таза, хват на ширине плеч, колени слегка согнуты и почти не меняют угол.','Отводи таз назад, будто закрываешь дверь ягодицами. Гриф скользит по бёдрам.','Опускай 4 секунды до сильного растяжения (обычно середина голени). Спина прямая.','Пауза, затем выпрямись, толкая таз вперёд.'],
+  breath:'Вдох вниз, выдох вверх.',
+  err:['Круглая спина.','Присед вместо наклона.','Гриф уходит от ног.'],
+  easier:'Меньше амплитуда.', harder:'Стоя на книгах (дефицит), пауза 2 секунды, на одной ноге.',
+  q:'румынская тяга со штангой техника' },
+ nordic:{ n:'Нордические сгибания', g:'legs', m:'Бицепс бедра', gear:'Тяжёлый диван или кровать (зацепить пятки) или партнёр; подушка под колени',
+  why:'Одно из лучших упражнений для бицепса бедра. Оно ещё и снижает риск травм задней поверхности бедра. Очень тяжёлое, поэтому начинаем с негативов.',
+  steps:['Встань на колени на подушку, зацепи пятки под тяжёлым диваном или попроси кого-то прижать щиколотки.','Тело прямое от колен до головы, ягодицы напряжены, руки перед грудью.','Медленно, 5 секунд, наклоняйся вперёд, сопротивляясь задней поверхностью бедра.','Когда больше не удержать — подставь руки и мягко «упади» в отжимание.','Оттолкнись руками, чтобы вернуться в начало.'],
+  breath:'Ровное дыхание.',
+  err:['Сгибаешься в тазу, попа уходит назад.','Быстрое падение.','Нет подушки под коленями.'],
+  safe:'Первые 2 недели будет сильная крепатура — это нормально. Начинай с 3 повторов.',
+  easier:'Меньше амплитуда, помогай руками.', harder:'Медленнее, дольше без рук, попытки вернуться без помощи.',
+  q:'нордические сгибания обучение дома' },
+ hip_thrust:{ n:'Ягодичный мост на одной ноге', g:'legs', m:'Ягодицы, бицепс бедра', gear:'Диван или стул под лопатки, рюкзак на таз',
+  why:'Ягодицы — самая большая мышца тела, от неё зависит сила в прыжках, беге и ударах.',
+  steps:['Сядь спиной к дивану, лопатки на краю. Одна стопа на полу, вторая нога согнута и поднята.','Толкаясь пяткой, подними таз до прямой линии плечи — таз — колено.','Наверху сожми ягодицу 2 секунды, подбородок прижат.','Опускайся 2 секунды.'],
+  breath:'Выдох на подъёме.',
+  err:['Прогиб в пояснице вместо разгибания таза.','Толкаешься носком.'],
+  easier:'На двух ногах.', harder:'Рюкзак или штанга на тазу (подложи полотенце), пауза 3 секунды.',
+  q:'ягодичный мост на одной ноге с опорой на диван' },
+ stepup:{ n:'Зашагивания на опору', g:'legs', m:'Квадрицепс, ягодицы', gear:'Устойчивая ступенька, низкий стул без колёс или край кровати; рюкзак',
+  why:'Простое и безопасное упражнение на одну ногу. С рюкзаком отлично добивает ноги в конце тренировки.',
+  steps:['Поставь всю стопу одной ноги на опору. Колено примерно на уровне таза или ниже.','Перенеси вес на верхнюю ногу и поднимись, не отталкиваясь нижней.','Медленно, 2–3 секунды, опустись той же ногой обратно.'],
+  breath:'Выдох на подъёме.',
+  err:['Отталкиваешься нижней ногой.','Колено заваливается внутрь.'],
+  safe:'Только устойчивая опора. Никаких стульев на колёсиках.',
+  easier:'Ниже опора, без веса.', harder:'Выше опора, тяжелее рюкзак.',
+  q:'зашагивания на тумбу техника' },
+ sissy:{ n:'Сисси-приседания с опорой', g:'legs', m:'Квадрицепс', gear:'Дверной косяк или спинка тяжёлого стула',
+  why:'Нагружает квадрицепс в растянутом положении. Это то, чего не хватает при лёгкой штанге.',
+  steps:['Встань на носки, держись рукой за косяк.','Сгибая колени, уводи их вперёд, а корпус отклоняй назад. Тело от колен до головы прямое.','Опустись настолько, насколько комфортно коленям, и вернись.'],
+  breath:'Вдох вниз, выдох вверх.',
+  err:['Сгибаешься в тазу.','Слишком глубоко с первого раза.'],
+  safe:'Если болит колено — замени на «стульчик» у стены 3 × 45–60 секунд.',
+  easier:'Меньше амплитуда.', harder:'Пауза внизу, медленнее.',
+  q:'сисси приседания с опорой техника' },
+ calf:{ n:'Подъёмы на носок на ступеньке', g:'legs', m:'Икроножные и камбаловидные', gear:'Ступенька или порог, гантель 3 кг',
+  why:'Икры упрямые и любят полную амплитуду и паузы. Одна нога и пауза в растяжении — секрет их роста.',
+  steps:['Встань носком одной ноги на край ступеньки, держись рукой за стену, в другой руке гантель.','Опусти пятку максимально вниз и задержись в растяжении 2 секунды.','Поднимись на самый носок и сожми икру 1 секунду.','Колено прямое или почти прямое.'],
+  breath:'Ровное дыхание.',
+  err:['Пружинишь без пауз.','Неполная амплитуда.'],
+  easier:'На двух ногах.', harder:'Пауза 3 секунды внизу, больше повторов, рюкзак.',
+  q:'подъемы на носок на одной ноге на ступеньке' },
+ hollow:{ n:'Лодочка (hollow body)', g:'core', m:'Прямая мышца живота, глубокие мышцы кора', gear:'Пол, коврик',
+  why:'Учит держать корпус жёстким. Это нужно во всех отжиманиях, в жиме стоя и в ударах.',
+  steps:['Ляг на спину, прижми поясницу к полу — это главное.','Подними ноги и плечи, руки вытяни за голову. Тело как банан.','Держи, не давая пояснице оторваться от пола.'],
+  breath:'Короткие ровные вдохи и выдохи.',
+  err:['Поясница отрывается от пола.','Задержка дыхания.'],
+  easier:'Колени согнуты, руки вдоль тела.', harder:'Руки за головой, ноги ниже.',
+  q:'лодочка hollow body hold техника' },
+ leg_raise:{ n:'Подъёмы ног (лёжа или в висе)', g:'core', m:'Прямая мышца живота, сгибатели бедра', gear:'Пол или турник',
+  why:'Пресс — тоже мышца, ему нужна нагрузка, а не тысячи скручиваний.',
+  steps:['Лёжа: руки вдоль тела или под тазом. Поднимай прямые ноги вверх и в конце подкручивай таз от пола.','Опускай медленно, не касаясь пола.','В висе (фаза 2–3): повисни на турнике и подними колени к груди, подкручивая таз. Без раскачки.'],
+  breath:'Выдох на подъёме.',
+  err:['Прогиб в пояснице.','Рывки и раскачка.'],
+  easier:'Согнутые колени.', harder:'Прямые ноги в висе, медленное опускание.',
+  q:'подъем ног в висе на турнике техника пресс' },
+ neck_iso:{ n:'Изометрия шеи рукой', g:'core', m:'Мышцы шеи', gear:'Только руки',
+  why:'Крепкая шея делает силуэт мощнее и защищает при ударах и падениях. Работаем аккуратно: только статика и своя рука, никаких мостов и рывков.',
+  steps:['Сядь прямо. Положи ладонь на лоб. Дави головой вперёд, а рукой сопротивляйся так, чтобы голова не двигалась. 10–20 секунд, усилие 50–70%.','Повтори для затылка (обе ладони сзади), правой и левой стороны.','Дыши ровно, не задерживай дыхание.'],
+  breath:'Ровное дыхание всё время.',
+  err:['Слишком сильное давление сразу.','Резкие движения головой.'],
+  safe:'Никаких «борцовских мостов» и веса на голову без тренера. Боль, головокружение или онемение — прекрати.',
+  easier:'Меньше усилие и время.', harder:'Дольше удержание, до 20–30 секунд.',
+  q:'изометрические упражнения для шеи рукой' }
+};
+
+/* ================= ПРОГРАММА ================= */
+function r(ex, s, reps, t, rest, note, alt){ return { ex:ex, s:s, r:reps, t:t, rest:rest, note:note || '', alt:alt || null }; }
+var NOBAR = 'Без турника', NOTABLE = 'Нет крепкого стола', NODIPS = 'Нет надёжной опоры';
+
+var PHASES = [
+ { name:'Фундамент', plate:'green', weeks:'1–4', rir:'RIR 2', about:'Учим технику, медленный темп, останавливаемся за 2 повтора до отказа.',
+   days:{
+    mon:[ r('pushup_decline',4,'12–20','3-1-1-0','90 с','Если 20 повторов даются легко — надень рюкзак.'),
+          r('pushup_deficit',3,'12–20','3-1-1-0','90 с','Глубину увеличивай постепенно.'),
+          r('bb_row',4,'12–15','2-0-1-2','90 с','Пауза 2 с с грифом у живота.'),
+          r('pike',3,'8–12','2-0-1-0','90 с','Ноги на полу.'),
+          r('lateral',4,'15–25','2-0-1-1','60 с'),
+          r('dips_chairs',3,'8–15','3-0-1-0','90 с','',['pushup_diamond',NODIPS]),
+          r('skull',3,'12–15','3-0-1-0','60 с','Начни с 8–10 кг.') ],
+    tue:[ r('bss',4,'10–15 на ногу','3-1-1-0','90 с','Штанга на трапециях или рюкзак.'),
+          r('box_pistol',3,'6–10 на ногу','3-0-1-0','90 с','Опора на высоте колена.'),
+          r('sl_rdl',3,'10–12 на ногу','3-0-1-0','60–90 с','Можно касаться стены для баланса.'),
+          r('hip_thrust',3,'12–20 на ногу','2-0-1-2','60 с'),
+          r('calf',4,'15–25 на ногу','2-2-1-1','45 с','Пауза 2 с внизу в растяжении.'),
+          r('leg_raise',3,'12–20','2-0-1-0','60 с','Лёжа на полу.') ],
+    thu:[ r('pullup',4,'макс − 1','2-0-1-1','2 мин','Меньше 5 раз? Делай 4 × 3–5 негативов по 5 с.',['inv_row',NOBAR]),
+          r('inv_row',3,'10–15','2-0-1-1','90 с','',['bb_row',NOTABLE]),
+          r('ohp',4,'10–15','2-0-1-0','90 с'),
+          r('pushup_weighted',3,'10–15','3-0-1-0','90 с','Подбери вес рюкзака под 10–15 повторов.'),
+          r('curl',3,'10–15','3-0-1-1','60 с'),
+          r('reardelt',3,'15–25','2-0-1-1','60 с'),
+          r('hammer',2,'12–20','4-0-1-0','60 с','4 секунды вниз.') ],
+    fri:[ r('nordic',3,'3–5','5-0-X-0','2 мин','Только негатив: 5 с вниз, вверх помогай руками.'),
+          r('rdl',3,'15–20','4-0-1-0','90 с'),
+          r('stepup',3,'10–12 на ногу','2-0-1-0','60–90 с','С рюкзаком.'),
+          r('sissy',3,'8–15','3-0-1-0','60 с','Болит колено — «стульчик» у стены 3 × 45 с.'),
+          r('calf',3,'15–25 на ногу','2-2-1-1','45 с'),
+          r('hollow',3,'20–40 с','','45 с'),
+          r('neck_iso',2,'4 × 10–15 с','','30 с','4 направления, усилие 50–70%.') ],
+    sat:[ r('chinup',3,'макс − 1','2-0-1-1','2 мин','',['curl',NOBAR]),
+          r('table_ext',3,'10–15','3-0-1-0','60 с'),
+          r('lateral',4,'15–25','2-0-1-1','45 с','В последнем подходе после отказа ещё 10 частичных махов.'),
+          r('hammer',3,'12–20','4-0-1-0','45 с'),
+          r('pushup_diamond',3,'макс − 2','2-0-1-0','60 с'),
+          r('reardelt',3,'15–25','2-0-1-1','45 с'),
+          r('rev_curl',2,'12–15','3-0-1-0','45 с'),
+          r('wrist',2,'20–30','2-0-1-1','30 с','Сгибания и разгибания подряд.') ]
+   }},
+ { name:'Рост', plate:'yellow', weeks:'5–8', rir:'RIR 1', about:'Варианты тяжелее, останавливаемся за 1 повтор до отказа, в последних подходах — техники интенсивности.',
+   days:{
+    mon:[ r('pushup_weighted',4,'8–15','3-1-1-0','2 мин','Ноги на стуле + рюкзак.'),
+          r('pushup_archer',3,'6–10 на сторону','3-0-1-0','90 с'),
+          r('bb_row',4,'12–15','3-0-1-2','90 с','Опускай 3 с.'),
+          r('pike',4,'8–12','2-0-1-0','90 с','Ноги на стуле.'),
+          r('lateral',4,'15–25','2-0-1-1','45 с','Последний подход — механический дроп: +10–15 частичных махов.'),
+          r('dips_chairs',3,'10–15','3-1-1-0','90 с','Пауза 1 с внизу.',['pushup_diamond',NODIPS]),
+          r('skull',3,'12–15','3-0-1-0','60 с','Последний подход — 1,5 повтора.') ],
+    tue:[ r('bss',4,'8–12 на ногу','3-0-1-0','2 мин','1,5 повтора: вниз → до середины → вниз → вверх.'),
+          r('box_pistol',3,'5–8 на ногу','3-0-1-0','90 с','Опора на 10–15 см ниже, чем в фазе 1.'),
+          r('sl_rdl',4,'10–12 на ногу','3-1-1-0','90 с','Пауза 1 с в растяжении.'),
+          r('hip_thrust',3,'12–20 на ногу','2-0-1-2','60 с','Рюкзак на таз.'),
+          r('calf',4,'15–25 на ногу','2-3-1-1','45 с','Пауза 3 с внизу.'),
+          r('leg_raise',3,'10–15','2-0-1-0','60 с','В висе на турнике. Без турника — лёжа, медленно.') ],
+    thu:[ r('pullup',5,'макс − 1','3-0-1-2','2 мин','Пауза 2 с наверху.',['inv_row',NOBAR + ' (ноги на стуле)']),
+          r('chinup',3,'макс − 1','3-0-1-0','2 мин','',['bb_row',NOBAR]),
+          r('ohp',4,'12–15','2-0-1-0','90 с','Последний подход — 1,5 повтора.'),
+          r('pushup_pseudo',3,'8–12','3-0-1-0','90 с'),
+          r('curl',4,'8–12','3-0-1-1','60 с','Последний подход — «21».'),
+          r('reardelt',3,'15–25','2-0-1-1','45 с'),
+          r('hammer',3,'12–15','4-0-1-0','45 с') ],
+    fri:[ r('nordic',4,'3–6','6-0-X-0','2 мин','Опускайся 6 с.'),
+          r('rdl',3,'15–20','4-2-1-0','90 с','Пауза 2 с внизу.'),
+          r('stepup',3,'10–12 на ногу','3-0-1-0','90 с','Рюкзак тяжелее.'),
+          r('sissy',3,'10–15','3-1-1-0','60 с'),
+          r('calf',3,'20–25 на ногу','2-2-1-1','45 с'),
+          r('hollow',3,'30–45 с','','45 с'),
+          r('neck_iso',3,'4 × 15 с','','30 с') ],
+    sat:[ r('chinup',3,'макс − 1','3-0-1-1','2 мин','',['curl',NOBAR + ' (последний подход — «21»)']),
+          r('table_ext',3,'10–15','3-0-1-0','60 с','Опора ниже, чем в фазе 1.'),
+          r('lateral',5,'15–25','2-0-1-1','45 с','Последний подход — миорепсы.'),
+          r('hammer',3,'12–20','4-0-1-0','45 с'),
+          r('pushup_diamond',3,'8–15','3-0-1-0','60 с','С рюкзаком.'),
+          r('reardelt',3,'15–25','2-0-1-1','45 с'),
+          r('rev_curl',3,'12–15','3-0-1-0','45 с'),
+          r('wrist',2,'20–30','2-0-1-1','30 с') ]
+   }},
+ { name:'Пик', plate:'red', weeks:'9–11', rir:'RIR 0–1', about:'Самые тяжёлые варианты. Последний подход каждого упражнения — до отказа с чистой техникой.',
+   days:{
+    mon:[ r('pushup_weighted',5,'6–12','3-1-1-0','2 мин','Максимальный рюкзак, ноги на стуле. Последний подход — до отказа.'),
+          r('pushup_pseudo',3,'6–10','3-0-1-0','90 с','Сильный наклон.'),
+          r('bb_row',4,'12–15','4-0-1-2','90 с'),
+          r('hspu_neg',4,'3–5','5-0-X-0','2 мин','Только если стоишь в стойке у стены 30 с.',['pike','Пока не готов к стойке']),
+          r('lateral',4,'20','2-0-1-1','45 с','Два механических дропа в последнем подходе.'),
+          r('dips_chairs',3,'8–12','4-1-1-0','90 с','',['pushup_diamond',NODIPS]),
+          r('skull',3,'10–15','3-1-1-0','60 с','Пауза 1 с в растяжении.') ],
+    tue:[ r('box_pistol',4,'5–8 на ногу','3-0-1-0','2 мин','Самая низкая опора или полный пистолет.'),
+          r('bss',4,'10–15 на ногу','3-0-1-0','2 мин','Штанга + рюкзак, 1,5 повтора в последнем подходе.'),
+          r('sl_rdl',4,'10–12 на ногу','3-2-1-0','90 с'),
+          r('hip_thrust',3,'15–20 на ногу','2-0-1-3','60 с','Пауза 3 с наверху.'),
+          r('calf',5,'15–20 на ногу','2-3-1-1','45 с'),
+          r('leg_raise',3,'12–15','2-0-1-0','60 с') ],
+    thu:[ r('pullup',5,'5–8','3-0-1-1','2–3 мин','С рюкзаком. Если меньше 5 — без веса, макс − 1.',['inv_row',NOBAR + ' (ноги на стуле, пауза 2 с)']),
+          r('chinup',3,'макс − 1','4-0-1-0','2 мин','',['bb_row',NOBAR]),
+          r('ohp',4,'10–15','3-0-1-0','90 с','Сразу после последнего подхода — 8–10 пайк-отжиманий.'),
+          r('pushup_archer',3,'6–10 на сторону','4-0-1-0','90 с'),
+          r('curl',4,'8–12','4-0-1-1','60 с'),
+          r('reardelt',3,'20','2-0-1-1','45 с'),
+          r('hammer',3,'12–15','4-0-1-0','45 с') ],
+    fri:[ r('nordic',4,'4–8','6-0-X-0','2 мин'),
+          r('rdl',4,'15–20','4-2-1-0','90 с','Стоя на книгах (дефицит).'),
+          r('stepup',3,'12 на ногу','3-0-1-0','90 с'),
+          r('sissy',3,'макс − 2','3-1-1-0','60 с'),
+          r('calf',3,'25 на ногу','2-2-1-1','45 с'),
+          r('hollow',3,'45 с','','45 с'),
+          r('neck_iso',3,'4 × 20 с','','30 с') ],
+    sat:[ r('chinup',4,'макс − 1','3-0-1-1','2 мин','',['curl',NOBAR]),
+          r('table_ext',4,'8–15','3-1-1-0','60 с'),
+          r('lateral',5,'15–25','2-0-1-1','45 с','Миорепсы в последнем подходе.'),
+          r('hammer',3,'12–20','5-0-1-0','45 с','5 секунд вниз.'),
+          r('pushup_diamond',3,'8–12','3-0-1-0','60 с','Рюкзак тяжелее.'),
+          r('reardelt',3,'20','2-0-1-1','45 с'),
+          r('rev_curl',3,'12–15','3-0-1-0','45 с'),
+          r('wrist',2,'25–30','2-0-1-1','30 с') ]
+   }},
+ { name:'Разгрузка и замеры', plate:'white', weeks:'12', rir:'RIR 3–4', about:'Половина подходов, лёгкая работа. Тело восстанавливается и растёт. В субботу — контрольный тест.', days:null }
+];
+// Неделя 12: упражнения фазы 2, подходов вдвое меньше.
+(function(){
+  var src = PHASES[1].days, d = {};
+  Object.keys(src).forEach(function(k){
+    d[k] = src[k].map(function(x){ return r(x.ex, Math.max(1, Math.ceil(x.s / 2)), x.r, x.t, x.rest, 'Разгрузка: вполсилы, не до отказа.', x.alt); });
+  });
+  d.sat = 'test';
+  PHASES[3].days = d;
+})();
+
+var WEEK_TASKS = [
+ 'Освой технику. Для каждого упражнения найди вариант, где выходит нижняя граница повторов. Запиши результаты — это твоя точка отсчёта.',
+ 'Добавь 1–2 повтора в каждом подходе по сравнению с прошлой неделей. Проверь, что ешь по плану.',
+ 'Ещё +1–2 повтора. Упёрся в верхнюю границу во всех подходах — усложняй вариант или добавляй груз в рюкзак.',
+ 'Побей рекорды недели 1. В воскресенье — первые контрольные замеры и фото.',
+ 'Новая фаза: варианты тяжелее, останавливайся за 1 повтор до отказа. Повторы снова у нижней границы — это нормально.',
+ '+1–2 повтора или +1–2 кг в рюкзак. В последних подходах — техника интенсивности из заметки к упражнению.',
+ 'Продолжай прогрессию. Проверь вес: если за 2 недели прибавка меньше 0,5 кг — добавь 300 ккал.',
+ 'Пиковая неделя фазы. В воскресенье — замеры. Сильно устал — сделай эту неделю разгрузочной (половина подходов).',
+ 'Фаза «Красный блин». Самые тяжёлые варианты, последний подход — до отказа с чистой техникой.',
+ 'Добавляй груз в рюкзак. Сон 9 часов — сейчас это критично.',
+ 'Последняя тяжёлая неделя. Выложись, но не жертвуй техникой.',
+ 'Разгрузка: половина подходов, не до отказа. В субботу — контрольный тест, в воскресенье — финальные замеры и фото. Сравни со стартом.'
+];
+
+var DAYS = [
+ { key:'mon', short:'Пн', name:'Понедельник', dow:1, title:'Верх А', focus:'Грудь · плечи · трицепс' },
+ { key:'tue', short:'Вт', name:'Вторник', dow:2, title:'Низ А', focus:'Квадрицепс · ягодицы · икры · пресс' },
+ { key:'wed', short:'Ср', name:'Среда', dow:3, title:'Активный отдых', rest:'Прогулка 30–60 минут. По желанию — 3 раунда боя с тенью по 2 минуты (вкладка «Самозащита») и 10 минут растяжки.' },
+ { key:'thu', short:'Чт', name:'Четверг', dow:4, title:'Верх Б', focus:'Спина · бицепс · плечи' },
+ { key:'fri', short:'Пт', name:'Пятница', dow:5, title:'Низ Б', focus:'Задняя поверхность бедра · кор · шея' },
+ { key:'sat', short:'Сб', name:'Суббота', dow:6, title:'Руки и дельты', focus:'Бицепс · трицепс · плечи · предплечья' },
+ { key:'sun', short:'Вс', name:'Воскресенье', dow:0, title:'Полный отдых', rest:'Сон, еда, прогулка. Утром — взвешивание натощак. Приготовь еду на 2–3 дня вперёд.' }
+];
+var PLATE_VAR = { green:'--plate-green', yellow:'--plate-yellow', red:'--plate-red', white:'--plate-white' };
+function phaseOf(w){ return w <= 4 ? 0 : w <= 8 ? 1 : w <= 11 ? 2 : 3; }
+
+function restMin(s){
+  var nums = (s.match(/\d+/g) || ['60']).map(Number);
+  var avg = nums.reduce(function(a, b){ return a + b; }, 0) / nums.length;
+  return /мин/.test(s) ? avg : avg / 60;
+}
+function estimate(rows){
+  var t = 8;
+  rows.forEach(function(x){ var work = /на ногу|на сторону/.test(x.r) ? 1.4 : 0.7; t += x.s * (work + restMin(x.rest)); });
+  return Math.round(t / 5) * 5;
+}
+
+/* ---------- состояние ---------- */
+var done = store.get('m12-done', {});
+var week = store.get('m12-week', 1);
+if (!(week >= 1 && week <= 12)) week = 1;
+
+function totalDone(){ return Object.keys(done).filter(function(k){ return done[k]; }).length; }
+function weekDone(w){ return ['mon','tue','thu','fri','sat'].filter(function(k){ return done[w + '-' + k]; }).length; }
+
+function renderWeeks(){
+  var box = $('#weeks'); box.innerHTML = '';
+  for (var w = 1; w <= 12; w++){
+    var p = PHASES[phaseOf(w)];
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'wk'; b.textContent = w;
+    b.style.setProperty('--c', p.plate === 'white' ? 'var(--muted)' : 'var(' + PLATE_VAR[p.plate] + ')');
+    b.setAttribute('aria-pressed', String(w === week));
+    b.setAttribute('aria-label', 'Неделя ' + w + ', фаза «' + p.name + '»');
+    if (weekDone(w) === 5){ var s = document.createElement('span'); s.className = 'wk-done'; s.textContent = '✓'; s.setAttribute('aria-hidden','true'); b.appendChild(s); }
+    (function(n){ b.addEventListener('click', function(){ setWeek(n); }); })(w);
+    box.appendChild(b);
+  }
+  var t = totalDone();
+  $('#progBar').style.width = Math.min(100, t / 60 * 100) + '%';
+  $('#progTxt').textContent = t + ' из 60 тренировок';
+  $$('.plate-btn').forEach(function(btn){ btn.setAttribute('aria-current', String(Number(btn.dataset.phase) === phaseOf(week))); });
+}
+
+function exRow(x, i){
+  var e = EX[x.ex];
+  var li = document.createElement('li'); li.className = 'ex-row';
+  var chips = '<span class="chip sets">' + x.s + ' × ' + x.r + '</span>';
+  if (x.t) chips += '<span class="chip" title="Темп: опускание-пауза-подъём-пауза">темп ' + x.t + '</span>';
+  chips += '<span class="chip">отдых ' + x.rest + '</span>';
+  var alt = '';
+  if (x.alt){ alt = '<p class="alt"><span class="muted">' + x.alt[1] + ' →</span> <button type="button" class="ex-link" data-ex="' + x.alt[0] + '">' + EX[x.alt[0]].n + '</button></p>'; }
+  li.innerHTML = '<span class="n">' + (i + 1) + '</span><div><button type="button" class="ex-link" data-ex="' + x.ex + '">' + e.n + '</button>' +
+    '<div class="meta">' + chips + '</div>' + (x.note ? '<p class="note">' + x.note + '</p>' : '') + alt + '</div>';
+  return li;
+}
+
+function renderWeek(){
+  var pi = phaseOf(week), p = PHASES[pi];
+  var view = $('#weekView'); view.innerHTML = '';
+  var head = document.createElement('div');
+  var darkInk = (p.plate === 'yellow' || p.plate === 'white') ? ' dark-ink' : '';
+  head.innerHTML = '<div class="week-head"><h2>Неделя ' + week + '</h2>' +
+    '<span class="chip phase' + darkInk + '" style="--c:var(' + PLATE_VAR[p.plate] + ')">Фаза: ' + p.name + '</span>' +
+    '<span class="chip">' + p.rir + '</span></div>' +
+    '<p class="muted small" style="margin:.2rem 0">' + p.about + '</p>' +
+    '<div class="callout info task"><span class="tag">Задача недели</span><p>' + WEEK_TASKS[week - 1] + '</p></div>';
+  view.appendChild(head);
+
+  var today = new Date().getDay();
+  var wrap = document.createElement('div'); wrap.className = 'days';
+  DAYS.forEach(function(d){
+    var card = document.createElement('article'); card.className = 'day';
+    var isToday = d.dow === today;
+    if (isToday) card.classList.add('today');
+    var nameLine = '<div class="dname">' + d.name + (isToday ? ' · <span class="now">сегодня</span>' : '') + '</div>';
+    if (d.rest){
+      card.classList.add('rest');
+      card.innerHTML = '<div class="day-head">' + nameLine + '<h3>' + d.title + '</h3></div><div class="rest-body"><p>' + d.rest + '</p></div>';
+      wrap.appendChild(card); return;
+    }
+    var rows = p.days[d.key];
+    var key = week + '-' + d.key, isDone = !!done[key];
+    if (isDone) card.classList.add('is-done');
+    if (rows === 'test'){
+      card.innerHTML = '<div class="day-head">' + nameLine + '<h3>Контрольный тест</h3><span class="focus">Сравни с результатами недели 1</span>' +
+        '<button type="button" class="done-btn" aria-pressed="' + isDone + '" data-key="' + key + '">' + (isDone ? '✓ Сделано' : 'Отметить') + '</button></div>' +
+        '<ol class="ex-list">' +
+        ['Отжимания классические — 1 подход на максимум (на старте было 60).',
+         'Подтягивания — максимум. Без турника — тяга под столом на максимум.',
+         'Пистолетик — максимум на каждую ногу с самой низкой опорой, что получается.',
+         'Лодочка — максимум времени.',
+         'Вес, все замеры и 3 фото при том же свете, что на старте.'].map(function(t, i){
+           return '<li class="ex-row"><span class="n">' + (i + 1) + '</span><div>' + t + '</div></li>'; }).join('') +
+        '</ol>';
+    } else {
+      card.innerHTML = '<div class="day-head">' + nameLine + '<h3>' + d.title + '</h3><span class="focus">' + d.focus + ' · <span class="mono">≈ ' + estimate(rows) + ' мин</span></span>' +
+        '<button type="button" class="done-btn" aria-pressed="' + isDone + '" data-key="' + key + '">' + (isDone ? '✓ Сделано' : 'Отметить') + '</button></div>';
+      var ol = document.createElement('ol'); ol.className = 'ex-list';
+      rows.forEach(function(x, i){ ol.appendChild(exRow(x, i)); });
+      card.appendChild(ol);
+    }
+    wrap.appendChild(card);
+  });
+  view.appendChild(wrap);
+}
+
+function setWeek(w){ week = w; store.set('m12-week', w); renderWeeks(); renderWeek(); }
+
+document.addEventListener('click', function(ev){
+  var link = ev.target.closest('.ex-link');
+  if (link){ openExercise(link.dataset.ex); return; }
+  var db = ev.target.closest('.done-btn');
+  if (db){
+    var k = db.dataset.key; done[k] = !done[k]; if (!done[k]) delete done[k];
+    store.set('m12-done', done); renderWeeks(); renderWeek();
+  }
+});
+
+$('#resetBtn').addEventListener('click', function(){ $('#resetConfirm').hidden = false; });
+$('#resetNo').addEventListener('click', function(){ $('#resetConfirm').hidden = true; });
+$('#resetYes').addEventListener('click', function(){ done = {}; store.set('m12-done', done); $('#resetConfirm').hidden = true; renderWeeks(); renderWeek(); });
+
+/* ================= ТЕХНИКА ================= */
+var filter = 'all';
+function renderFilters(){
+  var box = $('#filters'); box.innerHTML = '';
+  [['all','Все']].concat(Object.keys(GROUPS).map(function(k){ return [k, GROUPS[k]]; })).forEach(function(g){
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'fchip'; b.textContent = g[1];
+    b.setAttribute('aria-pressed', String(filter === g[0]));
+    b.addEventListener('click', function(){ filter = g[0]; renderFilters(); renderLib(); });
+    box.appendChild(b);
+  });
+}
+function list(arr){ return '<ul>' + arr.map(function(s){ return '<li>' + s + '</li>'; }).join('') + '</ul>'; }
+function renderLib(){
+  var q = ($('#exSearch').value || '').trim().toLowerCase();
+  var lib = $('#lib'); lib.innerHTML = '';
+  var shown = 0;
+  Object.keys(EX).forEach(function(id){
+    var e = EX[id];
+    if (filter !== 'all' && e.g !== filter) return;
+    if (q && (e.n + ' ' + e.m).toLowerCase().indexOf(q) === -1) return;
+    shown++;
+    var d = document.createElement('details'); d.className = 'ex'; d.id = 'ex-' + id;
+    d.innerHTML = '<summary><span class="nm">' + e.n + '</span><span class="mu">' + e.m + '</span><span class="gtag">' + GROUPS[e.g] + '</span></summary>' +
+      '<div class="ex-body"><p class="gear"><strong>Нужно:</strong> ' + e.gear + '</p><p>' + e.why + '</p>' +
+      '<h4>Как делать</h4><ol>' + e.steps.map(function(s){ return '<li>' + s + '</li>'; }).join('') + '</ol>' +
+      '<h4>Дыхание</h4><p>' + e.breath + '</p>' +
+      '<h4>Ошибки</h4>' + list(e.err) +
+      (e.safe ? '<div class="callout"><span class="tag">Безопасность</span><p>' + e.safe + '</p></div>' : '') +
+      '<div class="levels"><div><b>Легче</b>' + e.easier + '</div><div><b>Тяжелее</b>' + e.harder + '</div></div>' +
+      '<a class="btn" href="https://www.youtube.com/results?search_query=' + encodeURIComponent(e.q) + '" target="_blank" rel="noopener">Видео техники на YouTube ↗</a></div>';
+    lib.appendChild(d);
+  });
+  if (!shown) lib.innerHTML = '<p class="empty">Ничего не нашлось. Попробуй другое слово или выбери «Все».</p>';
+}
+$('#exSearch').addEventListener('input', renderLib);
+
+function openExercise(id){
+  filter = 'all'; $('#exSearch').value = '';
+  renderFilters(); renderLib();
+  showTab('technique', true);
+  var el = document.getElementById('ex-' + id);
+  if (el){
+    el.open = true;
+    el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+  }
+}
+
+/* ================= ВКЛАДКИ ================= */
+var TABS = ['start','program','technique','food','sleep','defense','faq'];
+function showTab(name, keepScroll){
+  if (TABS.indexOf(name) === -1) name = 'start';
+  $$('.tab').forEach(function(t){ t.setAttribute('aria-selected', String(t.dataset.tab === name)); });
+  $$('[data-panel]').forEach(function(p){ p.hidden = p.dataset.panel !== name; });
+  store.set('m12-tab', name);
+  try { history.replaceState(null, '', '#' + name); } catch(e){}
+  var active = $('.tab[data-tab="' + name + '"]');
+  if (active && active.scrollIntoView) active.scrollIntoView({ block:'nearest', inline:'nearest' });
+  if (!keepScroll){
+    var nav = $('.tabs');
+    var top = nav.getBoundingClientRect().top + window.scrollY - (parseFloat(getComputedStyle(document.documentElement).paddingTop) || 0);
+    if (window.scrollY > top) window.scrollTo(0, top);
+  }
+}
+$$('.tab').forEach(function(t){ t.addEventListener('click', function(){ showTab(t.dataset.tab); }); });
+$$('.plate-btn').forEach(function(b){
+  b.addEventListener('click', function(){
+    var first = [1, 5, 9, 12][Number(b.dataset.phase)];
+    setWeek(first); showTab('program');
+  });
+});
+
+/* ================= КАЛЬКУЛЯТОР ================= */
+function fmt(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+function calc(){
+  var w = parseFloat($('#cWeight').value) || 58, h = parseFloat($('#cHeight').value) || 177, a = parseFloat($('#cAge').value) || 16;
+  var act = parseFloat($('#cAct').value), sur = parseFloat($('#cSurplus').value);
+  var bmr = 10 * w + 6.25 * h - 5 * a + 5;
+  var tdee = bmr * act;
+  var kcal = Math.round((tdee + sur) / 50) * 50;
+  var p = Math.round(2.2 * w), f = Math.round(1.6 * w);
+  var c = Math.max(0, Math.round((kcal - p * 4 - f * 9) / 4));
+  var water = (w * 0.04 + 0.5).toFixed(1).replace('.', ',');
+  $('#oKcal').textContent = fmt(kcal);
+  $('#oP').innerHTML = p + ' <small>г</small>';
+  $('#oF').innerHTML = f + ' <small>г</small>';
+  $('#oC').innerHTML = c + ' <small>г</small>';
+  $('#oW').innerHTML = water + ' <small>л</small>';
+  $('#oNote').textContent = 'Поддержание веса ≈ ' + fmt(Math.round(tdee / 10) * 10) + ' ккал. Цель: +0,3–0,5 кг в неделю. Белок 2,2 г/кг, жиры 1,6 г/кг, остальное — углеводы.';
+}
+['#cWeight','#cHeight','#cAge','#cAct','#cSurplus'].forEach(function(s){ $(s).addEventListener('input', calc); $(s).addEventListener('change', calc); });
+
+/* ================= ТАЙМЕР ================= */
+var tSet = 90, tLeft = 90, tRun = false, tId = null, actx = null;
+function mmss(s){ var m = Math.floor(s / 60), x = s % 60; return m + ':' + (x < 10 ? '0' : '') + x; }
+function tPaint(){
+  $('#tDisplay').textContent = mmss(tLeft);
+  $('#tDisplay').classList.toggle('end', tLeft === 0);
+  $('#fabTxt').textContent = tRun ? mmss(tLeft) : (tLeft === 0 ? 'Подход!' : 'Отдых');
+  $('#tGo').textContent = tRun ? 'Пауза' : (tLeft === 0 ? 'Заново' : 'Старт');
+}
+function beep(){
+  try {
+    if (!actx) return;
+    [0, 0.35, 0.7].forEach(function(off){
+      var o = actx.createOscillator(), g = actx.createGain();
+      o.frequency.value = 880; o.connect(g); g.connect(actx.destination);
+      var t0 = actx.currentTime + off;
+      g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.3, t0 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.25);
+      o.start(t0); o.stop(t0 + 0.3);
+    });
+  } catch(e){}
+  try { if (navigator.vibrate) navigator.vibrate([200, 100, 200]); } catch(e){}
+}
+function tick(){
+  tLeft = Math.max(0, tLeft - 1);
+  if (tLeft === 0){ clearInterval(tId); tRun = false; beep(); }
+  tPaint();
+}
+$('#timerFab').addEventListener('click', function(){
+  var p = $('#timerPanel'); p.hidden = !p.hidden;
+  $('#timerFab').setAttribute('aria-expanded', String(!p.hidden));
+});
+$$('.t-presets button').forEach(function(b){
+  b.addEventListener('click', function(){
+    $$('.t-presets button').forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+    tSet = Number(b.dataset.sec); tLeft = tSet; clearInterval(tId); tRun = false; tPaint();
+  });
+});
+$('#tGo').addEventListener('click', function(){
+  try { if (!actx){ var AC = window.AudioContext || window.webkitAudioContext; if (AC) actx = new AC(); } if (actx && actx.state === 'suspended') actx.resume(); } catch(e){}
+  if (tRun){ clearInterval(tId); tRun = false; }
+  else { if (tLeft === 0) tLeft = tSet; tRun = true; tId = setInterval(tick, 1000); }
+  tPaint();
+});
+$('#tPlus').addEventListener('click', function(){ tLeft += 15; tPaint(); });
+$('#tReset').addEventListener('click', function(){ clearInterval(tId); tRun = false; tLeft = tSet; tPaint(); });
+
+/* ================= СТАРТ ================= */
+renderWeeks(); renderWeek(); renderFilters(); renderLib(); calc(); tPaint();
+var initial = (location.hash || '').replace('#', '');
+if (TABS.indexOf(initial) === -1) initial = store.get('m12-tab', 'start');
+showTab(initial, true);
+})();
+</script>
+
+</html>
