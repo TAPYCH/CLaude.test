@@ -1,0 +1,1387 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="План на год: мышление, характер, понимание людей, справедливость и стратегия. 12 месяцев с чек-листами, библиотека, шпаргалки.">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161F1D" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%2321705E%22/%3E%3Ctext x=%2232%22 y=%2246%22 font-family=%22Georgia,serif%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22%23F2E5D2%22%3E%D0%9C%3C/text%3E%3C/svg%3E">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Год мудрости</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=Golos+Text:wght@400;500;600&display=swap">
+<style>
+/* Layout: sticky header (brand, search, tab rail) over one reading column per tab; the months tab opens with a year strip of 4 quarters x 3 months that doubles as navigation and progress. Palette: bronze-statue verdigris and bronze on cool stone. */
+:root{
+  --bg:#F1F4F2;
+  --surface:#FFFFFF;
+  --sunk:#E5EBE8;
+  --line:#D2DBD7;
+  --fg:#17201E;
+  --muted:#55625E;
+  --accent:#21705E;
+  --accent-soft:#D8EAE3;
+  --on-accent:#FFFFFF;
+  --bronze:#8A5B24;
+  --bronze-soft:#F2E5D2;
+  --font-display:"Forum","Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --font-body:"Golos Text","PT Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  --r:8px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1513; --surface:#161F1D; --sunk:#1F2A28; --line:#2C3A37;
+    --fg:#E2E9E6; --muted:#97A6A1; --accent:#5FBDA6; --accent-soft:#1B3932; --on-accent:#0F1513;
+    --bronze:#D6A66B; --bronze-soft:#382C1D;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1513; --surface:#161F1D; --sunk:#1F2A28; --line:#2C3A37;
+  --fg:#E2E9E6; --muted:#97A6A1; --accent:#5FBDA6; --accent-soft:#1B3932; --on-accent:#0F1513;
+  --bronze:#D6A66B; --bronze-soft:#382C1D;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+a{color:var(--accent);text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+[id]{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 120px)}
+
+.wrap{max-width:60rem;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* Header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.top-row{display:flex;align-items:center;gap:16px;padding-block:12px 4px}
+.brand{font-family:var(--font-display);font-size:26px;line-height:1;color:var(--fg);text-decoration:none;white-space:nowrap}
+.search{position:relative;flex:1;min-width:0;max-width:26rem;margin-left:auto}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--muted);pointer-events:none}
+.search input{width:100%;font:inherit;font-size:15px;line-height:1.3;padding:9px 12px 9px 34px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg);color:var(--fg);-webkit-appearance:none;appearance:none}
+.search input::placeholder{color:var(--muted)}
+.search input:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+.tabs{position:relative;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-inline:-8px}
+.tabs::-webkit-scrollbar{display:none}
+.tabs a{flex:none;padding:8px 8px 10px;font-size:15px;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent}
+.tabs a:hover{color:var(--fg)}
+.tabs a[aria-current="page"]{color:var(--fg);border-bottom-color:var(--accent);font-weight:500}
+
+/* Type */
+main.wrap{padding-block:32px 72px}
+.tab{max-width:46rem}
+.tab-wide{max-width:none}
+.tab-wide .narrow{max-width:46rem}
+h1,h2{font-family:var(--font-display);font-weight:400;line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(36px,7vw,50px)}
+h2{font-size:clamp(26px,5vw,32px);margin-top:52px;margin-bottom:14px}
+h3{font-size:17px;font-weight:600;line-height:1.35;margin:30px 0 8px;text-wrap:balance}
+p{margin:0 0 12px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:500}
+.lead{font-size:18px;line-height:1.55;color:var(--muted);max-width:40rem;margin-top:14px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+ul.plain{margin:0;padding-left:1.1em}
+ul.plain li{margin-bottom:8px}
+ul.plain li::marker{color:var(--bronze)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:15px;font-weight:500;line-height:1.3;padding:9px 14px;border-radius:var(--r);border:1px solid var(--accent);background:var(--accent);color:var(--on-accent);text-decoration:none;cursor:pointer}
+.btn:hover{filter:brightness(1.06)}
+.btn-ghost{background:transparent;color:var(--accent)}
+
+/* Today card */
+.today{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:flex-end;justify-content:space-between;margin-top:28px;padding:20px 22px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.today-main{flex:1 1 20rem;min-width:0}
+.today-title{font-family:var(--font-display);font-size:28px;line-height:1.2;margin:0 0 8px;text-wrap:balance}
+.today-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.today-date{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+.today-date input{font:inherit;font-size:15px;padding:7px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg);color:var(--fg)}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin-top:24px}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stat{min-width:0}
+.stat-n{font-family:var(--font-display);font-size:34px;line-height:1;font-variant-numeric:tabular-nums}
+.stat-of{font-size:19px;color:var(--muted)}
+.stat-l{display:block;font-size:13px;line-height:1.35;color:var(--muted);margin-top:6px}
+.bar{display:block;height:4px;border-radius:2px;background:var(--sunk);overflow:hidden;margin-top:8px}
+.bar>span{display:block;height:100%;background:var(--accent);border-radius:2px}
+
+/* Quarters on overview */
+.quarters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 28px}
+@media (max-width:600px){.quarters{grid-template-columns:minmax(0,1fr)}}
+.quarter{min-width:0}
+.quarter-h{display:flex;align-items:baseline;gap:10px;margin:0 0 6px}
+.q-num{font-family:var(--font-display);font-size:22px;color:var(--bronze);line-height:1}
+.quarter-name{font-weight:600}
+.quarter-sub{font-size:14px;color:var(--muted)}
+.qmonths{list-style:none;margin:0 0 12px;padding:0;border-top:1px solid var(--line)}
+.qmonths a{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line);color:var(--fg);text-decoration:none}
+.qmonths a:hover .qm-t{text-decoration:underline}
+.qm-c{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* Qualities */
+.qual{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 28px}
+@media (max-width:600px){.qual{grid-template-columns:minmax(0,1fr)}}
+.qual h3{margin-top:4px}
+.qual ul{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+.qual li{padding:10px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.qt{font-weight:600}
+.qd{color:var(--muted);font-size:14px}
+.qm{font-size:13px;display:flex;flex-wrap:wrap;gap:4px 10px}
+
+/* Rows (checklists, resources) */
+.list{border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:4px 14px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line)}
+.row input[type="checkbox"]{width:20px;height:20px;margin:2px 0 0;accent-color:var(--accent);cursor:pointer}
+.row-body{display:flex;flex-direction:column;gap:2px;min-width:0;cursor:pointer}
+.row-tool .row-body{cursor:default}
+.row-title{font-weight:500}
+.row-by,.row-note{font-size:14px;color:var(--muted)}
+.row-side{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:flex-end;font-size:13px;padding-top:2px}
+.row input:checked + .row-body .row-title{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
+.row-tool .dot{width:8px;height:8px;border-radius:2px;background:var(--bronze);margin:9px 0 0 6px}
+@media (max-width:600px){
+  .row{grid-template-columns:24px minmax(0,1fr)}
+  .row-side{grid-column:2;justify-content:flex-start}
+}
+.chip{display:inline-block;padding:1px 8px;border-radius:999px;background:var(--sunk);color:var(--muted);font-size:12px;line-height:1.6;white-space:nowrap}
+.ext{white-space:nowrap}
+.mchip{font-size:12px;line-height:1.5;padding:1px 8px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--fg);white-space:nowrap}
+.mchip:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Year strip */
+.strip{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px;margin:24px 0 8px}
+@media (max-width:560px){.strip{grid-template-columns:minmax(0,1fr)}}
+.q{min-width:0}
+.q-label{font-size:13px;color:var(--muted);margin:0 0 6px;display:flex;align-items:baseline;gap:8px}
+.q-label .q-num{font-size:18px}
+.q-cells{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.cell{position:relative;display:flex;flex-direction:column;gap:2px;padding:8px 10px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);color:var(--fg);text-decoration:none;min-width:0}
+.cell:hover{border-color:var(--muted)}
+.cell.is-sel{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.cell-n{font-family:var(--font-display);font-size:26px;line-height:1;font-variant-numeric:tabular-nums}
+.cell-t{font-size:12px;color:var(--muted);line-height:1.3;overflow-wrap:anywhere}
+.cell .bar{margin-top:6px}
+.cell .now{position:absolute;top:8px;right:9px;font-size:11px;line-height:1.2;color:var(--bronze);font-weight:600}
+
+/* Month detail */
+#month-detail{margin-top:40px}
+.month-title{margin-top:8px}
+.understand{margin-top:34px;padding:20px 22px;border-radius:12px;background:var(--bronze-soft)}
+.understand .eyebrow{color:var(--bronze)}
+.understand .u{font-family:var(--font-display);font-size:25px;line-height:1.3;margin:0;text-wrap:pretty}
+.month-nav{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:32px;padding-top:16px;border-top:1px solid var(--line)}
+
+/* Table */
+.table-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{text-align:left;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:8px 14px 8px 0;border-bottom:1px solid var(--line)}
+td{padding:11px 14px 11px 0;border-bottom:1px solid var(--line);vertical-align:top}
+td.when{color:var(--muted);white-space:nowrap}
+td.t{white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* Definition lists */
+.defs{margin:0;border-top:1px solid var(--line)}
+.def{display:grid;grid-template-columns:minmax(0,12rem) minmax(0,1fr);gap:4px 22px;padding:12px 0;border-bottom:1px solid var(--line)}
+.def dt{font-weight:600}
+.def dd{margin:0}
+@media (max-width:600px){.def{grid-template-columns:minmax(0,1fr)}}
+.no{padding:14px 16px;border-radius:var(--r);background:var(--sunk)}
+.no b{color:var(--fg)}
+
+/* Laws */
+.laws{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+.laws li{display:grid;grid-template-columns:2.4rem minmax(0,1fr);gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.laws .n{font-family:var(--font-display);font-size:22px;line-height:1.15;color:var(--bronze);font-variant-numeric:tabular-nums}
+
+/* Tools */
+.tools{display:grid;gap:0;border-top:1px solid var(--line)}
+.tool{padding:14px 0 16px;border-bottom:1px solid var(--line)}
+.tool h3{margin:0 0 6px}
+.tool .key{display:inline-block;margin-left:8px;font-size:12px;font-weight:500;color:var(--bronze);vertical-align:2px}
+.example{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.example span{font-size:14px;padding:4px 10px;border:1px dashed var(--line);border-radius:var(--r);background:var(--surface)}
+
+/* Sub navigation, filters */
+.subnav{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.subnav a{font-size:14px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--fg);background:var(--surface)}
+.subnav a:hover{border-color:var(--accent);color:var(--accent)}
+.lib-tools{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;margin:24px 0 6px}
+.fchips{display:flex;flex-wrap:wrap;gap:8px}
+.fchip{font:inherit;font-size:14px;line-height:1.3;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--fg);cursor:pointer}
+.fchip:hover{border-color:var(--muted)}
+.fchip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.fchip .c{font-variant-numeric:tabular-nums;opacity:.7;margin-left:6px}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-size:14px;cursor:pointer}
+.toggle input{width:18px;height:18px;margin:0;accent-color:var(--accent)}
+.group-h{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;margin:30px 0 4px}
+.group-h a{color:inherit;text-decoration:none}
+.group-h a:hover{color:var(--accent)}
+.empty{padding:24px 0;color:var(--muted)}
+
+/* Search */
+.hits{display:flex;flex-direction:column;border-top:1px solid var(--line);margin-top:16px}
+.hit{display:grid;grid-template-columns:7rem minmax(0,1fr);gap:4px 14px;align-items:start;text-align:left;font:inherit;color:var(--fg);background:none;border:0;border-bottom:1px solid var(--line);padding:12px 6px;cursor:pointer;width:100%}
+.hit:hover{background:var(--surface)}
+.hit .chip{justify-self:start;margin-top:2px}
+.hit-main{display:flex;flex-direction:column;gap:2px;min-width:0}
+.hit-t{font-weight:500}
+.hit-c{font-size:13px;color:var(--muted)}
+@media (max-width:480px){.hit{grid-template-columns:minmax(0,1fr)}}
+
+/* Progress transfer */
+.xfer{display:grid;gap:8px;margin-top:12px}
+.xfer label{font-size:14px;color:var(--muted);margin-top:8px}
+.xfer-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.xfer-row input{flex:1 1 16rem;min-width:0;font:inherit;font-size:15px;padding:9px 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);color:var(--fg)}
+#xfer-code,#xfer-input{font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;font-size:14px}
+.xfer-confirm{padding:14px 16px;border-radius:var(--r);background:var(--accent-soft);margin-top:8px}
+.xfer-confirm p{margin-bottom:10px}
+.xfer-msg{font-size:14px;color:var(--muted);min-height:1.5em;margin:4px 0 0;overflow-wrap:anywhere}
+
+/* Footer */
+footer.wrap{padding-block:20px 40px;font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between;border-top:1px solid var(--line)}
+
+@keyframes flash{0%,45%{background:var(--bronze-soft)}100%{background:transparent}}
+.flash{animation:flash 2.2s ease-out}
+@media (prefers-reduced-motion: reduce){
+  .flash{animation:none;background:var(--bronze-soft)}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <a class="brand" href="#overview">Год мудрости</a>
+      <div class="search">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M10.8 10.8l3.6 3.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>
+        <input id="q" type="search" placeholder="Поиск по плану" aria-label="Поиск по плану" autocomplete="off" enterkeyhint="search">
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Разделы">
+      <a href="#overview" data-tab="overview">Обзор</a>
+      <a href="#daily" data-tab="daily">Каждый день</a>
+      <a href="#months" data-tab="months">12 месяцев</a>
+      <a href="#library" data-tab="library">Библиотека</a>
+      <a href="#notes" data-tab="notes">Шпаргалки</a>
+      <a href="#results" data-tab="results">Итоги</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <section class="tab" id="tab-overview" aria-label="Обзор"></section>
+  <section class="tab" id="tab-daily" aria-label="Каждый день" hidden></section>
+  <section class="tab tab-wide" id="tab-months" aria-label="12 месяцев" hidden></section>
+  <section class="tab tab-wide" id="tab-library" aria-label="Библиотека" hidden></section>
+  <section class="tab" id="tab-notes" aria-label="Шпаргалки" hidden></section>
+  <section class="tab" id="tab-results" aria-label="Итоги" hidden></section>
+  <section class="tab tab-wide" id="tab-search" aria-label="Результаты поиска" aria-live="polite" hidden></section>
+</main>
+
+<footer class="wrap">
+  <span id="sync">Подключаю сохранение отметок…</span>
+  <a href="#transfer">Перенести прогресс на другое устройство</a>
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- storage helpers ---------- */
+var LS = "god-mudrosti-v1";
+function lsGet(k){ try{ return localStorage.getItem(LS + ":" + k); }catch(e){ return null; } }
+function lsSet(k, v){ try{ localStorage.setItem(LS + ":" + k, v); }catch(e){} }
+
+var state = { done:{}, start:null };
+try{
+  var raw = lsGet("state");
+  if(raw){
+    var s = JSON.parse(raw);
+    if(s && typeof s === "object"){
+      state.done = (s.done && typeof s.done === "object") ? s.done : {};
+      state.start = typeof s.start === "string" ? s.start : null;
+    }
+  }
+}catch(e){}
+
+/* ---------- content ---------- */
+var QUARTERS = [
+  { q:1, roman:"I",   name:"Сначала я",       sub:"Ум и характер",                    months:[1,2,3] },
+  { q:2, roman:"II",  name:"Люди",            sub:"Чтение людей, ложь, желания",      months:[4,5,6] },
+  { q:3, roman:"III", name:"Справедливость",  sub:"Мораль и природа человека",        months:[7,8,9] },
+  { q:4, roman:"IV",  name:"На шаг впереди",  sub:"Стратегия, прогнозы, мастерство",  months:[10,11,12] }
+];
+
+var MONTHS = [
+  { n:1, q:1, short:"Мышление", title:"Как работает мышление и где оно ошибается",
+    practice:[
+      { id:"p1-1", text:"Каждый вечер находи у себя одно когнитивное искажение и записывай его в дневник." },
+      { id:"p1-2", text:"Делай минимум три новых прогноза в неделю в журнале прогнозов." },
+      { id:"p1-3", text:"Заводи в Anki карточку на каждое новое искажение." }
+    ],
+    understand:"Умный человек не тот, кто не ошибается, а тот, кто знает, как именно он ошибается." },
+  { n:2, q:1, short:"Стоицизм", title:"Стоицизм: самообладание и характер",
+    practice:[
+      { id:"p2-1", text:"Дихотомия контроля: дели каждую проблему на «зависит от меня» и «не зависит». На второе не трать нервы." },
+      { id:"p2-2", text:"В споре держи паузу в три секунды перед ответом." },
+      { id:"p2-3", text:"Проживи одну неделю без жалоб." },
+      { id:"p2-4", text:"13 добродетелей Бенджамина Франклина: работай над одной в неделю." }
+    ],
+    understand:"У человека можно отнять всё, кроме последней свободы: выбирать своё отношение к обстоятельствам (Франкл). Кто управляет эмоциями, тот видит людей ясно." },
+  { n:3, q:1, short:"Эмоции", title:"Эмоции и самопознание",
+    practice:[
+      { id:"p3-1", text:"Три раза в день называй своё точное чувство. Не «нормально», а «раздражение и усталость»." },
+      { id:"p3-2", text:"Замечай вокруг себя «игры» по Берну и записывай одну в неделю." }
+    ],
+    understand:"Чтобы читать других, сначала научись читать себя. В людях ты видишь только то, что умеешь различать в себе." },
+  { n:4, q:2, short:"Наблюдение", title:"Наблюдательность и язык тела",
+    practice:[
+      { id:"p4-1", text:"«Кафе»: 10 минут в день наблюдай за незнакомцами. Какое настроение, кто главный, кто хочет уйти? Где можно, проверяй и записывай точность." },
+      { id:"p4-2", text:"«Базовая линия»: запомни, как близкие ведут себя в обычном состоянии (голос, темп, жесты), и замечай отклонения." }
+    ],
+    understand:"Один жест ничего не значит. Значение имеют кластеры из трёх и больше сигналов и изменения в поведении. Ноги и корпус честнее лица." },
+  { n:5, q:2, short:"Ложь", title:"Ложь и манипуляции",
+    practice:[
+      { id:"p5-1", text:"Играй с друзьями в «Две правды и одна ложь» каждую неделю. Это тренажёр с мгновенной обратной связью." },
+      { id:"p5-2", text:"Когда на тебя действует реклама, продавец или человек, называй принцип Чалдини." },
+      { id:"p5-3", text:"Пробуй приёмы из шпаргалки «Как распознавать ложь» в безопасных ситуациях." }
+    ],
+    understand:"Ложь выдают несостыковки в рассказе и факты, а не бегающий взгляд. Мудрый человек не ловит, а спокойно проверяет." },
+  { n:6, q:2, short:"Желания", title:"Чего хотят люди. Переговоры",
+    practice:[
+      { id:"p6-1", text:"Зеркалирование: повторяй 1–3 последних слова собеседника с вопросительной интонацией." },
+      { id:"p6-2", text:"Называй чувство: «Похоже, тебя это сильно задело»." },
+      { id:"p6-3", text:"Задавай открытые вопросы: «Что для тебя здесь самое важное?», «Как мне это сделать?»" },
+      { id:"p6-4", text:"В каждом конфликте спрашивай себя, какая из пяти потребностей SCARF задета." }
+    ],
+    understand:"Люди почти никогда прямо не говорят, чего хотят. Слушай то, что за словами: страх, гордость, усталость, желание быть услышанным." },
+  { n:7, q:3, short:"Справедливость", title:"Справедливость",
+    practice:[
+      { id:"p7-1", text:"Не выноси суждение о конфликте, пока не выслушал обе стороны." },
+      { id:"p7-2", text:"«Стальной человек»: перескажи позицию оппонента так, чтобы он сказал «да, именно так». Только потом спорь." },
+      { id:"p7-3", text:"«Завеса неведения»: какое правило ты выбрал бы, если бы не знал, на чьём месте окажешься?" }
+    ],
+    understand:"Справедливость — это одинаковые правила для своих и чужих. Люди сначала чувствуют, а потом подбирают аргументы. Ты тоже." },
+  { n:8, q:3, short:"Биология", title:"Биология поведения: почему люди такие",
+    practice:[
+      { id:"p8-1", text:"Когда кто-то ведёт себя плохо, найди три причины, кроме «он плохой человек»: недосып, стресс, прошлое, ситуация, страх потерять статус." }
+    ],
+    understand:"Поведение складывается из человека и ситуации. Мы переоцениваем характер и недооцениваем обстоятельства. Это называется фундаментальной ошибкой атрибуции." },
+  { n:9, q:3, short:"Литература", title:"Литература как тренажёр понимания людей",
+    practice:[
+      { id:"p9-1", text:"Для каждого главного героя ответь: чего он хочет? Чего боится? В чём врёт самому себе?" },
+      { id:"p9-2", text:"Найди в жизни трёх людей, похожих на героев, и запиши, чем именно." }
+    ],
+    understand:"Великий роман — это тысяча страниц чужой головы изнутри. Ни один курс по языку тела не учит понимать людей так глубоко." },
+  { n:10, q:4, short:"Стратегия", title:"Ментальные модели и стратегия",
+    practice:[
+      { id:"p10-1", text:"20 минут в день решай шахматные задачи на lichess." },
+      { id:"p10-2", text:"Каждый день применяй одну ментальную модель из шпаргалки к реальной ситуации." },
+      { id:"p10-3", text:"Перед каждым важным решением делай премортем." }
+    ],
+    understand:"Быть на шаг впереди — это не чтение мыслей, а понимание интересов людей и последствий их действий." },
+  { n:11, q:4, short:"Прогнозы", title:"Прогнозы и решения",
+    practice:[
+      { id:"p11-1", text:"Зарегистрируйся на Good Judgment Open или Metaculus и делай прогнозы мировых событий." },
+      { id:"p11-2", text:"Подведи итоги журнала прогнозов за 10 месяцев: в чём ты ошибаешься систематически?" },
+      { id:"p11-3", text:"По желанию: основы покера. Только на интерес, не на деньги." }
+    ],
+    understand:"Мудрый человек думает вероятностями, а не категориями «точно да» и «точно нет»." },
+  { n:12, q:4, short:"Мастерство", title:"Мастерство, речь, память, итог года",
+    practice:[
+      { id:"p12-1", text:"Дворец памяти: запоминай имена и детали о людях." },
+      { id:"p12-2", text:"Выступи публично хотя бы раз: тост, доклад, клуб ораторов, видео." },
+      { id:"p12-3", text:"Напиши свой кодекс на 1–2 страницы: во что я верю, как поступаю, мои правила справедливости." },
+      { id:"p12-4", text:"Повтори стартовые тесты и перечитай письмо себе из недели 0." }
+    ],
+    understand:"Кто проще объясняет сложное, тот глубже его понимает. Через год важен не список прочитанного, а то, как ты поступаешь." }
+];
+
+/* type: book | video | audio | film | tool. m: months (0 = неделя 0). year: идёт весь год */
+var RES = [
+  // Книги
+  { id:"b-kahneman", type:"book", title:"«Думай медленно… решай быстро»", by:"Даниэль Канеман", m:[1], note:"Главная книга о том, как мозг ошибается." },
+  { id:"b-dobelli", type:"book", title:"«Территория заблуждений»", by:"Рольф Добелли", m:[1], note:"В других изданиях «Искусство ясно мыслить». Короткие главы об искажениях, удобно по одной в день." },
+  { id:"b-sagan", type:"book", title:"«Мир, полный демонов»", by:"Карл Саган", m:[1], note:"Как отличать знание от чепухи." },
+  { id:"b-aurelius", type:"book", title:"«Размышления»", by:"Марк Аврелий", m:[2], note:"Другое название — «Наедине с собой». Личный дневник императора." },
+  { id:"b-epictetus", type:"book", title:"«Энхиридион»", by:"Эпиктет", m:[2], note:"Короткое руководство о том, что в твоей власти, а что нет." },
+  { id:"b-frankl", type:"book", title:"«Сказать жизни „Да!“»", by:"Виктор Франкл", m:[2], note:"Психолог в концлагере о смысле и внутренней свободе." },
+  { id:"b-seneca", type:"book", title:"«Нравственные письма к Луцилию»", by:"Сенека", m:[2], year:true, note:"По одному письму в день, можно растянуть на весь год." },
+  { id:"b-goleman", type:"book", title:"«Эмоциональный интеллект»", by:"Дэниел Гоулман", m:[3] },
+  { id:"b-barrett", type:"book", title:"«Как рождаются эмоции»", by:"Лиза Фельдман Барретт", m:[3], note:"Почему эмоции не читаются по лицу так просто, как кажется." },
+  { id:"b-berne", type:"book", title:"«Игры, в которые играют люди»", by:"Эрик Берн", m:[3] },
+  { id:"b-navarro", type:"book", title:"«Я вижу, о чём вы думаете»", by:"Джо Наварро", m:[4], note:"Бывший агент ФБР о языке тела." },
+  { id:"b-ekman-face", type:"book", title:"«Узнай лжеца по выражению лица»", by:"Пол Экман, Уоллес Фризен", m:[4] },
+  { id:"b-doyle", type:"book", title:"Рассказы о Шерлоке Холмсе", by:"Артур Конан Дойл", m:[4], note:"Ради тренировки внимания, а не веры в «дедукцию»." },
+  { id:"b-ekman-lie", type:"book", title:"«Психология лжи. Обмани меня, если сможешь»", by:"Пол Экман", m:[5] },
+  { id:"b-gladwell", type:"book", title:"«Разговор с незнакомцем»", by:"Малкольм Гладуэлл", m:[5], note:"В оригинале Talking to Strangers. Почему мы плохо распознаём ложь и чужие намерения." },
+  { id:"b-cialdini", type:"book", title:"«Психология влияния»", by:"Роберт Чалдини", m:[5], note:"Шесть принципов, на которых держится любая манипуляция." },
+  { id:"b-voss", type:"book", title:"«Никаких компромиссов»", by:"Крис Восс", m:[6], note:"Переговоры от бывшего главного переговорщика ФБР." },
+  { id:"b-carnegie", type:"book", title:"«Как завоёвывать друзей и оказывать влияние на людей»", by:"Дейл Карнеги", m:[6] },
+  { id:"b-greene-laws", type:"book", title:"«Законы человеческой природы»", by:"Роберт Грин", m:[6] },
+  { id:"b-sandel", type:"book", title:"«Справедливость. Как поступать правильно?»", by:"Майкл Сэндел", m:[7] },
+  { id:"b-haidt", type:"book", title:"«Праведный разум»", by:"Джонатан Хайдт", m:[7], note:"В оригинале The Righteous Mind. Почему хорошие люди расходятся во взглядах на мораль." },
+  { id:"b-resurrection", type:"book", title:"«Воскресение»", by:"Лев Толстой", m:[7], note:"Роман о суде, вине и справедливости." },
+  { id:"b-sapolsky", type:"book", title:"«Биология добра и зла»", by:"Роберт Сапольски", m:[8] },
+  { id:"b-harari", type:"book", title:"«Sapiens. Краткая история человечества»", by:"Юваль Ной Харари", m:[8] },
+  { id:"b-karamazov", type:"book", title:"«Братья Карамазовы»", by:"Фёдор Достоевский", m:[9], note:"Обязательно глава «Великий инквизитор»." },
+  { id:"b-ilyich", type:"book", title:"«Смерть Ивана Ильича»", by:"Лев Толстой", m:[9], note:"Короткая повесть о том, что важно в жизни." },
+  { id:"b-chekhov", type:"book", title:"Рассказы", by:"Антон Чехов", m:[9], note:"15–20 рассказов: «Палата № 6», «Крыжовник», «Человек в футляре», «Дама с собачкой», «Тоска»." },
+  { id:"b-ecclesiastes", type:"book", title:"Книга Екклесиаста", by:"", m:[9], note:"Древний текст о суете и мудрости." },
+  { id:"b-suntzu", type:"book", title:"«Искусство войны»", by:"Сунь-цзы", m:[10] },
+  { id:"b-machiavelli", type:"book", title:"«Государь»", by:"Никколо Макиавелли", m:[10] },
+  { id:"b-antifragile", type:"book", title:"«Антихрупкость»", by:"Нассим Талеб", m:[10] },
+  { id:"b-48laws", type:"book", title:"«48 законов власти»", by:"Роберт Грин", m:[10], note:"Читай как описание того, как действуют манипуляторы, чтобы их распознавать." },
+  { id:"b-tetlock", type:"book", title:"«Думай медленно — предсказывай точно»", by:"Филип Тетлок, Дэн Гарднер", m:[11], note:"В оригинале Superforecasting." },
+  { id:"b-blackswan", type:"book", title:"«Чёрный лебедь»", by:"Нассим Талеб", m:[11] },
+  { id:"b-plutarch", type:"book", title:"«Сравнительные жизнеописания»", by:"Плутарх", m:[11], note:"Выборочно: истории решений великих людей." },
+  { id:"b-feynman", type:"book", title:"«Вы, конечно, шутите, мистер Фейнман!»", by:"Ричард Фейнман", m:[12] },
+  { id:"b-foer", type:"book", title:"«Эйнштейн гуляет по Луне»", by:"Джошуа Фоер", m:[12], note:"Искусство запоминания и дворец памяти." },
+  { id:"b-schopenhauer", type:"book", title:"«Искусство побеждать в спорах»", by:"Артур Шопенгауэр", m:[12] },
+  { id:"b-newport", type:"book", title:"«В работу с головой»", by:"Кэл Ньюпорт", m:[12] },
+  { id:"b-laozi", type:"book", title:"«Дао дэ цзин»", by:"Лао-цзы", m:[], year:true, note:"По странице перед сном." },
+  { id:"b-confucius", type:"book", title:"«Беседы и суждения»", by:"Конфуций", m:[], year:true, note:"По странице перед сном." },
+
+  // Видео и лекции
+  { id:"v-crashcourse", type:"video", title:"Crash Course Philosophy", by:"YouTube, на английском, есть автосубтитры", m:[1], year:true, note:"По 1–2 серии в неделю весь год.", q:"Crash Course Philosophy" },
+  { id:"v-galef", type:"video", title:"Julia Galef: «Why you think you're right — even if you're wrong»", by:"TED", m:[1], q:"Julia Galef why you think you're right even if you're wrong TED" },
+  { id:"v-chernigovskaya", type:"video", title:"Лекции Татьяны Черниговской о мозге", by:"YouTube", m:[1], q:"Татьяна Черниговская лекция мозг" },
+  { id:"v-einzelganger", type:"video", title:"Einzelgänger", by:"YouTube, на английском", m:[2], note:"Стоицизм и даосизм простым языком.", q:"Einzelgänger stoicism" },
+  { id:"v-dailystoic", type:"video", title:"Daily Stoic", by:"YouTube, на английском", m:[2], q:"Daily Stoic" },
+  { id:"v-antiq", type:"video", title:"Лекции по античной философии", by:"Арзамас, ПостНаука", m:[2], q:"ПостНаука стоицизм лекция" },
+  { id:"v-vertdider", type:"video", title:"Vert Dider", by:"YouTube, переводы научных лекций", m:[3], q:"Vert Dider" },
+  { id:"v-navarro", type:"video", title:"WIRED Tradecraft: бывший агент ФБР о языке тела", by:"Джо Наварро", m:[4], q:"WIRED Former FBI Agent Explains How to Read Body Language" },
+  { id:"v-coc", type:"video", title:"Charisma on Command", by:"YouTube", m:[4,6], note:"Разборы общения известных людей.", q:"Charisma on Command" },
+  { id:"v-meyer", type:"video", title:"Pamela Meyer: «How to spot a liar»", by:"TED, есть русские субтитры", m:[5], q:"Pamela Meyer How to spot a liar TED" },
+  { id:"v-munger", type:"video", title:"Чарли Мангер: «Психология человеческих заблуждений»", by:"The Psychology of Human Misjudgment", m:[5,10], q:"Charlie Munger Psychology of Human Misjudgment" },
+  { id:"v-voss", type:"video", title:"Интервью и лекции Криса Восса", by:"YouTube", m:[6], q:"Chris Voss negotiation" },
+  { id:"v-sandel", type:"video", title:"Майкл Сэндел: курс «Справедливость»", by:"Гарвард, 12 лекций", m:[7], note:"Ищи версию с русскими субтитрами или озвучкой.", q:"Майкл Сэндел Справедливость лекция 1" },
+  { id:"v-sapolsky", type:"video", title:"Роберт Сапольски: «Биология поведения человека»", by:"Стэнфорд, перевод Vert Dider", m:[8], q:"Сапольски Биология поведения человека Vert Dider" },
+  { id:"v-drobyshevsky", type:"video", title:"Станислав Дробышевский и «Антропогенез.ру»", by:"YouTube", m:[8], q:"Дробышевский Антропогенез лекция" },
+  { id:"v-arzamas-lit", type:"video", title:"Лекции по русской литературе", by:"Арзамас", m:[9], q:"Арзамас русская литература лекция" },
+  { id:"v-feynman", type:"video", title:"Ричард Фейнман: «Fun to Imagine»", by:"BBC", m:[12], q:"Feynman Fun to Imagine BBC" },
+  { id:"v-ted", type:"video", title:"Лучшие выступления TED", by:"Смотри, как устроена хорошая речь", m:[12], q:"TED лучшие выступления" },
+
+  // Подкасты
+  { id:"a-hiddenbrain", type:"audio", title:"Hidden Brain", by:"Подкаст о психологии, на английском", m:[3], year:true, q:"Hidden Brain podcast" },
+  { id:"a-knowledge", type:"audio", title:"The Knowledge Project", by:"Шейн Пэрриш, на английском", m:[10], q:"The Knowledge Project Shane Parrish podcast" },
+  { id:"a-philosophize", type:"audio", title:"Philosophize This!", by:"История философии, на английском", m:[], year:true, q:"Philosophize This podcast" },
+  { id:"a-lex", type:"audio", title:"Lex Fridman Podcast", by:"Разговоры с учёными, на английском", m:[], year:true, q:"Lex Fridman Podcast" },
+  { id:"a-arzamas", type:"audio", title:"Радио Арзамас", by:"Курсы и лекции на русском", m:[], year:true, q:"Радио Арзамас" },
+  { id:"a-postnauka", type:"audio", title:"ПостНаука", by:"Учёные о своих темах, на русском", m:[], year:true, q:"ПостНаука подкаст" },
+
+  // Фильмы и сериалы
+  { id:"f-poets", type:"film", title:"«Общество мёртвых поэтов»", by:"Питер Уир, 1989", m:[1], note:"Думать своей головой.", q:"Общество мёртвых поэтов 1989 фильм" },
+  { id:"f-gladiator", type:"film", title:"«Гладиатор»", by:"Ридли Скотт, 2000", m:[2], note:"В начале фильма Марк Аврелий. О достоинстве и самообладании под давлением.", q:"Гладиатор 2000 фильм" },
+  { id:"f-insideout", type:"film", title:"«Головоломка»", by:"Pixar, 2015", m:[3], note:"Как эмоции управляют поведением. Смотри как иллюстрацию, а не как науку.", q:"Головоломка 2015 мультфильм" },
+  { id:"f-mindhunter", type:"film", title:"«Охотник за разумом»", by:"Сериал, Дэвид Финчер", m:[4], note:"Как на самом деле строится профайлинг.", q:"Охотник за разумом сериал" },
+  { id:"f-lietome", type:"film", title:"«Обмани меня»", by:"Сериал, 2009–2011", m:[5], note:"Для интереса. Помни, что там всё сильно преувеличено.", q:"Обмани меня сериал" },
+  { id:"f-madmen", type:"film", title:"«Безумцы»", by:"Сериал, 2007–2015", m:[6], note:"Чего люди хотят на самом деле.", q:"Безумцы сериал" },
+  { id:"f-12angry", type:"film", title:"«12 разгневанных мужчин»", by:"Сидни Люмет, 1957", m:[7], note:"Справедливость и сила одного трезвого ума.", q:"12 разгневанных мужчин 1957 фильм" },
+  { id:"f-12", type:"film", title:"«12»", by:"Никита Михалков, 2007", m:[7], note:"Смотри после оригинала и сравни.", q:"12 Михалков 2007 фильм" },
+  { id:"f-mockingbird", type:"film", title:"«Убить пересмешника»", by:"Роберт Маллиган, 1962", m:[7], note:"Справедливость против толпы.", q:"Убить пересмешника 1962 фильм" },
+  { id:"f-wire", type:"film", title:"«Прослушка»", by:"Сериал, 2002–2008", m:[8], note:"Системы, стимулы и почему люди становятся такими.", q:"Прослушка сериал The Wire" },
+  { id:"f-rashomon", type:"film", title:"«Расёмон»", by:"Акира Куросава, 1950", m:[9], note:"По рассказам Акутагавы. У каждого своя правда.", q:"Расёмон Куросава 1950 фильм" },
+  { id:"f-hoc", type:"film", title:"«Карточный домик»", by:"Сериал, 2013–2018", m:[10], note:"Манипуляции и власть. Учись распознавать, а не повторять.", q:"Карточный домик сериал" },
+  { id:"f-bigshort", type:"film", title:"«Игра на понижение»", by:"Адам Маккей, 2015", m:[11], note:"Люди, которые увидели кризис 2008 года раньше всех, и почему им не верили.", q:"Игра на понижение 2015 фильм" },
+  { id:"f-goodwill", type:"film", title:"«Умница Уилл Хантинг»", by:"Гас Ван Сент, 1997", m:[12], note:"Разница между умом и мудростью. Сцену на скамейке в парке пересмотри дважды.", q:"Умница Уилл Хантинг 1997 фильм" },
+
+  // Сервисы и тесты
+  { id:"t-anki", type:"tool", title:"Anki", by:"Карточки с интервальными повторениями, бесплатно", m:[0], url:"https://apps.ankiweb.net" },
+  { id:"t-medito", type:"tool", title:"Medito", by:"Бесплатное приложение для медитации", m:[0], q:"Medito приложение медитация" },
+  { id:"t-eyes", type:"tool", title:"Тест «Чтение мыслей по глазам»", by:"Reading the Mind in the Eyes, Саймон Барон-Коэн", m:[0,12], q:"Reading the Mind in the Eyes test online" },
+  { id:"t-bigfive", type:"tool", title:"Тест «Большая пятёрка»", by:"IPIP Big Five", m:[0,12], q:"IPIP Big Five тест онлайн" },
+  { id:"t-mett", type:"tool", title:"Тренажёр микровыражений Пола Экмана", by:"METT, платный, по желанию", m:[4], q:"Paul Ekman Micro Expressions Training Tool" },
+  { id:"t-lichess", type:"tool", title:"lichess.org: шахматные задачи", by:"Бесплатно", m:[10], url:"https://lichess.org/training" },
+  { id:"t-gjopen", type:"tool", title:"Good Judgment Open", by:"Прогнозы мировых событий с рейтингом", m:[11], url:"https://www.gjopen.com" },
+  { id:"t-metaculus", type:"tool", title:"Metaculus", by:"Платформа прогнозов", m:[11], url:"https://www.metaculus.com" }
+];
+
+var TYPE = { book:"Книга", video:"Видео", audio:"Подкаст", film:"Фильм", tool:"Сервис" };
+var TYPE_WORDS = { book:"книга книги читать", video:"видео ютуб youtube лекция лекции смотреть", audio:"подкаст подкасты слушать аудио", film:"фильм фильмы сериал сериалы кино смотреть", tool:"сервис сайт приложение тест тесты" };
+
+var HONEST = [
+  "«Читать человека по одному шагу» и «видеть ложь с полуслова» умеют только герои сериалов. В исследованиях люди распознают ложь с точностью около 54%, чуть лучше монетки (Bond и DePaulo, 2006). Полицейские и судьи справляются почти так же.",
+  "Стать заметно проницательнее большинства реально. Для этого нужны знание того, как устроены люди, наблюдательность, правильные вопросы и проверка своих догадок.",
+  "По нескольким секундам поведения неплохо видны энергия, настроение, уверенность и общительность человека. Скрытые намерения так не видны.",
+  "Гением за год не станешь. Но реально прочитать около сорока сильных книг, научиться ясно думать и говорить и стать человеком, к которому приходят за советом.",
+  "Мудрые люди удивляют, не пытаясь удивить. Желание произвести впечатление придётся отпустить первым."
+];
+
+var QUAL_MINE = [
+  { t:"Мудрость", d:"Видеть суть и принимать хорошие жизненные решения.", m:[1,2,9,12] },
+  { t:"Справедливость", d:"Судить честно и выслушивать обе стороны.", m:[7] },
+  { t:"Проницательность", d:"Замечать настроение, мотивы, несостыковки.", m:[4,9] },
+  { t:"Распознавание лжи", d:"И защита от манипуляций.", m:[5] },
+  { t:"Понимание желаний людей", d:"И умение быть на шаг впереди.", m:[6,10] },
+  { t:"Ясный ум", d:"Думать без искажений, быстро учиться.", m:[1,11] }
+];
+var QUAL_ADDED = [
+  { t:"Самообладание", d:"Без спокойствия проницательность не работает: эмоции ослепляют.", m:[2,3] },
+  { t:"Интеллектуальная честность", d:"Умение сказать «я ошибся».", m:[1,11] },
+  { t:"Стратегическое мышление", d:"И умение прогнозировать.", m:[10,11] },
+  { t:"Сильная речь", d:"Коротко, точно, убедительно.", m:[12] },
+  { t:"Память на людей", d:"Имена, детали, что им важно. Это удивляет сильнее любых цитат.", m:[12] },
+  { t:"Широкий кругозор", d:"История, наука, философия, литература.", m:[8,9] },
+  { t:"Умение слушать", d:"И харизма, которая из него вырастает.", m:[6] }
+];
+
+var ROUTINE = [
+  { when:"Утро", what:"Медитация внимания: Medito или просто дыхание", t:"10 мин" },
+  { when:"Утро", what:"Книга месяца, 25–40 страниц", t:"30–40 мин" },
+  { when:"В дороге, на тренировке", what:"Аудиокнига, подкаст или лекция", t:"30–60 мин" },
+  { when:"Днём", what:"Упражнение месяца на наблюдение или общение", t:"10–15 мин" },
+  { when:"Вечер", what:"Дневник и журнал прогнозов", t:"15 мин" },
+  { when:"Вечер", what:"Anki: повторить карточки с идеями", t:"10 мин" }
+];
+var WEEKLY = [
+  "Один глубокий разговор: с новым человеком или по-настоящему откровенный со знакомым.",
+  "Конспект прочитанной книги на одну страницу.",
+  "Проверка журнала прогнозов: что сбылось, что нет."
+];
+var MONTHLY = [
+  "Объяснить главное из прочитанного другому человеку (метод Фейнмана: не можешь объяснить просто — значит, сам не понял).",
+  "Посмотреть фильм месяца и разобрать его: что он говорит о людях?",
+  "Записать итог месяца в дневник."
+];
+
+var WEEK0 = [
+  { id:"w0-eyes", text:"Пройти тест «Чтение мыслей по глазам» и записать результат." },
+  { id:"w0-bigfive", text:"Пройти тест «Большая пятёрка» и записать результат." },
+  { id:"w0-letter", text:"Написать письмо себе: какой я сейчас, как реагирую на критику, конфликты, ложь и давление." },
+  { id:"w0-diary", text:"Завести дневник: тетрадь или заметки в телефоне." },
+  { id:"w0-journal", text:"Завести журнал прогнозов и записать первые пять прогнозов." },
+  { id:"w0-anki", text:"Установить Anki и создать колоду «Год мудрости»." },
+  { id:"w0-medito", text:"Выбрать приложение для медитации или просто время для 10 минут дыхания." },
+  { id:"w0-time", text:"Выбрать постоянное время для чтения: 30–40 минут каждое утро." }
+];
+
+var YEAR = [
+  { t:"Английский", d:"20 минут в день, если язык пока слабый. Лучшие лекции и подкасты выходят на английском. Пока не подтянул, включай на YouTube автоперевод субтитров." },
+  { t:"Тело", d:"Сон 7–9 часов и спорт три раза в неделю. После недосыпа человек хуже распознаёт эмоции других." },
+  { t:"Театр импровизации", d:"По желанию. Лучший тренажёр реакции, юмора и чтения собеседника в реальном времени." },
+  { t:"Сенека", d:"По одному письму к Луцилию в день, если не успел дочитать во втором месяце." },
+  { t:"Философия фоном", d:"Crash Course Philosophy по 1–2 серии в неделю, подкаст Philosophize This!" },
+  { t:"Восточная мудрость", d:"Лао-цзы и Конфуций, по странице перед сном." }
+];
+
+var LAWS = [
+  "Люди действуют из интересов и страхов, а не из своих слов. Смотри на поступки и выгоды.",
+  "Лучший прогноз будущего поведения человека — его прошлое поведение.",
+  "Большинство людей думают о себе, а не о тебе. Это освобождает.",
+  "Каждый хочет быть услышанным. Тому, кто умеет слушать, рассказывают всё.",
+  "Один жест ничего не значит. Что-то значат несколько сигналов вместе и отклонение от обычного поведения.",
+  "Ложь выдают несостыковки в рассказе, а не бегающий взгляд.",
+  "Поведение — это человек плюс ситуация.",
+  "Ты тоже искажаешь реальность. Ищи ошибки сначала у себя.",
+  "Справедливость начинается с того, чтобы выслушать вторую сторону.",
+  "Не приписывай злу то, что объясняется глупостью или усталостью.",
+  "Карта — не территория: твоё мнение о человеке — это ещё не сам человек.",
+  "Чем больше ты уверен в выводе о человеке, тем тщательнее его нужно проверить.",
+  "Самый умный в комнате обычно больше спрашивает, чем говорит.",
+  "Мудрость — это знания, опыт, размышление и смирение. Без смирения остаётся просто эрудиция.",
+  "Кто проще объясняет сложное, тот глубже его понимает."
+];
+
+var OBSERVE = [
+  { t:"Тело и голос", items:[
+    "Главное правило: знай обычное поведение человека и замечай отклонения от него.",
+    "Ноги и стопы. Направлены к выходу — человек хочет уйти. К тебе — он вовлечён в разговор.",
+    "Резкое «замирание» тела говорит о стрессе.",
+    "Успокаивающие жесты (трогает шею, лицо, потирает руки) говорят о дискомфорте. Это не признак лжи.",
+    "Расхождение слов и лица: говорит «рад», а улыбается только ртом, без глаз.",
+    "Изменения темпа и высоты голоса, долгие паузы перед простыми ответами.",
+    "По походке видны энергия, настроение и уверенность, но не намерения."
+  ]},
+  { t:"Речь", items:[
+    "О чём человек говорит чаще всего, то для него и важно.",
+    "Чем хвастается: обычно это то, в чём он не уверен, или то, что он особенно ценит.",
+    "На что жалуется и кого винит: так видны его ценности и слабые места.",
+    "Как он говорит о тех, кого нет рядом. Так же он будет говорить и о тебе.",
+    "Отвечает ли он на тот вопрос, который ты задал, или на какой-то другой."
+  ]},
+  { t:"Поступки", items:[
+    "Как он обращается с официантами, младшими и с теми, от кого ему ничего не нужно.",
+    "Что он делает, когда думает, что никто не видит.",
+    "Выполняет ли мелкие обещания.",
+    "Как ведёт себя, когда проигрывает."
+  ]}
+];
+
+var LIES_NO = "«Отводит глаза», «трогает нос», «смотрит вверх влево». Это мифы. Честные люди тоже нервничают.";
+var LIES = [
+  { t:"Содержание важнее тела", d:"Правдивый рассказ богаче деталями: звуки, запахи, кто где стоял, лишние подробности. Ложь обычно гладкая и схематичная или держится на деталях, которые нельзя проверить." },
+  { t:"Проверяемые детали", d:"Спроси: «Кто ещё там был? Где вы сидели?» Лжец уходит от того, что можно проверить." },
+  { t:"Неожиданные вопросы", d:"На отрепетированную историю задай вопрос, к которому невозможно было подготовиться." },
+  { t:"Рассказ в обратном порядке", d:"Честному человеку это несложно, лжецу тяжело, потому что у него перегружена память (исследования Альдерта Врая)." },
+  { t:"Не раскрывай, что знаешь", d:"Сначала дай рассказать всё, потом сопоставь с фактами. Эта техника называется SUE (Strategic Use of Evidence)." },
+  { t:"Речевые маркеры", d:"Слабые, имеют смысл только вместе. «Если честно», «клянусь», «зачем мне врать?». Уход от прямого «нет»: «я бы никогда такого не сделал» вместо «я этого не делал». Отстранение: «та женщина» вместо имени." },
+  { t:"Главное", d:"Большинство лжи раскрывается не по лицу, а позже, через факты и других людей. Мудрый человек не ловит, а спокойно проверяет." }
+];
+
+var MODELS = [
+  { t:"Стимулы", d:"«Покажи мне стимулы, и я покажу тебе результат» (Чарли Мангер). Хочешь предсказать поступок человека — спроси себя, что ему выгодно." },
+  { t:"Мышление второго порядка", d:"«А что будет потом? А после этого?»" },
+  { t:"Инверсия", d:"Спроси не «как добиться успеха?», а «как гарантированно провалиться?», и избегай этого." },
+  { t:"Бритва Хэнлона", d:"Не приписывай злому умыслу то, что можно объяснить глупостью или усталостью." },
+  { t:"Премортем", d:"Перед важным решением представь, что прошёл год и всё провалилось. Почему?" },
+  { t:"Карта — не территория", d:"Твоё мнение о человеке — это ещё не сам человек. Обновляй его, когда видишь новые факты." }
+];
+
+var SCARF = [
+  { t:"Статус", d:"Уважение и место среди других." },
+  { t:"Определённость", d:"Понимать, что будет дальше." },
+  { t:"Автономия", d:"Право решать самому." },
+  { t:"Принадлежность", d:"Быть своим и доверять." },
+  { t:"Справедливость", d:"Честный обмен и одинаковые правила." }
+];
+var CIALDINI = [
+  { t:"Взаимность", d:"«Мне дали, я должен вернуть»." },
+  { t:"Дефицит", d:"«Осталось мало, надо успеть»." },
+  { t:"Авторитет", d:"«Эксперт сказал»." },
+  { t:"Социальное доказательство", d:"«Все так делают»." },
+  { t:"Симпатия", d:"«Он мне нравится, значит, он прав»." },
+  { t:"Последовательность", d:"«Я уже согласился раньше, значит, соглашусь и сейчас»." }
+];
+var VOSS = [
+  { t:"Зеркалирование", d:"Повтори 1–3 последних слова собеседника с вопросительной интонацией. Он продолжит и расскажет больше." },
+  { t:"Называние чувства", d:"«Похоже, тебя это сильно задело». Названная эмоция ослабевает." },
+  { t:"Открытые вопросы", d:"«Что для тебя здесь самое важное?», «Как мне это сделать?» Человек сам начинает искать решение." }
+];
+
+var METRICS = [
+  { id:"r-eyes", text:"Результат теста «по глазам» выше стартового." },
+  { id:"r-journal", text:"По журналу прогнозов я угадываю чаще, а излишней уверенности стало меньше." },
+  { id:"r-books", text:"Прочитано 35–40 книг, в Anki больше тысячи карточек." },
+  { id:"r-advice", text:"Мне чаще звонят за советом и чаще рассказывают личное." },
+  { id:"r-judge", text:"В конфликтах меня зовут как беспристрастную третью сторону." },
+  { id:"r-humble", text:"Я чаще говорю «я не уверен» и «я ошибался», и меня за это больше уважают." },
+  { id:"r-codex", text:"Написан мой кодекс на 1–2 страницы." }
+];
+var TRAPS = [
+  { t:"Паранойя", d:"Кто везде ищет ложь, теряет доверие и друзей. Большую часть времени люди говорят правду, и это нормально." },
+  { t:"Манипулятор вместо мудреца", d:"Знания из Грина и Чалдини — щит, а не оружие. Справедливость должна тебя ограничивать." },
+  { t:"Умничанье", d:"Цитата к месту — сила, не к месту — раздражает. Людей удивляет одна точная фраза в нужный момент." },
+  { t:"Потребление без практики", d:"40 книг без дневника, прогнозов и живых разговоров ничего не дадут. Практика важнее чтения." },
+  { t:"Перфекционизм", d:"Пропустил неделю — продолжай с текущего месяца. Не начинай заново." }
+];
+var CODEX = [
+  "Во что я верю?",
+  "Как я поступаю, когда никто не видит?",
+  "Мои правила справедливости: как я сужу других и себя.",
+  "Чего я не делаю никогда?",
+  "Чему я научился за этот год?"
+];
+
+/* ---------- helpers ---------- */
+function $(s, el){ return (el || document).querySelector(s); }
+function $$(s, el){ return Array.prototype.slice.call((el || document).querySelectorAll(s)); }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]; }); }
+function norm(s){ return String(s || "").toLowerCase().replace(/ё/g, "е").replace(/[«»„“”"()]/g, " "); }
+function clean(s){ return String(s || "").replace(/[«»„“”"]/g, ""); }
+
+var byId = {};
+RES.forEach(function(r){ byId[r.id] = r; });
+function checkable(r){ return r.type !== "tool"; }
+
+var IN_CLAUDE = !!(window.claude && typeof window.claude.use === "function");
+var HOSTED = !IN_CLAUDE && /^https?:$/.test(location.protocol);
+/* Each id is one bit of the progress code, in this order. Add new items only at the end of
+   their lists and never reorder them, or codes saved earlier will load the wrong marks. */
+var CODE_IDS = RES.filter(checkable).map(function(r){ return r.id; })
+  .concat([].concat.apply([], MONTHS.map(function(m){ return m.practice.map(function(p){ return p.id; }); })))
+  .concat(WEEK0.map(function(w){ return w.id; }))
+  .concat(METRICS.map(function(x){ return x.id; }));
+function monthItems(n){
+  var ids = RES.filter(function(r){ return r.m.indexOf(n) !== -1 && checkable(r); }).map(function(r){ return r.id; });
+  return ids.concat(MONTHS[n-1].practice.map(function(p){ return p.id; }));
+}
+function progressOf(ids){
+  var d = ids.filter(function(id){ return !!state.done[id]; }).length;
+  return { done:d, total:ids.length, ratio: ids.length ? d / ids.length : 0 };
+}
+function monthProgress(n){ return progressOf(monthItems(n)); }
+function pct(p){ return Math.round(p.ratio * 100); }
+
+function monthsLabel(r){
+  var parts = [];
+  r.m.forEach(function(n){ parts.push(n === 0 ? "Неделя 0" : "Месяц " + n); });
+  if(r.year) parts.push("весь год");
+  return parts.join(", ");
+}
+function resLink(r){
+  if(r.url) return { href:r.url, label:"Открыть сайт" };
+  if(r.type === "video") return { href:"https://www.youtube.com/results?search_query=" + encodeURIComponent(r.q || clean(r.title)), label:"Найти на YouTube" };
+  var q = r.q || clean((r.by ? r.by + " " : "") + r.title) + (r.type === "book" ? " книга" : "");
+  return { href:"https://duckduckgo.com/?q=" + encodeURIComponent(q), label:"Найти" };
+}
+
+function todayISO(){
+  var d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+function currentMonth(){
+  if(!state.start || !/^\d{4}-\d{2}-\d{2}$/.test(state.start)) return null;
+  var p = state.start.split("-").map(Number);
+  var start = new Date(p[0], p[1]-1, p[2]);
+  var now = new Date();
+  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var days = Math.round((today - start) / 86400000);
+  if(days < 0) return { phase:"before", days:-days };
+  var diff = (today.getFullYear() - start.getFullYear()) * 12 + (today.getMonth() - start.getMonth()) - (today.getDate() < start.getDate() ? 1 : 0);
+  var n = diff + 1;
+  if(n > 12) return { phase:"done", days:days };
+  return { phase:"active", n:n, days:days };
+}
+function plural(n, one, few, many){
+  var a = n % 10, b = n % 100;
+  if(a === 1 && b !== 11) return one;
+  if(a >= 2 && a <= 4 && (b < 12 || b > 14)) return few;
+  return many;
+}
+function daysWord(n){ return plural(n, "день", "дня", "дней"); }
+
+/* ---------- row builders ---------- */
+function check(id, ctx, bodyHtml, sideHtml){
+  var cid = ctx + "-" + id;
+  return '<div class="row" id="' + ctx + '-row-' + id + '" data-id="' + id + '">' +
+    '<input type="checkbox" id="' + cid + '" data-item="' + id + '"' + (state.done[id] ? " checked" : "") + '>' +
+    '<label for="' + cid + '" class="row-body">' + bodyHtml + '</label>' + (sideHtml || "") + '</div>';
+}
+function resRow(r, ctx){
+  var body = '<span class="row-title">' + esc(r.title) + '</span>' +
+    (r.by ? '<span class="row-by">' + esc(r.by) + '</span>' : "") +
+    (r.note ? '<span class="row-note">' + esc(r.note) + '</span>' : "");
+  var link = resLink(r);
+  var chips = "";
+  if(ctx === "lib"){
+    chips = r.m.filter(function(n){ return n > 0; }).map(function(n){ return '<a class="mchip" href="#m' + n + '">Месяц ' + n + '</a>'; }).join("");
+    if(r.m.indexOf(0) !== -1) chips = '<a class="mchip" href="#week0">Неделя 0</a>' + chips;
+    if(r.year) chips += '<a class="mchip" href="#year">Весь год</a>';
+  }
+  var side = '<div class="row-side"><span class="chip">' + TYPE[r.type] + '</span>' + chips +
+    '<a class="ext" href="' + esc(link.href) + '" target="_blank" rel="noopener noreferrer">' + link.label + ' ↗</a></div>';
+  if(!checkable(r)){
+    return '<div class="row row-tool" id="' + ctx + '-row-' + r.id + '" data-id="' + r.id + '"><span class="dot" aria-hidden="true"></span><div class="row-body">' + body + '</div>' + side + '</div>';
+  }
+  return check(r.id, ctx, body, side);
+}
+function defs(list, prefix){
+  return '<dl class="defs">' + list.map(function(x, i){
+    return '<div class="def" id="' + prefix + '-' + i + '"><dt>' + esc(x.t) + '</dt><dd>' + esc(x.d) + '</dd></div>';
+  }).join("") + '</dl>';
+}
+function monthLinks(ms){
+  return ms.map(function(n){ return '<a href="#m' + n + '">Месяц ' + n + '</a>'; }).join("");
+}
+
+/* ---------- OVERVIEW ---------- */
+function renderOverview(){
+  var qual = function(list, prefix){
+    return '<ul>' + list.map(function(x, i){
+      return '<li id="' + prefix + '-' + i + '"><span class="qt">' + esc(x.t) + '</span><span class="qd">' + esc(x.d) + '</span><span class="qm">' + monthLinks(x.m) + '</span></li>';
+    }).join("") + '</ul>';
+  };
+  $("#tab-overview").innerHTML =
+    '<p class="eyebrow">План на 12 месяцев</p>' +
+    '<h1>Год мудрости</h1>' +
+    '<p class="lead">Мышление, характер, понимание людей, справедливость и стратегия. Четыре квартала, двенадцать тем, около сорока книг и ежедневная практика.</p>' +
+    '<div class="today" id="today"></div>' +
+    '<div class="stats" id="stats"></div>' +
+    '<h2>Как устроен год</h2>' +
+    '<div class="quarters" id="ov-quarters"></div>' +
+    '<h2 id="honest">Сначала честно</h2>' +
+    '<ul class="plain">' + HONEST.map(function(h, i){ return '<li id="hon-' + i + '">' + esc(h) + '</li>'; }).join("") + '</ul>' +
+    '<h2 id="qualities">Какие качества строим</h2>' +
+    '<p class="muted">Под каждым качеством — месяцы, в которых оно тренируется сильнее всего.</p>' +
+    '<div class="qual"><div><h3>Твои</h3>' + qual(QUAL_MINE, "qm") + '</div><div><h3>Добавленные</h3>' + qual(QUAL_ADDED, "qa") + '</div></div>' +
+    '<h2 id="transfer">Перенос прогресса</h2>' +
+    '<p class="muted">' + (IN_CLAUDE
+      ? "Здесь отметки сохраняются в аккаунте Claude сами. Код ниже переносит прогресс в версию сайта вне Claude и обратно."
+      : "Отметки хранятся только на этом устройстве. Чтобы продолжить на другом, скопируй код" + (HOSTED ? " или ссылку" : "") + " и открой там. Делай так каждый раз, когда переходишь на другое устройство.") + '</p>' +
+    '<div class="xfer">' +
+      '<label for="xfer-code">Код прогресса на этом устройстве</label>' +
+      '<div class="xfer-row"><input id="xfer-code" readonly><button type="button" class="btn" data-act="copy-code">Скопировать код</button>' +
+        (HOSTED ? '<button type="button" class="btn btn-ghost" data-act="copy-link">Скопировать ссылку</button>' : "") + '</div>' +
+      '<label for="xfer-input">Код с другого устройства</label>' +
+      '<div class="xfer-row"><input id="xfer-input" placeholder="GM1.…" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn btn-ghost" data-act="check-code">Загрузить</button></div>' +
+      '<div class="xfer-confirm" id="xfer-confirm" hidden></div>' +
+      '<p class="xfer-msg" id="xfer-msg" role="status"></p>' +
+    '</div>';
+}
+
+/* ---------- PROGRESS CODE ---------- */
+function encodeProgress(){
+  var bytes = new Array(Math.ceil(CODE_IDS.length / 8)).fill(0);
+  CODE_IDS.forEach(function(id, i){ if(state.done[id]) bytes[i >> 3] |= 1 << (i & 7); });
+  var b64 = btoa(String.fromCharCode.apply(null, bytes)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return "GM1." + (state.start ? state.start.replace(/-/g, "") : "0") + "." + b64;
+}
+function decodeProgress(code){
+  var m = /^GM1\.(\d{8}|0)\.([A-Za-z0-9_-]+)$/.exec(String(code || "").trim());
+  if(!m) return null;
+  var b64 = m[2].replace(/-/g, "+").replace(/_/g, "/");
+  while(b64.length % 4) b64 += "=";
+  var bin; try{ bin = atob(b64); }catch(e){ return null; }
+  var done = {};
+  CODE_IDS.forEach(function(id, i){ if((bin.charCodeAt(i >> 3) || 0) & (1 << (i & 7))) done[id] = 1; });
+  var start = m[1] === "0" ? null : m[1].slice(0,4) + "-" + m[1].slice(4,6) + "-" + m[1].slice(6,8);
+  return { done:done, start:start };
+}
+function renderXfer(){ var c = $("#xfer-code"); if(c) c.value = encodeProgress(); }
+function syncLink(){ return location.origin + location.pathname + "#sync=" + encodeProgress(); }
+function fmtDate(iso){
+  var p = iso.split("-").map(Number);
+  return new Date(p[0], p[1]-1, p[2]).toLocaleDateString("ru-RU", { day:"numeric", month:"long" }) + " " + p[0];
+}
+var pendingImport = null;
+function previewImport(code){
+  var msg = $("#xfer-msg"), box = $("#xfer-confirm"); if(!msg || !box) return;
+  var dec = decodeProgress(code);
+  if(!dec){
+    pendingImport = null; box.hidden = true;
+    msg.textContent = "Код не распознан. Скопируй его целиком: он начинается с GM1.";
+    return;
+  }
+  pendingImport = dec;
+  var n = Object.keys(dec.done).length;
+  var cur = CODE_IDS.filter(function(id){ return state.done[id]; }).length;
+  box.innerHTML = '<p>В коде отмечено ' + n + ' ' + plural(n, "пункт", "пункта", "пунктов") +
+    (dec.start ? ", дата старта " + esc(fmtDate(dec.start)) : ", дата старта не указана") +
+    '. Сейчас здесь отмечено ' + cur + '. Заменить прогресс на этом устройстве прогрессом из кода?</p>' +
+    '<div class="xfer-row"><button type="button" class="btn" data-act="apply-import">Заменить</button><button type="button" class="btn btn-ghost" data-act="cancel-import">Отмена</button></div>';
+  box.hidden = false; msg.textContent = "";
+}
+function applyImport(){
+  if(!pendingImport) return;
+  state = { done:pendingImport.done, start:pendingImport.start };
+  if(!remoteReady){
+    sessionEdits = {};
+    CODE_IDS.forEach(function(id){ sessionEdits[id] = !!state.done[id]; });
+    startEdited = true;
+  }
+  pendingImport = null;
+  $("#xfer-confirm").hidden = true; $("#xfer-input").value = "";
+  var cm = currentMonth();
+  if(cm && cm.phase === "active"){ selMonth = cm.n; lsSet("month", String(cm.n)); renderMonth(); }
+  refreshAll(); persist();
+  $("#xfer-msg").textContent = "Готово: прогресс загружен.";
+}
+function copyText(text, onFail){
+  var msg = $("#xfer-msg");
+  var ok = function(){ msg.textContent = "Скопировано. Открой сайт на другом устройстве и вставь код в поле «Код с другого устройства»."; };
+  try{ navigator.clipboard.writeText(text).then(ok, onFail); }catch(e){ onFail(); }
+}
+function renderToday(){
+  var el = $("#today"); if(!el) return;
+  var cm = currentMonth();
+  var dateField = '<div class="today-date"><label for="start-date">Дата старта</label><input type="date" id="start-date" value="' + esc(state.start || "") + '"></div>';
+  var html;
+  if(!cm){
+    html = '<div class="today-main"><p class="eyebrow">С чего начать</p>' +
+      '<p class="today-title">Начни с недели 0: тесты, дневник и журнал прогнозов.</p>' +
+      '<p class="muted small">Укажи дату старта, и здесь будет показан текущий месяц плана.</p>' +
+      '<div class="today-actions"><button type="button" class="btn" data-act="start-today">Начать сегодня</button><a class="btn btn-ghost" href="#week0">Что сделать в неделю 0</a></div></div>';
+  } else if(cm.phase === "before"){
+    html = '<div class="today-main"><p class="eyebrow">До старта ' + cm.days + ' ' + daysWord(cm.days) + '</p>' +
+      '<p class="today-title">Пока пройди неделю 0.</p>' +
+      '<div class="today-actions"><a class="btn" href="#week0">Неделя 0</a><a class="btn btn-ghost" href="#m1">Посмотреть месяц 1</a></div></div>';
+  } else if(cm.phase === "done"){
+    html = '<div class="today-main"><p class="eyebrow">Год пройден</p>' +
+      '<p class="today-title">Повтори стартовые тесты и напиши свой кодекс.</p>' +
+      '<div class="today-actions"><a class="btn" href="#results">Итоги</a><a class="btn btn-ghost" href="#codex">Мой кодекс</a></div></div>';
+  } else {
+    var m = MONTHS[cm.n-1], q = QUARTERS[m.q-1], p = monthProgress(cm.n);
+    html = '<div class="today-main"><p class="eyebrow">Сейчас · день ' + (cm.days + 1) + ' из 365</p>' +
+      '<p class="today-title">Месяц ' + cm.n + '. ' + esc(m.title) + '</p>' +
+      '<p class="muted small">Квартал ' + q.roman + ' «' + esc(q.name) + '» · отмечено ' + p.done + ' из ' + p.total + '</p>' +
+      '<div class="today-actions"><a class="btn" href="#m' + cm.n + '">Открыть месяц ' + cm.n + '</a>' +
+      (cm.days < 7 ? '<a class="btn btn-ghost" href="#week0">Неделя 0</a>' : '<a class="btn btn-ghost" href="#daily">Распорядок дня</a>') + '</div></div>';
+  }
+  el.innerHTML = html + dateField;
+}
+function renderStats(){
+  var el = $("#stats"); if(!el) return;
+  var books = RES.filter(function(r){ return r.type === "book"; }).map(function(r){ return r.id; });
+  var media = RES.filter(function(r){ return r.type === "video" || r.type === "audio" || r.type === "film"; }).map(function(r){ return r.id; });
+  var prac = []; MONTHS.forEach(function(m){ m.practice.forEach(function(p){ prac.push(p.id); }); });
+  var w0 = WEEK0.map(function(w){ return w.id; });
+  var rows = [ ["Книги", progressOf(books)], ["Видео, подкасты, фильмы", progressOf(media)], ["Практики месяцев", progressOf(prac)], ["Неделя 0", progressOf(w0)] ];
+  el.innerHTML = rows.map(function(r){
+    return '<div class="stat"><span class="stat-n">' + r[1].done + '<span class="stat-of"> / ' + r[1].total + '</span></span><span class="stat-l">' + r[0] + '</span><span class="bar"><span style="width:' + pct(r[1]) + '%"></span></span></div>';
+  }).join("");
+}
+function renderOverviewQuarters(){
+  var el = $("#ov-quarters"); if(!el) return;
+  el.innerHTML = QUARTERS.map(function(q){
+    return '<div class="quarter"><p class="quarter-h"><span class="q-num">' + q.roman + '</span><span><span class="quarter-name">' + esc(q.name) + '</span> <span class="quarter-sub">· ' + esc(q.sub) + '</span></span></p>' +
+      '<ul class="qmonths">' + q.months.map(function(n){
+        var m = MONTHS[n-1], p = monthProgress(n);
+        return '<li><a href="#m' + n + '"><span class="qm-t">' + n + '. ' + esc(m.title) + '</span><span class="qm-c">' + p.done + '/' + p.total + '</span></a></li>';
+      }).join("") + '</ul></div>';
+  }).join("");
+}
+
+/* ---------- DAILY ---------- */
+function renderDaily(){
+  var week0Tools = RES.filter(function(r){ return r.m.indexOf(0) !== -1; });
+  var yearRes = RES.filter(function(r){ return r.year; });
+  $("#tab-daily").innerHTML =
+    '<p class="eyebrow">Система</p><h1>Каждый день</h1>' +
+    '<p class="lead">План держится на ежедневной системе: полтора-два часа в день. Пропустил день — продолжай со следующего.</p>' +
+    '<h2 id="routine">Распорядок дня</h2>' +
+    '<div class="table-scroll"><table><thead><tr><th scope="col">Когда</th><th scope="col">Что</th><th scope="col">Время</th></tr></thead><tbody>' +
+      ROUTINE.map(function(r, i){ return '<tr id="rt-' + i + '"><td class="when">' + esc(r.when) + '</td><td>' + esc(r.what) + '</td><td class="t">' + esc(r.t) + '</td></tr>'; }).join("") +
+    '</tbody></table></div>' +
+    '<h2>Раз в неделю</h2><ul class="plain">' + WEEKLY.map(function(w, i){ return '<li id="wk-' + i + '">' + esc(w) + '</li>'; }).join("") + '</ul>' +
+    '<h2>Раз в месяц</h2><ul class="plain">' + MONTHLY.map(function(w, i){ return '<li id="mo-' + i + '">' + esc(w) + '</li>'; }).join("") + '</ul>' +
+    '<h2 id="tools">Три главных инструмента</h2><div class="tools">' +
+      '<div class="tool" id="tool-0"><h3>Дневник</h3><p>Каждый вечер три вопроса, как у Сенеки:</p><ul class="plain"><li>Что я сегодня сделал хорошо?</li><li>Где поступил слабо или несправедливо?</li><li>Что я сегодня заметил в людях?</li></ul></div>' +
+      '<div class="tool" id="tool-1"><h3>Журнал прогнозов<span class="key">самый важный</span></h3><p>Записывай догадки о людях и событиях с вероятностью, а позже проверяй, сбылось ли. Почти все уверены, что хорошо разбираются в людях. Без проверки это самообман, а с проверкой — единственный способ реально стать точнее.</p><div class="example"><span>Коллега уйдёт с работы до лета — 70%</span><span>Друг расстроен не из-за учёбы, а из-за отношений — 60%</span></div></div>' +
+      '<div class="tool" id="tool-2"><h3>Anki</h3><p>Бесплатное приложение с интервальными повторениями. Заводи карточки: идея, когнитивное искажение, цитата, факт. Через год в голове будут тысячи идей, а не смутное «что-то такое читал».</p></div>' +
+    '</div>' +
+    '<h2 id="week0">Неделя 0: подготовка</h2>' +
+    '<p>Сделай это до первого месяца. Тесты повторишь через год, чтобы увидеть рост.</p>' +
+    '<div class="list">' + WEEK0.map(function(w){ return check(w.id, "day", '<span class="row-title">' + esc(w.text) + '</span>'); }).join("") + '</div>' +
+    '<h3>Понадобится</h3><div class="list">' + week0Tools.map(function(r){ return resRow(r, "day"); }).join("") + '</div>' +
+    '<h2 id="year">Весь год</h2>' +
+    defs(YEAR, "yr") +
+    '<h3>Материалы на весь год</h3><div class="list">' + yearRes.map(function(r){ return resRow(r, "day"); }).join("") + '</div>' +
+    '<h2>Темп</h2>' +
+    '<p>Примерно одна книга за 10 дней, то есть три в месяц. Почти всё из списка есть в аудио на Яндекс Букмейте и ЛитРес. Если не успеваешь, сокращай количество книг, но не регулярность.</p>';
+}
+
+/* ---------- MONTHS ---------- */
+var selMonth = (function(){
+  var v = parseInt(lsGet("month"), 10);
+  if(v >= 1 && v <= 12) return v;
+  var cm = currentMonth();
+  return cm && cm.phase === "active" ? cm.n : 1;
+})();
+function renderMonthsTab(){
+  $("#tab-months").innerHTML =
+    '<div class="narrow"><p class="eyebrow">Четыре квартала по три месяца</p><h1>12 месяцев</h1>' +
+    '<p class="lead">Выбери месяц. Полоска в каждой клетке показывает, сколько отмечено.</p></div>' +
+    '<div class="strip" id="strip"></div><div id="month-detail" class="narrow"></div>';
+  renderStrip(); renderMonth();
+}
+function renderStrip(){
+  var el = $("#strip"); if(!el) return;
+  var cm = currentMonth(); var now = cm && cm.phase === "active" ? cm.n : null;
+  el.innerHTML = QUARTERS.map(function(q){
+    return '<div class="q"><p class="q-label"><span class="q-num">' + q.roman + '</span><span>' + esc(q.name) + '</span></p><div class="q-cells">' +
+      q.months.map(function(n){
+        var m = MONTHS[n-1], p = monthProgress(n), sel = n === selMonth;
+        return '<a class="cell' + (sel ? " is-sel" : "") + '" href="#m' + n + '"' + (sel ? ' aria-current="true"' : "") + ' aria-label="Месяц ' + n + ': ' + esc(m.short) + ', отмечено ' + p.done + ' из ' + p.total + '">' +
+          '<span class="cell-n">' + n + '</span><span class="cell-t">' + esc(m.short) + '</span><span class="bar"><span style="width:' + pct(p) + '%"></span></span>' +
+          (n === now ? '<span class="now">сейчас</span>' : "") + '</a>';
+      }).join("") + '</div></div>';
+  }).join("");
+}
+function renderMonth(){
+  var n = selMonth, m = MONTHS[n-1], q = QUARTERS[m.q-1];
+  var rs = RES.filter(function(r){ return r.m.indexOf(n) !== -1; });
+  var books = rs.filter(function(r){ return r.type === "book"; });
+  var media = rs.filter(function(r){ return r.type === "video" || r.type === "audio" || r.type === "film"; });
+  var tools = rs.filter(function(r){ return r.type === "tool"; });
+  var prev = n > 1 ? MONTHS[n-2] : null, next = n < 12 ? MONTHS[n] : null;
+  var list = function(arr){ return '<div class="list">' + arr.map(function(r){ return resRow(r, "mon"); }).join("") + '</div>'; };
+  $("#month-detail").innerHTML =
+    '<p class="eyebrow">Квартал ' + q.roman + ' · ' + esc(q.name) + '</p>' +
+    '<h2 class="month-title" id="month-title">Месяц ' + n + '. ' + esc(m.title) + '</h2>' +
+    '<p class="muted" id="month-prog"></p>' +
+    '<h3>Читать</h3>' + list(books) +
+    '<h3>Смотреть и слушать</h3>' + list(media) +
+    (tools.length ? '<h3>Сервисы</h3>' + list(tools) : "") +
+    '<h3>Практика</h3><div class="list">' + m.practice.map(function(p){ return check(p.id, "mon", '<span class="row-title">' + esc(p.text) + '</span>'); }).join("") + '</div>' +
+    '<div class="understand"><p class="eyebrow">Понять</p><p class="u">' + esc(m.understand) + '</p></div>' +
+    '<nav class="month-nav" aria-label="Соседние месяцы">' +
+      (prev ? '<a href="#m' + (n-1) + '">← Месяц ' + (n-1) + '. ' + esc(prev.short) + '</a>' : '<span></span>') +
+      (next ? '<a href="#m' + (n+1) + '">Месяц ' + (n+1) + '. ' + esc(next.short) + ' →</a>' : '<a href="#results">Итоги года →</a>') +
+    '</nav>';
+  updateMonthProg();
+}
+function updateMonthProg(){
+  var el = $("#month-prog"); if(!el) return;
+  var p = monthProgress(selMonth);
+  el.textContent = p.done === p.total ? "Всё отмечено: " + p.total + " из " + p.total : "Отмечено " + p.done + " из " + p.total;
+}
+
+/* ---------- LIBRARY ---------- */
+var FILTERS = [ ["all","Всё"], ["book","Книги"], ["video","Видео и лекции"], ["audio","Подкасты"], ["film","Фильмы и сериалы"], ["tool","Сервисы и тесты"] ];
+var libType = lsGet("libType") || "all";
+if(!FILTERS.some(function(f){ return f[0] === libType; })) libType = "all";
+var libHide = lsGet("libHide") === "1";
+function groupKey(r){ var ms = r.m.slice().sort(function(a,b){ return a-b; }); return ms.length ? ms[0] : 13; }
+function groupLabel(k){
+  if(k === 0) return '<a href="#week0">Неделя 0 · подготовка</a>';
+  if(k === 13) return '<a href="#year">Весь год</a>';
+  return '<a href="#m' + k + '">Месяц ' + k + ' · ' + esc(MONTHS[k-1].short) + '</a>';
+}
+function renderLibrary(){
+  var groups = {};
+  RES.forEach(function(r){ var k = groupKey(r); (groups[k] = groups[k] || []).push(r); });
+  var keys = Object.keys(groups).map(Number).sort(function(a,b){ return a-b; });
+  $("#tab-library").innerHTML =
+    '<div class="narrow"><p class="eyebrow">Всё в одном списке</p><h1>Библиотека</h1>' +
+    '<p class="lead">Книги, лекции, подкасты, фильмы и сервисы, разложенные по месяцам. Отметки здесь и в месяцах общие.</p></div>' +
+    '<div class="lib-tools"><div class="fchips" role="group" aria-label="Тип материала">' +
+      FILTERS.map(function(f){
+        var c = f[0] === "all" ? RES.length : RES.filter(function(r){ return r.type === f[0]; }).length;
+        return '<button type="button" class="fchip" data-type="' + f[0] + '" aria-pressed="' + (f[0] === libType) + '">' + f[1] + '<span class="c">' + c + '</span></button>';
+      }).join("") +
+    '</div><label class="toggle" for="lib-hide-done"><input type="checkbox" id="lib-hide-done"' + (libHide ? " checked" : "") + '> Скрыть отмеченное</label></div>' +
+    '<p class="muted small" id="lib-count"></p>' +
+    '<div id="lib-list">' + keys.map(function(k){
+      return '<div class="lib-group"><h3 class="group-h">' + groupLabel(k) + '</h3><div class="list">' + groups[k].map(function(r){ return resRow(r, "lib"); }).join("") + '</div></div>';
+    }).join("") + '</div>' +
+    '<p class="empty" id="lib-empty" hidden>Здесь всё отмечено. Сними галочку «Скрыть отмеченное», чтобы снова увидеть список.</p>';
+  applyLibFilter();
+}
+function applyLibFilter(){
+  var list = $("#lib-list"); if(!list) return;
+  var shown = 0, total = 0;
+  $$(".row", list).forEach(function(row){
+    var r = byId[row.dataset.id];
+    var typeOk = libType === "all" || r.type === libType;
+    var vis = typeOk && !(libHide && state.done[r.id]);
+    row.hidden = !vis;
+    if(typeOk) total++;
+    if(vis) shown++;
+  });
+  $$(".lib-group", list).forEach(function(g){ g.hidden = !g.querySelector(".row:not([hidden])"); });
+  var c = $("#lib-count");
+  if(c) c.textContent = shown === total ? "Показано: " + shown : "Показано " + shown + " из " + total;
+  var e = $("#lib-empty"); if(e) e.hidden = shown > 0;
+  $$(".fchip").forEach(function(b){ b.setAttribute("aria-pressed", String(b.dataset.type === libType)); });
+}
+
+/* ---------- NOTES ---------- */
+function renderNotes(){
+  $("#tab-notes").innerHTML =
+    '<p class="eyebrow">Чтобы держать в голове</p><h1>Шпаргалки</h1>' +
+    '<p class="lead">Короткие правила, к которым стоит возвращаться. Открывай перед важным разговором или вечером, когда разбираешь день.</p>' +
+    '<nav class="subnav" aria-label="Шпаргалки"><a href="#laws">15 законов</a><a href="#observe">На что смотреть в людях</a><a href="#lies">Как распознавать ложь</a><a href="#models">Ментальные модели</a><a href="#people">Влияние и переговоры</a></nav>' +
+    '<h2 id="laws">15 законов</h2>' +
+    '<ol class="laws">' + LAWS.map(function(l, i){ return '<li id="law-' + i + '"><span class="n">' + (i+1) + '</span><span>' + esc(l) + '</span></li>'; }).join("") + '</ol>' +
+    '<h2 id="observe">На что обращать внимание в людях</h2>' +
+    OBSERVE.map(function(g, gi){ return '<h3>' + esc(g.t) + '</h3><ul class="plain">' + g.items.map(function(it, i){ return '<li id="obs-' + gi + '-' + i + '">' + esc(it) + '</li>'; }).join("") + '</ul>'; }).join("") +
+    '<h2 id="lies">Как распознавать ложь по науке</h2>' +
+    '<p class="no" id="lie-no"><b>Не работает:</b> ' + esc(LIES_NO) + '</p>' +
+    '<h3>Работает</h3>' + defs(LIES, "lie") +
+    '<h2 id="models">Ментальные модели</h2>' +
+    '<p class="muted">Применяй по одной в день к реальной ситуации. Главная тема десятого месяца.</p>' + defs(MODELS, "mdl") +
+    '<h2 id="people">Влияние и переговоры</h2>' +
+    '<h3>Модель SCARF: чего хотят люди</h3><p class="muted">В любом конфликте спроси себя, какая из пяти потребностей задета.</p>' + defs(SCARF, "scarf") +
+    '<h3>Шесть принципов Чалдини</h3><p class="muted">Называй принцип, когда на тебя пытаются повлиять.</p>' + defs(CIALDINI, "cia") +
+    '<h3>Техники Криса Восса</h3>' + defs(VOSS, "voss");
+}
+
+/* ---------- RESULTS ---------- */
+function renderResults(){
+  $("#tab-results").innerHTML =
+    '<p class="eyebrow">Через год</p><h1>Итоги</h1>' +
+    '<p class="lead">Как понять, что ты вырос, чего избегать по дороге и чем закончить год.</p>' +
+    '<h2 id="growth">Признаки роста</h2><p class="muted">Отмечай, когда это станет правдой.</p>' +
+    '<div class="list">' + METRICS.map(function(x){ return check(x.id, "res", '<span class="row-title">' + esc(x.text) + '</span>'); }).join("") + '</div>' +
+    '<h2 id="traps">Ловушки</h2>' + defs(TRAPS, "trap") +
+    '<h2 id="codex">Мой кодекс</h2>' +
+    '<p>Главный итог года: одна-две страницы о том, как ты живёшь. Ответь письменно на эти вопросы и перечитывай раз в месяц.</p>' +
+    '<ul class="plain">' + CODEX.map(function(c, i){ return '<li id="cdx-' + i + '">' + esc(c) + '</li>'; }).join("") + '</ul>';
+}
+
+/* ---------- SEARCH ---------- */
+var INDEX = [];
+function addIdx(kind, title, ctx, text, go){ INDEX.push({ i:INDEX.length, kind:kind, title:title, ctx:ctx, text:norm(title + " " + (ctx || "") + " " + (text || "")), go:go }); }
+function buildIndex(){
+  RES.forEach(function(r){
+    addIdx(TYPE[r.type], r.title, [r.by, monthsLabel(r)].filter(Boolean).join(" · "), (r.note || "") + " " + TYPE_WORDS[r.type], function(){ goRes(r); });
+  });
+  MONTHS.forEach(function(m){
+    var q = QUARTERS[m.q-1];
+    addIdx("Месяц", "Месяц " + m.n + ". " + m.title, "Квартал " + q.roman + " · " + q.name, m.short + " " + m.understand + " месяц", function(){ goto("m" + m.n); });
+    m.practice.forEach(function(p){ addIdx("Практика", p.text, "Месяц " + m.n + " · " + m.short, "практика упражнение", function(){ goto("m" + m.n, "mon-row-" + p.id); }); });
+    addIdx("Понять", m.understand, "Месяц " + m.n + " · " + m.short, "понять мысль", function(){ goto("m" + m.n); });
+  });
+  WEEK0.forEach(function(w){ addIdx("Неделя 0", w.text, "Подготовка", "неделя 0 подготовка старт", function(){ goto("week0", "day-row-" + w.id); }); });
+  ROUTINE.forEach(function(r, i){ addIdx("Распорядок", r.what, r.when + " · " + r.t, "каждый день распорядок", function(){ goto("daily", "rt-" + i); }); });
+  WEEKLY.forEach(function(w, i){ addIdx("Раз в неделю", w, "Каждый день", "неделя", function(){ goto("daily", "wk-" + i); }); });
+  MONTHLY.forEach(function(w, i){ addIdx("Раз в месяц", w, "Каждый день", "месяц", function(){ goto("daily", "mo-" + i); }); });
+  ["Дневник", "Журнал прогнозов", "Anki"].forEach(function(t, i){ addIdx("Инструмент", t, "Три главных инструмента", ["дневник сенека вопросы вечер", "прогнозы вероятность проверка журнал", "карточки повторение anki"][i], function(){ goto("daily", "tool-" + i); }); });
+  YEAR.forEach(function(y, i){ addIdx("Весь год", y.t, y.d, "весь год", function(){ goto("year", "yr-" + i); }); });
+  LAWS.forEach(function(l, i){ addIdx("Закон " + (i+1), l, "Шпаргалки · 15 законов", "закон", function(){ goto("laws", "law-" + i); }); });
+  OBSERVE.forEach(function(g, gi){ g.items.forEach(function(it, i){ addIdx("Наблюдение", it, "На что смотреть · " + g.t, "наблюдение язык тела читать людей", function(){ goto("observe", "obs-" + gi + "-" + i); }); }); });
+  addIdx("Ложь", "Что не работает: " + LIES_NO, "Как распознавать ложь", "ложь мифы", function(){ goto("lies", "lie-no"); });
+  LIES.forEach(function(x, i){ addIdx("Ложь", x.t, x.d, "ложь распознавать вранье лжец", function(){ goto("lies", "lie-" + i); }); });
+  MODELS.forEach(function(x, i){ addIdx("Модель", x.t, x.d, "ментальная модель стратегия", function(){ goto("models", "mdl-" + i); }); });
+  SCARF.forEach(function(x, i){ addIdx("SCARF", x.t, x.d, "scarf потребности желания чего хотят люди", function(){ goto("people", "scarf-" + i); }); });
+  CIALDINI.forEach(function(x, i){ addIdx("Чалдини", x.t, x.d, "чалдини влияние манипуляция", function(){ goto("people", "cia-" + i); }); });
+  VOSS.forEach(function(x, i){ addIdx("Восс", x.t, x.d, "восс переговоры техника", function(){ goto("people", "voss-" + i); }); });
+  HONEST.forEach(function(h, i){ addIdx("Честно", h, "Обзор · сначала честно", "реалистично ожидания", function(){ goto("overview", "hon-" + i); }); });
+  QUAL_MINE.forEach(function(x, i){ addIdx("Качество", x.t, x.d, "качество", function(){ goto("overview", "qm-" + i); }); });
+  QUAL_ADDED.forEach(function(x, i){ addIdx("Качество", x.t, x.d, "качество", function(){ goto("overview", "qa-" + i); }); });
+  METRICS.forEach(function(x){ addIdx("Итоги", x.text, "Признаки роста", "итоги рост метрика", function(){ goto("results", "res-row-" + x.id); }); });
+  TRAPS.forEach(function(x, i){ addIdx("Ловушка", x.t, x.d, "ловушка ошибка", function(){ goto("traps", "trap-" + i); }); });
+  addIdx("Итоги", "Мой кодекс", "Главный итог года", "кодекс итог правила " + CODEX.join(" "), function(){ goto("codex"); });
+  addIdx("Перенос", "Перенос прогресса на другое устройство", "Обзор", "код синхронизация телефон компьютер устройство перенести прогресс", function(){ goto("transfer"); });
+}
+function doSearch(){
+  var q = norm($("#q").value).trim();
+  var box = $("#tab-search");
+  if(!q){ box.hidden = true; if(currentTab) $("#tab-" + currentTab).hidden = false; return; }
+  var toks = q.split(/\s+/).filter(Boolean);
+  var hits = INDEX.filter(function(it){ return toks.every(function(t){ return it.text.indexOf(t) !== -1; }); });
+  TABS.forEach(function(t){ $("#tab-" + t).hidden = true; });
+  box.hidden = false;
+  box.innerHTML = '<div class="narrow"><p class="eyebrow">Поиск</p><h1>' + (hits.length ? "Найдено: " + hits.length : "Ничего не найдено") + '</h1>' +
+    (hits.length
+      ? '<div class="hits">' + hits.slice(0, 80).map(function(h){
+          return '<button type="button" class="hit" data-hit="' + h.i + '"><span class="chip">' + esc(h.kind) + '</span><span class="hit-main"><span class="hit-t">' + esc(h.title) + '</span>' + (h.ctx ? '<span class="hit-c">' + esc(h.ctx) + '</span>' : "") + '</span></button>';
+        }).join("") + '</div>'
+      : '<p class="muted">Попробуй другое слово, например «ложь», «Сенека», «переговоры» или «фильм».</p>') + '</div>';
+}
+function clearSearch(){
+  var input = $("#q");
+  if(input.value) input.value = "";
+  $("#tab-search").hidden = true;
+}
+
+/* ---------- ROUTER ---------- */
+var TABS = ["overview","daily","months","library","notes","results"];
+var ANCHOR_TAB = { transfer:"overview", laws:"notes", observe:"notes", lies:"notes", models:"notes", people:"notes", week0:"daily", year:"daily", routine:"daily", tools:"daily", traps:"results", codex:"results", growth:"results", honest:"overview", qualities:"overview" };
+var currentTab = null, pendingScroll = null;
+
+function showTab(tab){
+  currentTab = tab; lsSet("tab", tab);
+  TABS.forEach(function(t){ $("#tab-" + t).hidden = t !== tab; });
+  $("#tab-search").hidden = true;
+  $$(".tabs a").forEach(function(a){
+    if(a.dataset.tab === tab) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+  });
+  var nav = $(".tabs"), act = $('.tabs a[data-tab="' + tab + '"]');
+  if(nav && act){
+    var l = act.offsetLeft, w = act.offsetWidth;
+    if(l < nav.scrollLeft || l + w > nav.scrollLeft + nav.clientWidth) nav.scrollLeft = Math.max(0, l - 16);
+  }
+}
+function route(){
+  var h = (location.hash || "").slice(1);
+  if(h.indexOf("sync=") === 0){
+    var code = h.slice(5);
+    try{ code = decodeURIComponent(code); }catch(e){}
+    try{ history.replaceState(null, "", location.pathname + location.search + "#transfer"); }catch(e){}
+    clearSearch(); showTab("overview");
+    var inp = $("#xfer-input"); if(inp) inp.value = code;
+    previewImport(code);
+    requestAnimationFrame(function(){ scrollToId("transfer", false); });
+    return;
+  }
+  var tab = null, month = null, anchor = null;
+  if(TABS.indexOf(h) !== -1) tab = h;
+  else {
+    var mm = /^m([1-9]|1[0-2])$/.exec(h);
+    if(mm){ tab = "months"; month = parseInt(mm[1], 10); }
+    else if(ANCHOR_TAB[h]){ tab = ANCHOR_TAB[h]; anchor = h; }
+  }
+  if(!tab){ var saved = lsGet("tab"); tab = TABS.indexOf(saved) !== -1 ? saved : "overview"; }
+  clearSearch();
+  var changed = tab !== currentTab;
+  showTab(tab);
+  var monthChanged = false;
+  if(month && month !== selMonth){
+    selMonth = month; lsSet("month", String(month)); monthChanged = true;
+    renderStrip(); renderMonth();
+  }
+  var target = pendingScroll; pendingScroll = null;
+  if(!target && anchor) target = { id:anchor, flash:false };
+  if(target){
+    requestAnimationFrame(function(){ scrollToId(target.id, target.flash); });
+  } else if(changed){
+    window.scrollTo(0, 0);
+  } else if(monthChanged){
+    var t = $("#month-title");
+    if(t && t.getBoundingClientRect().top < 0) scrollToId("month-title", false);
+  }
+}
+function goto(token, elId){
+  pendingScroll = elId ? { id:elId, flash:true } : null;
+  if(location.hash === "#" + token) route(); else location.hash = token;
+}
+function goRes(r){
+  libType = "all"; libHide = false; lsSet("libType", "all"); lsSet("libHide", "0");
+  var hd = $("#lib-hide-done"); if(hd) hd.checked = false;
+  applyLibFilter();
+  goto("library", "lib-row-" + r.id);
+}
+function scrollToId(id, flash){
+  var el = document.getElementById(id); if(!el) return;
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  el.scrollIntoView({ block: flash ? "center" : "start", behavior: reduce ? "auto" : "smooth" });
+  if(flash){
+    el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+    setTimeout(function(){ el.classList.remove("flash"); }, 2300);
+  }
+}
+
+/* ---------- PROGRESS + SYNC ---------- */
+var dbRef = null, remoteReady = false, writing = false, again = false, wtimer = null, retried = false;
+var sessionEdits = {}, startEdited = false;
+
+function setSync(kind){
+  var el = $("#sync"); if(!el) return;
+  el.textContent = {
+    pending:"Подключаю сохранение отметок…",
+    cloud:"Отметки сохраняются в твоём аккаунте и видны на всех устройствах.",
+    local:"Отметки сохраняются только в этом браузере.",
+    error:"Не удалось сохранить в аккаунт. Отметки пока хранятся в этом браузере."
+  }[kind] || "";
+}
+function persist(){
+  lsSet("state", JSON.stringify({ done:state.done, start:state.start }));
+  if(dbRef && remoteReady){ clearTimeout(wtimer); wtimer = setTimeout(flush, 700); }
+}
+function flush(){
+  wtimer = null;
+  if(!dbRef) return;
+  if(writing){ again = true; return; }
+  writing = true;
+  dbRef.set({ done:state.done, start:state.start || null }).then(function(){
+    retried = false; setSync("cloud");
+  }, function(e){
+    if(e && e.code === "unavailable" && !retried){ retried = true; setTimeout(flush, 800 + Math.random() * 1200); }
+    else setSync("error");
+  }).then(function(){
+    writing = false;
+    if(again){ again = false; flush(); }
+  });
+}
+function refreshAll(){
+  $$("input[data-item]").forEach(function(c){ c.checked = !!state.done[c.dataset.item]; });
+  renderToday(); renderStats(); renderOverviewQuarters(); renderStrip(); updateMonthProg(); applyLibFilter(); renderXfer();
+}
+function toggle(id, val){
+  if(val) state.done[id] = 1; else delete state.done[id];
+  if(!remoteReady) sessionEdits[id] = val;
+  $$('input[data-item="' + id + '"]').forEach(function(c){ c.checked = val; });
+  renderToday(); renderStats(); renderOverviewQuarters(); renderStrip(); updateMonthProg(); applyLibFilter(); renderXfer();
+  persist();
+}
+function setStart(v){
+  state.start = v || null;
+  if(!remoteReady) startEdited = true;
+  var cm = currentMonth();
+  if(cm && cm.phase === "active" && !lsGet("month")){ selMonth = cm.n; renderMonth(); }
+  renderToday(); renderStrip(); renderXfer();
+  persist();
+}
+function applyRemote(d){
+  state = { done: Object.assign({}, (d && typeof d.done === "object" && d.done) || {}), start: d && typeof d.start === "string" ? d.start : null };
+}
+function initRemote(){
+  var c = window.claude;
+  if(!c || typeof c.use !== "function"){ setSync("local"); return; }
+  Promise.all([c.use("db"), c.use("user")]).then(function(res){
+    var db = res[0], user = res[1];
+    if(!db || !user){ setSync("local"); return null; }
+    return user.id().then(function(uid){
+      if(!uid){ setSync("local"); return; }
+      try{ dbRef = db.doc("data/users/" + uid + "/progress"); }catch(e){ dbRef = null; setSync("local"); return; }
+      dbRef.onSnapshot(function(snap){
+        if(snap.metadata && snap.metadata.hasPendingWrites) return;
+        if(!remoteReady){
+          if(snap.metadata && snap.metadata.fromCache) return;
+          remoteReady = true;
+          var edited = Object.keys(sessionEdits).length > 0 || startEdited;
+          if(snap.exists){
+            var local = state;
+            applyRemote(snap.data());
+            Object.keys(sessionEdits).forEach(function(id){ if(sessionEdits[id]) state.done[id] = 1; else delete state.done[id]; });
+            if(startEdited) state.start = local.start;
+            lsSet("state", JSON.stringify({ done:state.done, start:state.start }));
+            refreshAll(); setSync("cloud");
+            if(edited) flush();
+          } else {
+            setSync("cloud");
+            if(Object.keys(state.done).length || state.start) flush();
+          }
+          return;
+        }
+        if(writing || wtimer || !snap.exists) return;
+        applyRemote(snap.data());
+        lsSet("state", JSON.stringify({ done:state.done, start:state.start }));
+        refreshAll();
+      }, function(err){
+        dbRef = null; remoteReady = false;
+        setSync(err && err.code === "revoked" ? "local" : "error");
+      });
+    });
+  }).catch(function(){ setSync("local"); });
+}
+
+/* ---------- events ---------- */
+document.addEventListener("change", function(e){
+  var t = e.target;
+  if(t.matches && t.matches("input[data-item]")){ toggle(t.dataset.item, t.checked); return; }
+  if(t.id === "start-date"){ setStart(t.value); return; }
+  if(t.id === "lib-hide-done"){ libHide = t.checked; lsSet("libHide", libHide ? "1" : "0"); applyLibFilter(); }
+});
+document.addEventListener("click", function(e){
+  var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+  if(a && a.getAttribute("href") === location.hash){ e.preventDefault(); route(); return; }
+  var t = e.target.closest ? e.target.closest("[data-act], .fchip, .hit") : null;
+  if(!t) return;
+  if(t.dataset.act === "start-today"){ setStart(todayISO()); return; }
+  if(t.dataset.act === "copy-code"){
+    var codeEl = $("#xfer-code");
+    copyText(codeEl.value, function(){ codeEl.focus(); codeEl.select(); $("#xfer-msg").textContent = "Не получилось скопировать автоматически. Код выделен: скопируй его вручную."; });
+    return;
+  }
+  if(t.dataset.act === "copy-link"){
+    var link = syncLink();
+    copyText(link, function(){ $("#xfer-msg").textContent = "Не получилось скопировать автоматически. Скопируй ссылку вручную: " + link; });
+    return;
+  }
+  if(t.dataset.act === "check-code"){ previewImport($("#xfer-input").value); return; }
+  if(t.dataset.act === "apply-import"){ applyImport(); return; }
+  if(t.dataset.act === "cancel-import"){ pendingImport = null; $("#xfer-confirm").hidden = true; $("#xfer-msg").textContent = ""; return; }
+  if(t.classList.contains("fchip")){ libType = t.dataset.type; lsSet("libType", libType); applyLibFilter(); return; }
+  if(t.classList.contains("hit")){
+    var it = INDEX[parseInt(t.dataset.hit, 10)];
+    clearSearch(); $("#q").blur();
+    if(it) it.go();
+  }
+});
+$("#q").addEventListener("input", doSearch);
+$("#q").addEventListener("keydown", function(e){
+  if(e.key === "Escape"){ clearSearch(); if(currentTab) $("#tab-" + currentTab).hidden = false; e.target.blur(); }
+  if(e.key === "Enter"){ var first = $("#tab-search .hit"); if(first) first.click(); }
+});
+document.addEventListener("keydown", function(e){
+  if(e.key !== "/" || e.metaKey || e.ctrlKey || e.altKey) return;
+  var a = document.activeElement;
+  if(a && (a.tagName === "INPUT" || a.tagName === "TEXTAREA" || a.isContentEditable)) return;
+  e.preventDefault(); $("#q").focus();
+});
+document.addEventListener("keydown", function(e){
+  if(e.key === "Enter" && e.target && e.target.id === "xfer-input"){ e.preventDefault(); previewImport(e.target.value); }
+});
+window.addEventListener("hashchange", route);
+
+/* ---------- init ---------- */
+renderOverview(); renderToday(); renderStats(); renderOverviewQuarters(); renderXfer();
+renderDaily(); renderMonthsTab(); renderLibrary(); renderNotes(); renderResults();
+buildIndex();
+route();
+setSync("pending");
+initRemote();
+setTimeout(function(){ if(!remoteReady && $("#sync").textContent.indexOf("Подключаю") === 0) setSync("local"); }, 12000);
+})();
+</script>
+</body>
+</html>
