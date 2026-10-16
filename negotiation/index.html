@@ -1,0 +1,1423 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="План на год: переговоры и споры. Хладнокровие, подготовка, логика, краткость, торг и стратегия. 12 месяцев с чек-листами, библиотека, шпаргалки.">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#171A1F" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2210%22 fill=%22%238C2A36%22/%3E%3Ctext x=%2232%22 y=%2245%22 font-family=%22Arial,sans-serif%22 font-weight=%22700%22 font-size=%2236%22 text-anchor=%22middle%22 fill=%22%23FFFFFF%22%3E%D0%9F%3C/text%3E%3C/svg%3E">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Год переговорщика</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: a briefing dossier. Sticky header (brand, search, tab rail) over one reading column per tab; the months tab opens with a 4x3 year strip of numbered rounds that doubles as navigation and progress. Palette: cool paper and graphite with a sealing-wax claret for actions and a steel ink for notes. */
+:root{
+  --bg:#F2F3F5;
+  --surface:#FFFFFF;
+  --sunk:#E5E7EB;
+  --line:#D3D7DE;
+  --fg:#14171C;
+  --muted:#575F6C;
+  --accent:#8C2A36;
+  --accent-soft:#F4E4E6;
+  --on-accent:#FFFFFF;
+  --mark:#2B4A6E;
+  --mark-soft:#E2E9F2;
+  --font-display:"IBM Plex Sans Condensed","Arial Narrow","Roboto Condensed",system-ui,sans-serif;
+  --font-body:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --r:6px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1114; --surface:#171A1F; --sunk:#21252C; --line:#2F343D;
+    --fg:#E6E8EC; --muted:#9BA3AF; --accent:#E3818C; --accent-soft:#3A1F24; --on-accent:#14171C;
+    --mark:#93B5DB; --mark-soft:#1C2735;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1114; --surface:#171A1F; --sunk:#21252C; --line:#2F343D;
+  --fg:#E6E8EC; --muted:#9BA3AF; --accent:#E3818C; --accent-soft:#3A1F24; --on-accent:#14171C;
+  --mark:#93B5DB; --mark-soft:#1C2735;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+a{color:var(--accent);text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+[id]{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 120px)}
+
+.wrap{max-width:60rem;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* Header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.top-row{display:flex;align-items:center;gap:16px;padding-block:12px 4px}
+.brand{font-family:var(--font-display);font-weight:600;font-size:22px;line-height:1;letter-spacing:-.01em;color:var(--fg);text-decoration:none;white-space:nowrap}
+.brand span{color:var(--accent)}
+.search{position:relative;flex:1;min-width:0;max-width:26rem;margin-left:auto}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--muted);pointer-events:none}
+.search input{width:100%;font:inherit;font-size:15px;line-height:1.3;padding:9px 12px 9px 34px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg);color:var(--fg);-webkit-appearance:none;appearance:none}
+.search input::placeholder{color:var(--muted)}
+.search input:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+.tabs{position:relative;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-inline:-8px}
+.tabs::-webkit-scrollbar{display:none}
+.tabs a{flex:none;padding:8px 8px 10px;font-size:15px;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent}
+.tabs a:hover{color:var(--fg)}
+.tabs a[aria-current="page"]{color:var(--fg);border-bottom-color:var(--accent);font-weight:500}
+
+/* Type */
+main.wrap{padding-block:32px 72px}
+.tab{max-width:46rem}
+.tab-wide{max-width:none}
+.tab-wide .narrow{max-width:46rem}
+h1,h2{font-family:var(--font-display);font-weight:600;line-height:1.1;letter-spacing:-.01em;text-wrap:balance;margin:0}
+h1{font-size:clamp(36px,7vw,52px)}
+h2{font-size:clamp(25px,4.6vw,31px);margin-top:52px;margin-bottom:14px}
+h3{font-size:17px;font-weight:600;line-height:1.35;margin:30px 0 8px;text-wrap:balance}
+p{margin:0 0 12px}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;font-weight:500}
+.lead{font-size:18px;line-height:1.55;color:var(--muted);max-width:40rem;margin-top:14px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+ul.plain{margin:0;padding-left:1.1em}
+ul.plain li{margin-bottom:8px}
+ul.plain li::marker{color:var(--accent)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:15px;font-weight:500;line-height:1.3;padding:9px 14px;border-radius:var(--r);border:1px solid var(--accent);background:var(--accent);color:var(--on-accent);text-decoration:none;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn-ghost{background:transparent;color:var(--accent)}
+
+/* Today card */
+.today{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:flex-end;justify-content:space-between;margin-top:28px;padding:20px 22px;border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:var(--r);background:var(--surface)}
+.today-main{flex:1 1 20rem;min-width:0}
+.today-title{font-family:var(--font-display);font-weight:600;font-size:27px;line-height:1.15;margin:0 0 8px;text-wrap:balance}
+.today-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.today-date{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+.today-date input{font:inherit;font-size:15px;padding:7px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg);color:var(--fg)}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin-top:24px}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stat{min-width:0}
+.stat-n{font-family:var(--font-mono);font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.stat-of{font-size:17px;color:var(--muted)}
+.stat-l{display:block;font-size:13px;line-height:1.35;color:var(--muted);margin-top:6px}
+.bar{display:block;height:4px;border-radius:2px;background:var(--sunk);overflow:hidden;margin-top:8px}
+.bar>span{display:block;height:100%;background:var(--accent);border-radius:2px}
+
+/* Quarters on overview */
+.quarters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 28px}
+@media (max-width:600px){.quarters{grid-template-columns:minmax(0,1fr)}}
+.quarter{min-width:0}
+.quarter-h{display:flex;align-items:baseline;gap:10px;margin:0 0 6px}
+.q-num{font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--mark);line-height:1}
+.quarter-name{font-weight:600}
+.quarter-sub{font-size:14px;color:var(--muted)}
+.qmonths{list-style:none;margin:0 0 12px;padding:0;border-top:1px solid var(--line)}
+.qmonths a{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line);color:var(--fg);text-decoration:none}
+.qmonths a:hover .qm-t{text-decoration:underline}
+.qm-c{font-family:var(--font-mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* Qualities */
+.qual{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 28px}
+@media (max-width:600px){.qual{grid-template-columns:minmax(0,1fr)}}
+.qual h3{margin-top:4px}
+.qual ul{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+.qual li{padding:10px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.qt{font-weight:600}
+.qd{color:var(--muted);font-size:14px}
+.qm{font-size:13px;display:flex;flex-wrap:wrap;gap:4px 10px}
+
+/* Rows (checklists, resources) */
+.list{border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:4px 14px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line)}
+.row input[type="checkbox"]{width:20px;height:20px;margin:2px 0 0;accent-color:var(--accent);cursor:pointer}
+.row-body{display:flex;flex-direction:column;gap:2px;min-width:0;cursor:pointer}
+.row-tool .row-body{cursor:default}
+.row-title{font-weight:500}
+.row-by,.row-note{font-size:14px;color:var(--muted)}
+.row-side{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:flex-end;font-size:13px;padding-top:2px}
+.row input:checked + .row-body .row-title{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
+.row-tool .dot{width:8px;height:8px;border-radius:1px;background:var(--mark);margin:9px 0 0 6px}
+@media (max-width:600px){
+  .row{grid-template-columns:24px minmax(0,1fr)}
+  .row-side{grid-column:2;justify-content:flex-start}
+}
+.chip{display:inline-block;padding:1px 8px;border-radius:3px;background:var(--sunk);color:var(--muted);font-size:12px;line-height:1.6;white-space:nowrap}
+.ext{white-space:nowrap}
+.mchip{font-size:12px;line-height:1.5;padding:1px 8px;border:1px solid var(--line);border-radius:3px;text-decoration:none;color:var(--fg);white-space:nowrap}
+.mchip:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Year strip */
+.strip{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px;margin:24px 0 8px}
+@media (max-width:560px){.strip{grid-template-columns:minmax(0,1fr)}}
+.q{min-width:0}
+.q-label{font-size:13px;color:var(--muted);margin:0 0 6px;display:flex;align-items:baseline;gap:8px}
+.q-cells{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.cell{position:relative;display:flex;flex-direction:column;gap:2px;padding:8px 10px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);color:var(--fg);text-decoration:none;min-width:0}
+.cell:hover{border-color:var(--muted)}
+.cell.is-sel{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.cell-n{font-family:var(--font-mono);font-size:20px;font-weight:500;line-height:1.1;font-variant-numeric:tabular-nums}
+.cell-t{font-size:12px;color:var(--muted);line-height:1.3;overflow-wrap:anywhere}
+.cell .bar{margin-top:6px}
+.cell .now{position:absolute;top:8px;right:9px;font-size:11px;line-height:1.2;color:var(--mark);font-weight:600}
+
+/* Month detail */
+#month-detail{margin-top:40px}
+.month-title{margin-top:8px}
+.understand{margin-top:34px;padding:20px 22px;border-radius:var(--r);background:var(--mark-soft)}
+.understand .eyebrow{color:var(--mark)}
+.understand .u{font-family:var(--font-display);font-weight:500;font-size:24px;line-height:1.3;margin:0;text-wrap:pretty}
+.month-nav{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:32px;padding-top:16px;border-top:1px solid var(--line)}
+
+/* Table */
+.table-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{text-align:left;font-family:var(--font-mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:8px 14px 8px 0;border-bottom:1px solid var(--line)}
+td{padding:11px 14px 11px 0;border-bottom:1px solid var(--line);vertical-align:top}
+td.when{color:var(--muted);white-space:nowrap}
+td.t{white-space:nowrap;font-family:var(--font-mono);font-size:14px;font-variant-numeric:tabular-nums}
+
+/* Definition lists */
+.defs{margin:0;border-top:1px solid var(--line)}
+.def{display:grid;grid-template-columns:minmax(0,12rem) minmax(0,1fr);gap:4px 22px;padding:12px 0;border-bottom:1px solid var(--line)}
+.def dt{font-weight:600}
+.def dd{margin:0}
+.def .ans{display:block;margin-top:4px}
+.def .ans b{color:var(--accent);font-weight:600}
+@media (max-width:600px){.def{grid-template-columns:minmax(0,1fr)}}
+
+/* Numbered lists: laws, preparation sheet, calm protocol */
+.laws{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+.laws li{display:grid;grid-template-columns:2.4rem minmax(0,1fr);gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.laws .n{font-family:var(--font-mono);font-size:15px;font-weight:500;line-height:1.6;color:var(--mark);font-variant-numeric:tabular-nums}
+
+/* Phrases */
+.phrases{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+.phrases li{padding:9px 0 9px 16px;border-bottom:1px solid var(--line);position:relative}
+.phrases li::before{content:"";position:absolute;left:0;top:17px;width:6px;height:6px;border-radius:1px;background:var(--accent)}
+
+/* Tools */
+.tools{display:grid;gap:0;border-top:1px solid var(--line)}
+.tool{padding:14px 0 16px;border-bottom:1px solid var(--line)}
+.tool h3{margin:0 0 6px}
+.tool .key{display:inline-block;margin-left:8px;font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);vertical-align:2px}
+
+/* Sub navigation, filters */
+.subnav{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.subnav a{font-size:14px;padding:6px 12px;border:1px solid var(--line);border-radius:3px;text-decoration:none;color:var(--fg);background:var(--surface)}
+.subnav a:hover{border-color:var(--accent);color:var(--accent)}
+.lib-tools{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;margin:24px 0 6px}
+.fchips{display:flex;flex-wrap:wrap;gap:8px}
+.fchip{font:inherit;font-size:14px;line-height:1.3;padding:6px 12px;border:1px solid var(--line);border-radius:3px;background:var(--surface);color:var(--fg);cursor:pointer}
+.fchip:hover{border-color:var(--muted)}
+.fchip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.fchip .c{font-family:var(--font-mono);font-size:12px;opacity:.75;margin-left:6px}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-size:14px;cursor:pointer}
+.toggle input{width:18px;height:18px;margin:0;accent-color:var(--accent)}
+.group-h{font-family:var(--font-mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:500;margin:30px 0 4px}
+.group-h a{color:inherit;text-decoration:none}
+.group-h a:hover{color:var(--accent)}
+.empty{padding:24px 0;color:var(--muted)}
+
+/* Search */
+.hits{display:flex;flex-direction:column;border-top:1px solid var(--line);margin-top:16px}
+.hit{display:grid;grid-template-columns:7rem minmax(0,1fr);gap:4px 14px;align-items:start;text-align:left;font:inherit;color:var(--fg);background:none;border:0;border-bottom:1px solid var(--line);padding:12px 6px;cursor:pointer;width:100%}
+.hit:hover{background:var(--surface)}
+.hit .chip{justify-self:start;margin-top:2px}
+.hit-main{display:flex;flex-direction:column;gap:2px;min-width:0}
+.hit-t{font-weight:500}
+.hit-c{font-size:13px;color:var(--muted)}
+@media (max-width:480px){.hit{grid-template-columns:minmax(0,1fr)}}
+
+/* Progress transfer */
+.xfer{display:grid;gap:8px;margin-top:12px}
+.xfer label{font-size:14px;color:var(--muted);margin-top:8px}
+.xfer-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.xfer-row input{flex:1 1 16rem;min-width:0;font:inherit;font-size:15px;padding:9px 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);color:var(--fg)}
+#xfer-code,#xfer-input{font-family:var(--font-mono);font-size:14px}
+.xfer-confirm{padding:14px 16px;border-radius:var(--r);background:var(--accent-soft);margin-top:8px}
+.xfer-confirm p{margin-bottom:10px}
+.xfer-msg{font-size:14px;color:var(--muted);min-height:1.5em;margin:4px 0 0;overflow-wrap:anywhere}
+
+/* Footer */
+footer.wrap{padding-block:20px 40px;font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between;border-top:1px solid var(--line)}
+
+@keyframes flash{0%,45%{background:var(--mark-soft)}100%{background:transparent}}
+.flash{animation:flash 2.2s ease-out}
+@media (prefers-reduced-motion: reduce){
+  .flash{animation:none;background:var(--mark-soft)}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <a class="brand" href="#overview">Год <span>переговорщика</span></a>
+      <div class="search">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M10.8 10.8l3.6 3.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>
+        <input id="q" type="search" placeholder="Поиск" aria-label="Поиск по плану" autocomplete="off" enterkeyhint="search">
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Разделы">
+      <a href="#overview" data-tab="overview">Обзор</a>
+      <a href="#daily" data-tab="daily">Каждый день</a>
+      <a href="#months" data-tab="months">12 месяцев</a>
+      <a href="#library" data-tab="library">Библиотека</a>
+      <a href="#notes" data-tab="notes">Шпаргалки</a>
+      <a href="#results" data-tab="results">Итоги</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <section class="tab" id="tab-overview" aria-label="Обзор"></section>
+  <section class="tab" id="tab-daily" aria-label="Каждый день" hidden></section>
+  <section class="tab tab-wide" id="tab-months" aria-label="12 месяцев" hidden></section>
+  <section class="tab tab-wide" id="tab-library" aria-label="Библиотека" hidden></section>
+  <section class="tab" id="tab-notes" aria-label="Шпаргалки" hidden></section>
+  <section class="tab" id="tab-results" aria-label="Итоги" hidden></section>
+  <section class="tab tab-wide" id="tab-search" aria-label="Результаты поиска" aria-live="polite" hidden></section>
+</main>
+
+<footer class="wrap">
+  <span id="sync">Подключаю сохранение отметок…</span>
+  <a href="#transfer">Перенести прогресс на другое устройство</a>
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- storage helpers ---------- */
+var LS = "god-peregovorshchika-v1";
+var CODE_PREFIX = "PN1";
+function lsGet(k){ try{ return localStorage.getItem(LS + ":" + k); }catch(e){ return null; } }
+function lsSet(k, v){ try{ localStorage.setItem(LS + ":" + k, v); }catch(e){} }
+
+var state = { done:{}, start:null };
+try{
+  var raw = lsGet("state");
+  if(raw){
+    var s = JSON.parse(raw);
+    if(s && typeof s === "object"){
+      state.done = (s.done && typeof s.done === "object") ? s.done : {};
+      state.start = typeof s.start === "string" ? s.start : null;
+    }
+  }
+}catch(e){}
+
+/* ---------- content ---------- */
+var QUARTERS = [
+  { q:1, roman:"I",   name:"Внутренняя опора", sub:"Хладнокровие, подготовка, умение слушать", months:[1,2,3] },
+  { q:2, roman:"II",  name:"Слово и логика",   sub:"Спор, краткость, убеждение",              months:[4,5,6] },
+  { q:3, roman:"III", name:"Давление и сила",  sub:"Жёсткие оппоненты, статус, торг",         months:[7,8,9] },
+  { q:4, roman:"IV",  name:"Мастерство",       sub:"Конфликты, стратегия, большие сделки",    months:[10,11,12] }
+];
+
+var MONTHS = [
+  { n:1, q:1, short:"Хладнокровие", title:"Хладнокровие: управление собой под давлением",
+    practice:[
+      { id:"p1-1", text:"Дыхание по квадрату 5 минут утром и перед каждым трудным разговором: вдох 4 счёта, задержка 4, выдох 4, задержка 4." },
+      { id:"p1-2", text:"В любом споре держи паузу в три секунды перед ответом." },
+      { id:"p1-3", text:"«Уйди на балкон»: в споре мысленно называй, что происходит: «он давит», «я злюсь»." },
+      { id:"p1-4", text:"Записывай себя на диктофон в спорном разговоре и учись говорить медленнее и ниже." }
+    ],
+    understand:"Кто злится, тот проигрывает. Не потому что эмоции плохи, а потому что они выдают твои слабые места и мешают думать." },
+  { n:2, q:1, short:"Подготовка", title:"Подготовка и гарвардский метод",
+    practice:[
+      { id:"p2-1", text:"Перед любыми переговорами этого месяца, даже мелкими, заполняй лист подготовки." },
+      { id:"p2-2", text:"Для трёх реальных ситуаций определи свою НАОС и НАОС другой стороны." },
+      { id:"p2-3", text:"В каждом споре спрашивай себя: какая позиция у человека и какой интерес за ней стоит?" }
+    ],
+    understand:"Сила в переговорах — это твоя альтернатива. Кто может спокойно уйти, тот и диктует условия." },
+  { n:3, q:1, short:"Слушать", title:"Слушать и спрашивать: техники Криса Восса",
+    practice:[
+      { id:"p3-1", text:"В каждом разговоре используй зеркалирование и называние чувств." },
+      { id:"p3-2", text:"Заменяй «почему» на калиброванные вопросы «как» и «что»." },
+      { id:"p3-3", text:"Правило: говори меньше, чем собеседник." },
+      { id:"p3-4", text:"Перед трудным разговором делай аудит обвинений: перечисли всё плохое, что о тебе могут подумать, и скажи это первым." }
+    ],
+    understand:"Человек, который чувствует себя понятым, перестаёт защищаться. Тогда с ним можно договориться." },
+  { n:4, q:2, short:"Логика", title:"Логика спора и уловки",
+    practice:[
+      { id:"p4-1", text:"Выучи уловки из шпаргалки и ответы на них." },
+      { id:"p4-2", text:"Каждую неделю смотри одни дебаты и записывай уловки, которые заметил." },
+      { id:"p4-3", text:"Когда в споре подменяют твой тезис, спокойно возвращай его одной фразой." },
+      { id:"p4-4", text:"Разбери на Kialo три спорные темы: лучшие аргументы за и против." }
+    ],
+    understand:"Спор выигрывает не тот, кто громче, а тот, кто точнее определил предмет спора и не дал его подменить." },
+  { n:5, q:2, short:"Краткость", title:"Краткость и сила слова",
+    practice:[
+      { id:"p5-1", text:"Начинай с главного: сначала вывод, потом доводы." },
+      { id:"p5-2", text:"Убирай смягчители: «как бы», «наверное», «просто», «немного», «если честно»." },
+      { id:"p5-3", text:"После своего предложения молчи и жди ответа." },
+      { id:"p5-4", text:"Записывай ответы на трудные вопросы и сокращай каждый до 30 секунд." }
+    ],
+    understand:"Чем меньше слов, тем больше вес каждого. Слабые аргументы разбавляют сильные: один сильный довод лучше пяти средних." },
+  { n:6, q:2, short:"Убеждение", title:"Убеждение и влияние",
+    practice:[
+      { id:"p6-1", text:"Каждый день находи в рекламе, продажах или разговорах один принцип Чалдини." },
+      { id:"p6-2", text:"Перед важной просьбой подготовь контекст: о чём говорить до неё, в каком настроении её задать." },
+      { id:"p6-3", text:"Формулируй предложения через выгоду собеседника, а не через свою." }
+    ],
+    understand:"Люди соглашаются не с аргументами, а с человеком, которому доверяют, и с решением, которое считают своим." },
+  { n:7, q:3, short:"Давление", title:"Жёсткие оппоненты, давление и «нет»",
+    practice:[
+      { id:"p7-1", text:"На любой приём давления отвечай паузой и вопросом." },
+      { id:"p7-2", text:"«Сломанная пластинка»: спокойно повторяй свою позицию одной и той же фразой." },
+      { id:"p7-3", text:"Хотя бы раз в день говори «нет» без оправданий." },
+      { id:"p7-4", text:"Отработай с партнёром сцену с «плохим полицейским»: он давит, ты держишься." }
+    ],
+    understand:"Давление работает, только пока его не назвали. Спокойно назови приём, и он теряет силу." },
+  { n:8, q:3, short:"Статус", title:"Власть, статус и рамка",
+    practice:[
+      { id:"p8-1", text:"Упражнения на статус из «Импро»: неподвижная голова, паузы, никаких «э-э»." },
+      { id:"p8-2", text:"Не оправдывайся: заменяй объяснение одним фактом." },
+      { id:"p8-3", text:"Усиль свою альтернативу в реальной жизни: второй вариант работы, другой поставщик, запасной план." }
+    ],
+    understand:"Статус — это не громкость и не грубость. Это спокойствие, паузы и готовность уйти." },
+  { n:9, q:3, short:"Торг", title:"Торг: цифры, якоря, уступки",
+    practice:[
+      { id:"p9-1", text:"Каждую неделю торгуйся по-настоящему: рынок, продавец на сайте объявлений, услуги." },
+      { id:"p9-2", text:"Проведи один торг по методу Аккермана." },
+      { id:"p9-3", text:"Каждую уступку делай по формуле «если вы…, то я…»." },
+      { id:"p9-4", text:"Предлагай два-три равноценных для тебя варианта вместо одного." }
+    ],
+    understand:"Первое число задаёт рамку всему торгу, а каждая уступка без встречной учит другую сторону просить ещё." },
+  { n:10, q:4, short:"Конфликты", title:"Конфликты и трудные люди",
+    practice:[
+      { id:"p10-1", text:"«Золотой мост»: в каждом конфликте дай другой стороне способ согласиться, не потеряв лицо." },
+      { id:"p10-2", text:"Раз в неделю проводи трудный разговор по схеме Розенберга: наблюдение, чувство, потребность, просьба." },
+      { id:"p10-3", text:"Когда человек в ярости, сначала успокой его и только потом обсуждай суть." }
+    ],
+    understand:"Можно победить человека, а можно договориться с ним. Первое создаёт врага, второе — результат." },
+  { n:11, q:4, short:"Стратегия", title:"Стратегия и теория игр",
+    practice:[
+      { id:"p11-1", text:"15 минут в день решай шахматные задачи на lichess." },
+      { id:"p11-2", text:"Для каждых важных переговоров рисуй дерево ходов: что они сделают, если я…" },
+      { id:"p11-3", text:"Сформулируй своё правило для долгих отношений: честность, ответ на нечестность и прощение." }
+    ],
+    understand:"Сильный стратег думает не о своём следующем ходе, а о том, как на него ответят." },
+  { n:12, q:4, short:"Мастерство", title:"Большие переговоры и свой стиль",
+    practice:[
+      { id:"p12-1", text:"Проведи одни большие переговоры с полной подготовкой: зарплата, аренда или крупная покупка." },
+      { id:"p12-2", text:"Перечитай дневник за год и выпиши три главные ошибки и как ты их исправил." },
+      { id:"p12-3", text:"Объясни основы переговоров другу. Если не можешь объяснить просто, значит, сам не понял." },
+      { id:"p12-4", text:"Напиши свой кодекс переговорщика." }
+    ],
+    understand:"Мастера переговоров уважают, а не боятся: с ним бесполезно играть в игры, но выгодно договариваться." }
+];
+
+/* type: book | video | audio | film | tool. m: months (0 = неделя 0). year: идёт весь год */
+var RES = [
+  // Книги
+  { id:"b-goulston", type:"book", title:"«Я слышу вас насквозь»", by:"Марк Гоулстон", m:[1], note:"В оригинале Just Listen. Как успокоить себя и собеседника и пробиться к нему." },
+  { id:"b-crucial", type:"book", title:"«Ключевые разговоры»", by:"Керри Паттерсон, Джозеф Гренни и др.", m:[1], note:"В оригинале Crucial Conversations. Как говорить, когда ставки высоки, а эмоции зашкаливают." },
+  { id:"b-epictetus", type:"book", title:"«Энхиридион»", by:"Эпиктет", m:[1], note:"Что в твоей власти, а что нет. Читается за вечер." },
+  { id:"b-yes", type:"book", title:"«Переговоры без поражения. Гарвардский метод»", by:"Роджер Фишер, Уильям Юри, Брюс Паттон", m:[2], note:"В оригинале Getting to Yes. Основа всего курса." },
+  { id:"b-genius", type:"book", title:"«Гениальный переговорщик»", by:"Дипак Малхотра, Макс Базерман", m:[2], note:"В оригинале Negotiation Genius. Подготовка, торг и защита от уловок на примерах Гарвардской школы бизнеса." },
+  { id:"b-diamond", type:"book", title:"«Переговоры, которые работают»", by:"Стюарт Даймонд", m:[2], note:"В оригинале Getting More. Переговоры в быту: магазины, сервисы, семья." },
+  { id:"b-voss", type:"book", title:"«Никаких компромиссов»", by:"Крис Восс", m:[3], note:"В оригинале Never Split the Difference. Бывший главный переговорщик ФБР о технике переговоров." },
+  { id:"b-spin", type:"book", title:"«СПИН-продажи»", by:"Нил Рекхэм", m:[3], note:"Как задавать вопросы так, чтобы собеседник сам пришёл к нужному выводу." },
+  { id:"b-povarnin", type:"book", title:"«Искусство спора»", by:"Сергей Поварнин", m:[4], note:"Русская классика 1918 года: теория спора и разбор нечестных приёмов." },
+  { id:"b-schopenhauer", type:"book", title:"«Искусство побеждать в спорах»", by:"Артур Шопенгауэр", m:[4], note:"38 уловок. Читай как каталог того, что будут применять против тебя." },
+  { id:"b-ivin", type:"book", title:"«Искусство правильно мыслить»", by:"Александр Ивин", m:[4], note:"Логика простым языком." },
+  { id:"b-minto", type:"book", title:"«Принцип пирамиды Минто»", by:"Барбара Минто", m:[5], note:"Сначала вывод, потом доводы. Стандарт консультантов McKinsey." },
+  { id:"b-ilyahov", type:"book", title:"«Пиши, сокращай»", by:"Максим Ильяхов, Людмила Сарычева", m:[5], note:"Про текст, но работает и для речи: убирай всё лишнее." },
+  { id:"b-rhetoric", type:"book", title:"«Риторика»", by:"Аристотель", m:[5], note:"Этос, пафос, логос: на чём держится любое убеждение." },
+  { id:"b-cialdini", type:"book", title:"«Психология влияния»", by:"Роберт Чалдини", m:[6], note:"Шесть принципов, на которых держится любое влияние." },
+  { id:"b-presuasion", type:"book", title:"«Пре-суазия»", by:"Роберт Чалдини", m:[6], note:"Как подготовить собеседника до того, как начнёшь убеждать." },
+  { id:"b-pastno", type:"book", title:"«Преодолевая „нет“»", by:"Уильям Юри", m:[7], note:"В оригинале Getting Past No. Переговоры с трудными и жёсткими людьми." },
+  { id:"b-camp", type:"book", title:"«Сначала скажите „нет“»", by:"Джим Кэмп", m:[7], note:"В оригинале Start with No. Не нуждайся в сделке и не бойся отказа." },
+  { id:"b-ryzov", type:"book", title:"«Кремлёвская школа переговоров»", by:"Игорь Рызов", m:[7], note:"Жёсткие переговоры на российских примерах." },
+  { id:"b-48laws", type:"book", title:"«48 законов власти»", by:"Роберт Грин", m:[8], note:"Читай как описание того, как действуют игроки, чтобы их распознавать." },
+  { id:"b-impro", type:"book", title:"«Импро»", by:"Кит Джонстон", m:[8], note:"Глава о статусе: как он проявляется в позе, паузах и взгляде." },
+  { id:"b-pfeffer", type:"book", title:"«Власть»", by:"Джеффри Пфеффер", m:[8], note:"В оригинале Power: Why Some People Have It — and Others Don't. Профессор Стэнфорда о том, как устроено влияние." },
+  { id:"b-kennedy", type:"book", title:"«Договориться можно обо всём!»", by:"Гэвин Кеннеди", m:[9], note:"В оригинале Everything Is Negotiable. Торг, уступки и типичные ошибки." },
+  { id:"b-thompson", type:"book", title:"«Разум переговорщика»", by:"Ли Томпсон", m:[9], note:"В оригинале The Mind and Heart of the Negotiator. Учебник на данных исследований." },
+  { id:"b-crazy", type:"book", title:"«Как разговаривать с м*даком»", by:"Марк Гоулстон", m:[10], note:"В оригинале Talking to Crazy. Что делать, если собеседник неадекватен." },
+  { id:"b-nvc", type:"book", title:"«Язык жизни. Ненасильственное общение»", by:"Маршалл Розенберг", m:[10], note:"Как говорить жёстко по сути и не нападать на человека." },
+  { id:"b-dixit", type:"book", title:"«Теория игр. Искусство стратегического мышления в бизнесе и жизни»", by:"Авинаш Диксит, Барри Нейлбафф", m:[11], note:"В оригинале The Art of Strategy." },
+  { id:"b-schelling", type:"book", title:"«Стратегия конфликта»", by:"Томас Шеллинг", m:[11], note:"Нобелевский лауреат об угрозах, обязательствах и торге." },
+  { id:"b-suntzu", type:"book", title:"«Искусство войны»", by:"Сунь-цзы", m:[11] },
+  { id:"b-grant", type:"book", title:"«Брать или отдавать?»", by:"Адам Грант", m:[12], note:"В оригинале Give and Take. Почему в долгую выигрывают не самые жёсткие." },
+  { id:"b-wheeler", type:"book", title:"«Искусство переговоров»", by:"Майкл Уилер", m:[12], note:"В оригинале The Art of Negotiation. Как импровизировать, когда всё идёт не по плану." },
+
+  // Видео и лекции
+  { id:"v-ury", type:"video", title:"Уильям Юри: «The walk from „no“ to „yes“»", by:"TED, есть русские субтитры", m:[1], note:"Про «уход на балкон» и третью сторону.", q:"William Ury The walk from no to yes TED" },
+  { id:"v-sigh", type:"video", title:"Эндрю Хуберман: физиологический вздох", by:"Как быстро успокоиться", m:[1], q:"Huberman physiological sigh" },
+  { id:"v-pon", type:"video", title:"Harvard Program on Negotiation", by:"Канал Гарвардской программы по переговорам", m:[2], q:"Harvard Program on Negotiation" },
+  { id:"v-ury-yes", type:"video", title:"Уильям Юри: лекции о гарвардском методе", by:"YouTube", m:[2], q:"William Ury Getting to Yes lecture" },
+  { id:"v-voss", type:"video", title:"Крис Восс: интервью и разборы", by:"Big Think и другие", m:[3], q:"Chris Voss negotiation Big Think" },
+  { id:"v-voss-mirror", type:"video", title:"Крис Восс: зеркалирование и ярлыки", by:"YouTube", m:[3], q:"Chris Voss mirroring labeling" },
+  { id:"v-iq2", type:"video", title:"Intelligence Squared: дебаты", by:"YouTube, на английском", m:[4], year:true, note:"Одни дебаты в неделю с разбором.", q:"Intelligence Squared debate" },
+  { id:"v-fallacies", type:"video", title:"Wireless Philosophy: логические ошибки", by:"YouTube, на английском", m:[4], q:"Wireless Philosophy fallacies critical thinking" },
+  { id:"v-treasure", type:"video", title:"Джулиан Трежер: «How to speak so that people want to listen»", by:"TED, есть русские субтитры", m:[5], q:"Julian Treasure How to speak so that people want to listen TED" },
+  { id:"v-lancaster", type:"video", title:"Саймон Ланкастер: «Speak like a leader»", by:"TEDx", m:[5], q:"Simon Lancaster Speak like a leader TEDx" },
+  { id:"v-cialdini", type:"video", title:"Роберт Чалдини: «Science of Persuasion»", by:"Короткий анимированный ролик", m:[6], q:"Cialdini Science of Persuasion" },
+  { id:"v-jiang", type:"video", title:"Цзя Цзян: «What I learned from 100 days of rejection»", by:"TED, есть русские субтитры", m:[7], note:"Как перестать бояться отказа.", q:"Jia Jiang What I learned from 100 days of rejection TED" },
+  { id:"v-ryzov", type:"video", title:"Игорь Рызов: интервью и лекции", by:"YouTube, на русском", m:[7], q:"Игорь Рызов переговоры" },
+  { id:"v-galinsky", type:"video", title:"Адам Галински: «How to speak up for yourself»", by:"TED, есть русские субтитры", m:[8], q:"Adam Galinsky How to speak up for yourself TED" },
+  { id:"v-neale", type:"video", title:"Маргарет Нил: «Negotiation: Getting What You Want»", by:"Stanford GSB", m:[9], q:"Margaret Neale Negotiation Getting What You Want Stanford" },
+  { id:"v-ackerman", type:"video", title:"Крис Восс: метод Аккермана", by:"YouTube", m:[9], q:"Chris Voss Ackerman model bargaining" },
+  { id:"v-rosenberg", type:"video", title:"Маршалл Розенберг: семинар по ненасильственному общению", by:"YouTube, есть версии с переводом", m:[10], q:"Маршалл Розенберг ненасильственное общение семинар" },
+  { id:"v-veritasium", type:"video", title:"Veritasium: «What Game Theory Reveals About Life, The Universe, and Everything»", by:"YouTube", m:[11], note:"Дилемма заключённого и почему выигрывает «око за око с прощением».", q:"Veritasium What Game Theory Reveals About Life" },
+  { id:"v-malhotra", type:"video", title:"Дипак Малхотра: «Negotiating the Impossible»", by:"Лекция", m:[12], q:"Deepak Malhotra Negotiating the Impossible talk" },
+
+  // Подкасты
+  { id:"a-negotiate", type:"audio", title:"Negotiate Anything", by:"Кваме Кристиан, на английском", m:[3], year:true, q:"Negotiate Anything podcast Kwame Christian" },
+  { id:"a-iq2", type:"audio", title:"Intelligence Squared", by:"Дебаты в аудио, на английском", m:[], year:true, q:"Intelligence Squared podcast debates" },
+
+  // Фильмы и сериалы
+  { id:"f-bridge", type:"film", title:"«Шпионский мост»", by:"Стивен Спилберг, 2015", m:[1], note:"Спокойный адвокат против двух систем. Образец хладнокровия.", q:"Шпионский мост 2015 фильм" },
+  { id:"f-founder", type:"film", title:"«Основатель»", by:"Джон Ли Хэнкок, 2016", m:[2], note:"Как плохо подготовленная сделка стоила братьям Макдональд империи.", q:"Основатель 2016 фильм" },
+  { id:"f-negotiator", type:"film", title:"«Переговорщик»", by:"Ф. Гэри Грей, 1998", m:[3], note:"Переговоры с захватчиком заложников, где оба — профессионалы.", q:"Переговорщик 1998 фильм" },
+  { id:"f-12angry", type:"film", title:"«12 разгневанных мужчин»", by:"Сидни Люмет, 1957", m:[4], note:"Один спокойный человек логикой переубеждает одиннадцать.", q:"12 разгневанных мужчин 1957 фильм" },
+  { id:"f-kingspeech", type:"film", title:"«Король говорит!»", by:"Том Хупер, 2010", m:[5], note:"Голос, паузы и уверенность в речи.", q:"Король говорит 2010 фильм" },
+  { id:"f-glengarry", type:"film", title:"«Гленгарри Глен Росс»", by:"Джеймс Фоули, 1992", m:[6], note:"В российском прокате «Американцы». Давление в продажах: учись видеть приёмы.", q:"Гленгарри Глен Росс Американцы 1992 фильм" },
+  { id:"f-billions", type:"film", title:"«Миллиарды»", by:"Сериал, 2016–2023", m:[7], note:"Давление, блеф и рычаги.", q:"Миллиарды сериал Billions" },
+  { id:"f-succession", type:"film", title:"«Наследники»", by:"Сериал, 2018–2023", m:[8], note:"Власть, статус и игры в семье и бизнесе.", q:"Наследники сериал Succession" },
+  { id:"f-moneyball", type:"film", title:"«Человек, который изменил всё»", by:"Беннетт Миллер, 2011", m:[9], note:"Обмены игроков по телефону: торг в чистом виде.", q:"Человек который изменил всё 2011 фильм" },
+  { id:"f-marriage", type:"film", title:"«Брачная история»", by:"Ноа Баумбах, 2019", m:[10], note:"Как юристы превращают конфликт в войну.", q:"Брачная история 2019 фильм" },
+  { id:"f-13days", type:"film", title:"«Тринадцать дней»", by:"Роджер Дональдсон, 2000", m:[11], note:"Карибский кризис: стратегия на грани войны.", q:"Тринадцать дней 2000 фильм" },
+  { id:"f-suits", type:"film", title:"«Форс-мажоры»", by:"Сериал, 2011–2019", m:[12], note:"Для удовольствия: блеф и рычаги, сильно приукрашено.", q:"Форс-мажоры сериал Suits" },
+
+  // Сервисы и тесты
+  { id:"t-tki", type:"tool", title:"Тест Томаса — Килманна", by:"Твой стиль поведения в конфликте", m:[0,12], q:"тест Томаса Килманна онлайн" },
+  { id:"t-anki", type:"tool", title:"Anki", by:"Карточки для фраз и уловок, бесплатно", m:[0], url:"https://apps.ankiweb.net" },
+  { id:"t-cmich", type:"tool", title:"Coursera: «Successful Negotiation: Essential Strategies and Skills»", by:"Мичиганский университет, можно бесплатно", m:[2], q:"Coursera Successful Negotiation Essential Strategies and Skills Michigan" },
+  { id:"t-kialo", type:"tool", title:"Kialo", by:"Карты аргументов по спорным темам", m:[4], url:"https://www.kialo.com" },
+  { id:"t-toastmasters", type:"tool", title:"Клуб ораторов Toastmasters", by:"Тренировка речи в живой группе", m:[5], q:"Toastmasters клуб ораторов" },
+  { id:"t-cyale", type:"tool", title:"Coursera: «Introduction to Negotiation»", by:"Йельский университет, можно бесплатно", m:[9], q:"Coursera Introduction to Negotiation Yale Nalebuff" },
+  { id:"t-lichess", type:"tool", title:"lichess.org: шахматные задачи", by:"Бесплатно", m:[11], url:"https://lichess.org/training" },
+  { id:"t-cgame", type:"tool", title:"Coursera: «Game Theory»", by:"Стэнфорд и Университет Британской Колумбии", m:[11], q:"Coursera Game Theory Stanford" }
+];
+
+var TYPE = { book:"Книга", video:"Видео", audio:"Подкаст", film:"Фильм", tool:"Сервис" };
+var TYPE_WORDS = { book:"книга книги читать", video:"видео ютуб youtube лекция лекции смотреть", audio:"подкаст подкасты слушать аудио", film:"фильм фильмы сериал сериалы кино смотреть", tool:"сервис сайт приложение тест тесты курс" };
+
+var HONEST = [
+  "«Всегда выходить правым» не получится ни у кого. Лучшие переговорщики выигрывают не спор, а результат. Выигранный спор часто стоит сделки, отношений и репутации.",
+  "Страх — плохая валюта. Те, кто тебя боится, скрывают информацию, тянут время и ищут реванш. Сильнее работает другое: с тобой бесполезно играть в игры, но выгодно договариваться.",
+  "Хладнокровие — навык, а не врождённая черта. Его дают подготовка, дыхание, пауза и опыт десятков трудных разговоров.",
+  "Немногословность — преимущество. Кто больше спрашивает и слушает, тот знает больше и управляет разговором.",
+  "Гением переговоров делают не книги, а сотни реальных переговоров с разбором. За год реально стать заметно сильнее большинства, если практиковаться каждый день."
+];
+
+var QUAL_MINE = [
+  { t:"Грамотные переговоры", d:"Готовиться, вести разговор и закрывать сделку.", m:[2,9,12] },
+  { t:"Сильная позиция в споре", d:"Точные аргументы и защита от уловок.", m:[4,8] },
+  { t:"Хладнокровие", d:"Спокойствие под давлением и на провокации.", m:[1,7] },
+  { t:"Ум", d:"Логика, стратегия, просчёт ходов.", m:[4,11] },
+  { t:"Немногословность", d:"Коротко, точно, с паузами.", m:[5] },
+  { t:"Авторитет", d:"Чтобы с тобой не пытались играть в игры.", m:[8,12] }
+];
+var QUAL_ADDED = [
+  { t:"Умение слушать и спрашивать", d:"Главный источник информации и контроля в разговоре.", m:[3] },
+  { t:"Умение сказать «нет»", d:"Без оправданий и чувства вины.", m:[7] },
+  { t:"Торг", d:"Якоря, уступки, пакеты условий.", m:[9] },
+  { t:"Убеждение", d:"Чтобы соглашались, а не уступали.", m:[6] },
+  { t:"Защита от манипуляций", d:"Видеть приём и спокойно называть его.", m:[6,7] },
+  { t:"Управление конфликтом", d:"Гасить эскалацию и давать другой стороне выход.", m:[10] },
+  { t:"Репутация", d:"Слово, которое держишь. Самый сильный аргумент в следующих переговорах.", m:[12] }
+];
+
+var ROUTINE = [
+  { when:"Утро", what:"Дыхание по квадрату: 4 счёта вдох, 4 задержка, 4 выдох, 4 задержка", t:"5 мин" },
+  { when:"Утро", what:"Книга месяца, 20–30 страниц", t:"30 мин" },
+  { when:"В дороге", what:"Лекция, подкаст или дебаты", t:"30 мин" },
+  { when:"Днём", what:"Одна маленькая просьба или торг, где тебе могут отказать", t:"5 мин" },
+  { when:"Днём", what:"Техника месяца в обычных разговорах", t:"весь день" },
+  { when:"Вечер", what:"Дневник переговоров", t:"10 мин" },
+  { when:"Вечер", what:"Anki: фразы и уловки", t:"10 мин" }
+];
+var WEEKLY = [
+  "Разобрать одни дебаты или спор из видео: найти уловки и сильные ходы.",
+  "Ролевая тренировка с партнёром: 15 минут переговоров по сценарию, потом поменяться ролями.",
+  "Перечитать дневник переговоров за неделю и выписать одну повторяющуюся ошибку."
+];
+var MONTHLY = [
+  "Одни настоящие переговоры с полной подготовкой по листу: цена, сроки или условия.",
+  "Посмотреть фильм месяца и разобрать, кто вёл переговоры лучше и почему.",
+  "Записать итог месяца: что уже получается, что пока нет."
+];
+var TOOLS = [
+  { t:"Дневник переговоров", key:"главный", d:"После каждого спора или торга пять строк: чего я хотел, что получил, где потерял контроль, какую технику применил, что скажу иначе в следующий раз. Без разбора опыт не превращается в мастерство.", words:"дневник разбор ошибки" },
+  { t:"Лист подготовки", d:"Одна страница перед любыми важными переговорами. Двенадцать вопросов из шпаргалки, заполняются за 15 минут.", link:"#prep", words:"подготовка лист вопросы" },
+  { t:"Банк фраз", d:"Anki или заметки с готовыми короткими фразами на давление, отказ, уступку и паузу. В трудный момент голова пустеет, а заученная фраза срабатывает сама.", link:"#phrases", words:"фразы карточки anki" }
+];
+
+var WEEK0 = [
+  { id:"w0-tki", text:"Пройти тест Томаса — Килманна и записать свой основной стиль в конфликте." },
+  { id:"w0-three", text:"Записать три последних спора или торга: чего хотел, что получил, что пошло не так." },
+  { id:"w0-voice", text:"Записать себя на диктофон: 2 минуты защищай любую позицию. Посчитай слова-паразиты и оцени темп." },
+  { id:"w0-diary", text:"Завести дневник переговоров." },
+  { id:"w0-prep", text:"Сохранить лист подготовки из шпаргалок в телефоне." },
+  { id:"w0-partner", text:"Найти партнёра для еженедельных ролевых тренировок." },
+  { id:"w0-anki", text:"Завести колоду Anki «Фразы и уловки»." }
+];
+
+var YEAR = [
+  { t:"Отказы", d:"Каждый день одна маленькая просьба, где тебе могут отказать: скидка, место у окна, перенос срока. Страх отказа заметно слабеет за две-три недели." },
+  { t:"Дебаты", d:"Одни дебаты в неделю с разбором: тезис, уловки, сильные ходы." },
+  { t:"Голос", d:"5 минут в день читай вслух медленно и чуть ниже обычного." },
+  { t:"Тело", d:"Сон и спорт. Уставший человек хуже держит удар и чаще срывается." },
+  { t:"Шахматы или покер на интерес", d:"Просчёт ходов и спокойствие при проигрыше." }
+];
+
+var LAWS = [
+  "Кто лучше подготовлен, тот и сильнее. Большая часть переговоров выигрывается до их начала.",
+  "Твоя сила — в твоей альтернативе. Без НАОС ты просишь, а не договариваешься.",
+  "Кто задаёт вопросы, тот управляет разговором.",
+  "Говори меньше, чем собеседник.",
+  "Спорь с позицией, уважай человека.",
+  "Эмоции — сигнал, а не руль. Решение на эмоциях почти всегда дорогое.",
+  "Никогда не уступай бесплатно: каждая уступка — в обмен на что-то.",
+  "Первое предложение задаёт рамку всему торгу.",
+  "Дедлайн другой стороны почти всегда мягче, чем кажется.",
+  "Молчание — тоже ход.",
+  "Не загоняй в угол: человек без выхода дерётся до конца. Строй золотой мост.",
+  "Выиграть спор и выиграть переговоры — разные вещи.",
+  "Сдержанное обещание — самый сильный аргумент в следующих переговорах.",
+  "Не нуждайся. Кто сильнее хочет сделку, тот платит больше.",
+  "Договорённость без записи — это намерение, а не договорённость."
+];
+
+var PREP = [
+  "Чего я хочу? Идеальный результат, приемлемый результат и точка, где я ухожу.",
+  "Моя НАОС: что я сделаю, если не договоримся? Как усилить её до встречи?",
+  "Их НАОС: что они сделают без меня? Насколько им нужна эта сделка?",
+  "Мои интересы за позицией: зачем мне это на самом деле?",
+  "Их интересы: чего они хотят, чего боятся, что им важно сохранить (лицо, статус, время)?",
+  "Объективные критерии: рыночные цены, примеры, правила, на которые можно сослаться.",
+  "Якорь: какое первое предложение я сделаю и чем его обосную?",
+  "Уступки: что мне отдать дёшево, а им получить ценно? Что я хочу взамен каждой?",
+  "Пять калиброванных вопросов «как» и «что».",
+  "Их возможные атаки и мои короткие ответы.",
+  "Первые 30 секунд: как я начну разговор.",
+  "Как мы зафиксируем договорённость."
+];
+
+var PHRASES = [
+  { t:"Взять паузу", items:["«Мне нужно подумать. Отвечу завтра до двенадцати.»", "«Давайте зафиксируем, о чём уже договорились.»", "«Секунду.» И молчать столько, сколько нужно."] },
+  { t:"На давление и спешку", items:["«Похоже, вам важно закрыть это сегодня. Что изменится, если решим в понедельник?»", "«Под давлением я решений не принимаю.»", "«Если это последнее предложение, похоже, мы не договоримся.» Только если у тебя есть сильная альтернатива."] },
+  { t:"Отказ", items:["«Нет, мне это не подходит.»", "«Не в этот раз.»", "«Как я могу на это согласиться?»"] },
+  { t:"Уступка", items:["«Если вы… то я могу…»", "«Что вы готовы дать взамен?»"] },
+  { t:"Вопросы", items:["«Что для вас здесь самое важное?»", "«Что мешает согласиться?»", "«Как мы поймём, что это честно для обеих сторон?»", "«На чём основана эта цифра?»"] },
+  { t:"Эмоции и грубость", items:["«Похоже, вас это сильно задело.»", "«Давайте вернёмся к сути.»", "«Я готов продолжить, когда разговор будет спокойным.»"] },
+  { t:"Подмена темы", items:["«Это другой вопрос. Давайте сначала закончим с этим.»", "«Я этого не говорил. Я сказал…»"] },
+  { t:"Закрытие", items:["«Итак, договорились: … Пришлю это письменно сегодня.»"] }
+];
+
+var TRICKS = [
+  { t:"Подмена тезиса", what:"Опровергают не то, что ты сказал.", ans:"«Я говорил другое. Мой тезис: …» Одной фразой верни исходную мысль." },
+  { t:"Соломенное чучело", what:"Твою позицию доводят до абсурда и бьют по ней.", ans:"«Это не моя позиция. Я говорю только, что …»" },
+  { t:"Переход на личности", what:"Вместо аргумента атакуют тебя.", ans:"Не защищайся. «Это про меня, а не про вопрос. Что по сути?»" },
+  { t:"Ложная дилемма", what:"«Или так, или никак».", ans:"«Есть и другие варианты. Например, …»" },
+  { t:"«Все так делают»", what:"Ссылка на большинство вместо довода.", ans:"«Возможно. Но почему это правильно именно в нашем случае?»" },
+  { t:"Перенос бремени доказательства", what:"«Докажи, что это не так».", ans:"«Утверждаете вы, значит, и доказывать вам.»" },
+  { t:"Вопрос с подвохом", what:"В вопросе спрятана ложная предпосылка: «Вы уже перестали обманывать клиентов?»", ans:"«В вопросе ложная предпосылка. Я не …»" },
+  { t:"Ложный дедлайн", what:"«Предложение действует только сегодня».", ans:"«Тогда я, видимо, его пропущу.» Чаще всего срок сдвигается." },
+  { t:"Хороший и плохой полицейский", what:"Один давит, другой «спасает».", ans:"Спокойно назови игру вслух или говори с обоими одинаково, на одних и тех же условиях." },
+  { t:"«Щипок» в конце", what:"После согласия просят ещё немного.", ans:"«Если добавить это, давайте вернёмся к условиям целиком.»" },
+  { t:"Ограниченные полномочия", what:"«Мне нужно согласовать с начальством».", ans:"Заранее спроси: «Кто принимает окончательное решение?» Этим же приёмом можешь пользоваться сам." },
+  { t:"Лесть", what:"«Вы же умный человек, вы понимаете…».", ans:"Не отвечай на комплимент. Верни разговор к критериям: «Давайте посмотрим на цифры.»" },
+  { t:"Повторение до истощения", what:"Одно и то же требование снова и снова.", ans:"«Сломанная пластинка» в ответ: спокойно повторяй свою позицию одной фразой." },
+  { t:"Новое условие после согласия", what:"«Да, но есть ещё одно условие».", ans:"Остановись и пересмотри сделку целиком." },
+  { t:"Угроза", what:"«Если не согласитесь, то…».", ans:"Без эмоций уточни: «Правильно ли я понимаю, что вы предлагаете …?» Опирайся на свою НАОС." }
+];
+
+var CALM = [
+  "Замолчи. Первые три секунды не отвечай.",
+  "Сделай физиологический вздох: два вдоха носом подряд и длинный выдох ртом.",
+  "Назови про себя, что происходит: «Он давит. Я злюсь.» Названная эмоция слабеет.",
+  "«Уйди на балкон» (Юри): посмотри на разговор со стороны, как на партию.",
+  "Говори медленнее и ниже, чем хочется.",
+  "Отвечай на суть, а не на тон. Или задай вопрос.",
+  "Если спокойствие не возвращается, возьми паузу: «Давайте вернёмся к этому через десять минут.»"
+];
+
+var BARGAIN = [
+  { t:"Кто называет цифру первым", d:"Если знаешь рынок, называй первым: первое предложение становится якорем. Если не знаешь, дай назвать им и не реагируй сразу." },
+  { t:"Точные числа", d:"Точная цифра (183 400) выглядит обоснованной и сдвигается меньше, чем круглая (180 000)." },
+  { t:"Уступки уменьшаются", d:"Каждая следующая уступка меньше предыдущей. Так другая сторона видит, что ты подходишь к пределу." },
+  { t:"Только в обмен", d:"Никаких бесплатных уступок: «Если вы …, то я …»." },
+  { t:"Не торгуйся сам с собой", d:"Назвал цену — жди ответа. Не снижай её, пока другая сторона не ответила." },
+  { t:"Не дели пополам", d:"Разница пополам выгодна тому, чей первый якорь был наглее." },
+  { t:"Пакет вместо цены", d:"Обсуждай всё сразу: цену, сроки, оплату, гарантии. Если спорить только о цене, кто-то обязательно проиграет." },
+  { t:"Несколько вариантов", d:"Предложи два-три равноценных для тебя варианта. По выбору видно приоритеты другой стороны, а у неё появляется чувство контроля." },
+  { t:"Метод Аккермана", d:"Цель — X. Первое предложение 65% от X, потом 85%, 95% и 100%. Последнее число точное и некруглое, вместе с небольшим нематериальным бонусом (из книги Восса)." }
+];
+
+var VOSS = [
+  { t:"Зеркалирование", d:"Повтори 1–3 последних слова собеседника с вопросительной интонацией. Он продолжит и расскажет больше." },
+  { t:"Называние чувства", d:"«Похоже, вас это сильно задело». Названная эмоция ослабевает." },
+  { t:"Калиброванные вопросы", d:"«Как» и «что» вместо «почему»: «Как мне это сделать?» Человек сам начинает искать решение." },
+  { t:"Аудит обвинений", d:"Скажи первым всё плохое, что о тебе могут подумать: «Вы, наверное, решите, что я жадничаю…». Обвинения теряют силу." },
+  { t:"Вопросы на «нет»", d:"«Вам это совсем неинтересно?» Сказать «нет» людям проще и безопаснее, чем «да»." },
+  { t:"«Вот именно»", d:"Перескажи позицию собеседника так точно, чтобы он сказал «вот именно». С этого момента он слушает тебя." },
+  { t:"Голос ночного диджея", d:"Медленно, спокойно, чуть ниже. Голос успокаивает и показывает, что ты контролируешь ситуацию." }
+];
+
+var HARVARD = [
+  { t:"Отделяй людей от проблемы", d:"Жёстко к вопросу, мягко к человеку." },
+  { t:"Интересы, а не позиции", d:"Позиция — что человек требует. Интерес — зачем ему это. Договариваются по интересам." },
+  { t:"Варианты взаимной выгоды", d:"Прежде чем делить, попробуй увеличить то, что делят." },
+  { t:"Объективные критерии", d:"Рыночная цена, прецедент, правило. Спор о критериях спокойнее спора о воле." },
+  { t:"НАОС", d:"Наилучшая альтернатива обсуждаемому соглашению. Знай свою, усиливай её и оценивай их." },
+  { t:"Золотой мост", d:"Дай другой стороне способ согласиться и сохранить лицо (Юри)." }
+];
+
+var METRICS = [
+  { id:"r-100", text:"Провёл больше ста маленьких переговоров и записал их в дневник." },
+  { id:"r-calm", text:"В трудном разговоре сохраняю спокойный голос и темп." },
+  { id:"r-no", text:"Говорю «нет» без оправданий и чувства вины." },
+  { id:"r-prep", text:"Готовлюсь к важному разговору по листу подготовки за 15 минут." },
+  { id:"r-tricks", text:"Узнаю уловки в споре и спокойно называю их." },
+  { id:"r-real", text:"Минимум трижды добился реального результата: скидка, зарплата, лучшие условия." },
+  { id:"r-tki", text:"Повторил тест Томаса — Килманна: мой стиль в конфликте стал гибче." },
+  { id:"r-codex", text:"Написан мой кодекс переговорщика." }
+];
+var TRAPS = [
+  { t:"Победа ценой отношений", d:"Выиграл спор, потерял человека, сделку или репутацию. Считай результат, а не очки в споре." },
+  { t:"Манипуляции", d:"Приёмы из книг Грина и Чалдини быстро замечают. Репутация манипулятора закрывает больше дверей, чем открывает." },
+  { t:"Жёсткость ради жёсткости", d:"Если тебя боятся, с тобой не договариваются, а избегают тебя и скрывают информацию." },
+  { t:"Многословие от неуверенности", d:"Длинные объяснения звучат как оправдания. Один факт сильнее пяти «потому что»." },
+  { t:"Теория без практики", d:"Книги без дневника и реальных переговоров навыка не дают." },
+  { t:"Самоуверенность", d:"«Я всех читаю» — опасная мысль. Проверяй догадки вопросами." }
+];
+var CODEX = [
+  "Что я никогда не делаю в переговорах?",
+  "Где моя точка ухода и как я её определяю?",
+  "Как я веду себя, когда на меня давят?",
+  "Как я поступаю с обещаниями?",
+  "Что для меня честная сделка?"
+];
+
+/* ---------- helpers ---------- */
+function $(s, el){ return (el || document).querySelector(s); }
+function $$(s, el){ return Array.prototype.slice.call((el || document).querySelectorAll(s)); }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]; }); }
+function norm(s){ return String(s || "").toLowerCase().replace(/ё/g, "е").replace(/[«»„“”"()]/g, " "); }
+function clean(s){ return String(s || "").replace(/[«»„“”"]/g, ""); }
+function pad2(n){ return (n < 10 ? "0" : "") + n; }
+
+var byId = {};
+RES.forEach(function(r){ byId[r.id] = r; });
+function checkable(r){ return r.type !== "tool"; }
+
+var IN_CLAUDE = !!(window.claude && typeof window.claude.use === "function");
+var HOSTED = !IN_CLAUDE && /^https?:$/.test(location.protocol);
+/* Each id is one bit of the progress code, in this order. Add new items only at the end of
+   their lists and never reorder them, or codes saved earlier will load the wrong marks. */
+var CODE_IDS = RES.filter(checkable).map(function(r){ return r.id; })
+  .concat([].concat.apply([], MONTHS.map(function(m){ return m.practice.map(function(p){ return p.id; }); })))
+  .concat(WEEK0.map(function(w){ return w.id; }))
+  .concat(METRICS.map(function(x){ return x.id; }));
+
+function monthItems(n){
+  var ids = RES.filter(function(r){ return r.m.indexOf(n) !== -1 && checkable(r); }).map(function(r){ return r.id; });
+  return ids.concat(MONTHS[n-1].practice.map(function(p){ return p.id; }));
+}
+function progressOf(ids){
+  var d = ids.filter(function(id){ return !!state.done[id]; }).length;
+  return { done:d, total:ids.length, ratio: ids.length ? d / ids.length : 0 };
+}
+function monthProgress(n){ return progressOf(monthItems(n)); }
+function pct(p){ return Math.round(p.ratio * 100); }
+
+function monthsLabel(r){
+  var parts = [];
+  r.m.forEach(function(n){ parts.push(n === 0 ? "Неделя 0" : "Месяц " + n); });
+  if(r.year) parts.push("весь год");
+  return parts.join(", ");
+}
+function resLink(r){
+  if(r.url) return { href:r.url, label:"Открыть сайт" };
+  if(r.type === "video") return { href:"https://www.youtube.com/results?search_query=" + encodeURIComponent(r.q || clean(r.title)), label:"Найти на YouTube" };
+  var q = r.q || clean((r.by ? r.by + " " : "") + r.title) + (r.type === "book" ? " книга" : "");
+  return { href:"https://duckduckgo.com/?q=" + encodeURIComponent(q), label:"Найти" };
+}
+
+function todayISO(){
+  var d = new Date();
+  return d.getFullYear() + "-" + pad2(d.getMonth()+1) + "-" + pad2(d.getDate());
+}
+function currentMonth(){
+  if(!state.start || !/^\d{4}-\d{2}-\d{2}$/.test(state.start)) return null;
+  var p = state.start.split("-").map(Number);
+  var start = new Date(p[0], p[1]-1, p[2]);
+  var now = new Date();
+  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var days = Math.round((today - start) / 86400000);
+  if(days < 0) return { phase:"before", days:-days };
+  var diff = (today.getFullYear() - start.getFullYear()) * 12 + (today.getMonth() - start.getMonth()) - (today.getDate() < start.getDate() ? 1 : 0);
+  var n = diff + 1;
+  if(n > 12) return { phase:"done", days:days };
+  return { phase:"active", n:n, days:days };
+}
+function plural(n, one, few, many){
+  var a = n % 10, b = n % 100;
+  if(a === 1 && b !== 11) return one;
+  if(a >= 2 && a <= 4 && (b < 12 || b > 14)) return few;
+  return many;
+}
+function daysWord(n){ return plural(n, "день", "дня", "дней"); }
+
+/* ---------- row builders ---------- */
+function check(id, ctx, bodyHtml, sideHtml){
+  var cid = ctx + "-" + id;
+  return '<div class="row" id="' + ctx + '-row-' + id + '" data-id="' + id + '">' +
+    '<input type="checkbox" id="' + cid + '" data-item="' + id + '"' + (state.done[id] ? " checked" : "") + '>' +
+    '<label for="' + cid + '" class="row-body">' + bodyHtml + '</label>' + (sideHtml || "") + '</div>';
+}
+function resRow(r, ctx){
+  var body = '<span class="row-title">' + esc(r.title) + '</span>' +
+    (r.by ? '<span class="row-by">' + esc(r.by) + '</span>' : "") +
+    (r.note ? '<span class="row-note">' + esc(r.note) + '</span>' : "");
+  var link = resLink(r);
+  var chips = "";
+  if(ctx === "lib"){
+    chips = r.m.filter(function(n){ return n > 0; }).map(function(n){ return '<a class="mchip" href="#m' + n + '">Месяц ' + n + '</a>'; }).join("");
+    if(r.m.indexOf(0) !== -1) chips = '<a class="mchip" href="#week0">Неделя 0</a>' + chips;
+    if(r.year) chips += '<a class="mchip" href="#year">Весь год</a>';
+  }
+  var side = '<div class="row-side"><span class="chip">' + TYPE[r.type] + '</span>' + chips +
+    '<a class="ext" href="' + esc(link.href) + '" target="_blank" rel="noopener noreferrer">' + link.label + ' ↗</a></div>';
+  if(!checkable(r)){
+    return '<div class="row row-tool" id="' + ctx + '-row-' + r.id + '" data-id="' + r.id + '"><span class="dot" aria-hidden="true"></span><div class="row-body">' + body + '</div>' + side + '</div>';
+  }
+  return check(r.id, ctx, body, side);
+}
+function defs(list, prefix){
+  return '<dl class="defs">' + list.map(function(x, i){
+    return '<div class="def" id="' + prefix + '-' + i + '"><dt>' + esc(x.t) + '</dt><dd>' + esc(x.d) + '</dd></div>';
+  }).join("") + '</dl>';
+}
+function numbered(list, prefix){
+  return '<ol class="laws">' + list.map(function(l, i){ return '<li id="' + prefix + '-' + i + '"><span class="n">' + pad2(i+1) + '</span><span>' + esc(l) + '</span></li>'; }).join("") + '</ol>';
+}
+function monthLinks(ms){
+  return ms.map(function(n){ return '<a href="#m' + n + '">Месяц ' + n + '</a>'; }).join("");
+}
+
+/* ---------- OVERVIEW ---------- */
+function renderOverview(){
+  var qual = function(list, prefix){
+    return '<ul>' + list.map(function(x, i){
+      return '<li id="' + prefix + '-' + i + '"><span class="qt">' + esc(x.t) + '</span><span class="qd">' + esc(x.d) + '</span><span class="qm">' + monthLinks(x.m) + '</span></li>';
+    }).join("") + '</ul>';
+  };
+  $("#tab-overview").innerHTML =
+    '<p class="eyebrow">План на 12 месяцев</p>' +
+    '<h1>Год переговорщика</h1>' +
+    '<p class="lead">Хладнокровие, подготовка, логика, краткость, торг и стратегия. Четыре квартала, двенадцать тем, около тридцати книг и ежедневная практика на реальных разговорах.</p>' +
+    '<div class="today" id="today"></div>' +
+    '<div class="stats" id="stats"></div>' +
+    '<h2>Как устроен год</h2>' +
+    '<div class="quarters" id="ov-quarters"></div>' +
+    '<h2 id="honest">Сначала честно</h2>' +
+    '<ul class="plain">' + HONEST.map(function(h, i){ return '<li id="hon-' + i + '">' + esc(h) + '</li>'; }).join("") + '</ul>' +
+    '<h2 id="qualities">Какие качества строим</h2>' +
+    '<p class="muted">Под каждым качеством — месяцы, в которых оно тренируется сильнее всего.</p>' +
+    '<div class="qual"><div><h3>Твои</h3>' + qual(QUAL_MINE, "qm") + '</div><div><h3>Добавленные</h3>' + qual(QUAL_ADDED, "qa") + '</div></div>' +
+    '<h2 id="transfer">Перенос прогресса</h2>' +
+    '<p class="muted">' + (IN_CLAUDE
+      ? "Здесь отметки сохраняются в аккаунте Claude сами. Код ниже переносит прогресс в версию сайта вне Claude и обратно."
+      : "Отметки хранятся только на этом устройстве. Чтобы продолжить на другом, скопируй код" + (HOSTED ? " или ссылку" : "") + " и открой там. Делай так каждый раз, когда переходишь на другое устройство.") + '</p>' +
+    '<div class="xfer">' +
+      '<label for="xfer-code">Код прогресса на этом устройстве</label>' +
+      '<div class="xfer-row"><input id="xfer-code" readonly><button type="button" class="btn" data-act="copy-code">Скопировать код</button>' +
+        (HOSTED ? '<button type="button" class="btn btn-ghost" data-act="copy-link">Скопировать ссылку</button>' : "") + '</div>' +
+      '<label for="xfer-input">Код с другого устройства</label>' +
+      '<div class="xfer-row"><input id="xfer-input" placeholder="' + CODE_PREFIX + '.…" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn btn-ghost" data-act="check-code">Загрузить</button></div>' +
+      '<div class="xfer-confirm" id="xfer-confirm" hidden></div>' +
+      '<p class="xfer-msg" id="xfer-msg" role="status"></p>' +
+    '</div>';
+}
+
+/* ---------- PROGRESS CODE ---------- */
+function encodeProgress(){
+  var bytes = new Array(Math.ceil(CODE_IDS.length / 8)).fill(0);
+  CODE_IDS.forEach(function(id, i){ if(state.done[id]) bytes[i >> 3] |= 1 << (i & 7); });
+  var b64 = btoa(String.fromCharCode.apply(null, bytes)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return CODE_PREFIX + "." + (state.start ? state.start.replace(/-/g, "") : "0") + "." + b64;
+}
+function decodeProgress(code){
+  var m = new RegExp("^" + CODE_PREFIX + "\\.(\\d{8}|0)\\.([A-Za-z0-9_-]+)$").exec(String(code || "").trim());
+  if(!m) return null;
+  var b64 = m[2].replace(/-/g, "+").replace(/_/g, "/");
+  while(b64.length % 4) b64 += "=";
+  var bin; try{ bin = atob(b64); }catch(e){ return null; }
+  var done = {};
+  CODE_IDS.forEach(function(id, i){ if((bin.charCodeAt(i >> 3) || 0) & (1 << (i & 7))) done[id] = 1; });
+  var start = m[1] === "0" ? null : m[1].slice(0,4) + "-" + m[1].slice(4,6) + "-" + m[1].slice(6,8);
+  return { done:done, start:start };
+}
+function renderXfer(){ var c = $("#xfer-code"); if(c) c.value = encodeProgress(); }
+function syncLink(){ return location.origin + location.pathname + "#sync=" + encodeProgress(); }
+function fmtDate(iso){
+  var p = iso.split("-").map(Number);
+  return new Date(p[0], p[1]-1, p[2]).toLocaleDateString("ru-RU", { day:"numeric", month:"long" }) + " " + p[0];
+}
+var pendingImport = null;
+function previewImport(code){
+  var msg = $("#xfer-msg"), box = $("#xfer-confirm"); if(!msg || !box) return;
+  var dec = decodeProgress(code);
+  if(!dec){
+    pendingImport = null; box.hidden = true;
+    msg.textContent = "Код не распознан. Скопируй его целиком: он начинается с " + CODE_PREFIX + ".";
+    return;
+  }
+  pendingImport = dec;
+  var n = Object.keys(dec.done).length;
+  var cur = CODE_IDS.filter(function(id){ return state.done[id]; }).length;
+  box.innerHTML = '<p>В коде отмечено ' + n + ' ' + plural(n, "пункт", "пункта", "пунктов") +
+    (dec.start ? ", дата старта " + esc(fmtDate(dec.start)) : ", дата старта не указана") +
+    '. Сейчас здесь отмечено ' + cur + '. Заменить прогресс на этом устройстве прогрессом из кода?</p>' +
+    '<div class="xfer-row"><button type="button" class="btn" data-act="apply-import">Заменить</button><button type="button" class="btn btn-ghost" data-act="cancel-import">Отмена</button></div>';
+  box.hidden = false; msg.textContent = "";
+}
+function applyImport(){
+  if(!pendingImport) return;
+  state = { done:pendingImport.done, start:pendingImport.start };
+  if(!remoteReady){
+    sessionEdits = {};
+    CODE_IDS.forEach(function(id){ sessionEdits[id] = !!state.done[id]; });
+    startEdited = true;
+  }
+  pendingImport = null;
+  $("#xfer-confirm").hidden = true; $("#xfer-input").value = "";
+  var cm = currentMonth();
+  if(cm && cm.phase === "active"){ selMonth = cm.n; lsSet("month", String(cm.n)); renderMonth(); }
+  refreshAll(); persist();
+  $("#xfer-msg").textContent = "Готово: прогресс загружен.";
+}
+function copyText(text, onFail){
+  var msg = $("#xfer-msg");
+  var ok = function(){ msg.textContent = "Скопировано. Открой сайт на другом устройстве и вставь код в поле «Код с другого устройства»."; };
+  try{ navigator.clipboard.writeText(text).then(ok, onFail); }catch(e){ onFail(); }
+}
+
+function renderToday(){
+  var el = $("#today"); if(!el) return;
+  var cm = currentMonth();
+  var dateField = '<div class="today-date"><label for="start-date">Дата старта</label><input type="date" id="start-date" value="' + esc(state.start || "") + '"></div>';
+  var html;
+  if(!cm){
+    html = '<div class="today-main"><p class="eyebrow">С чего начать</p>' +
+      '<p class="today-title">Начни с недели 0: тест, разбор трёх последних споров и запись голоса.</p>' +
+      '<p class="muted small">Укажи дату старта, и здесь будет показан текущий месяц плана.</p>' +
+      '<div class="today-actions"><button type="button" class="btn" data-act="start-today">Начать сегодня</button><a class="btn btn-ghost" href="#week0">Что сделать в неделю 0</a></div></div>';
+  } else if(cm.phase === "before"){
+    html = '<div class="today-main"><p class="eyebrow">До старта ' + cm.days + ' ' + daysWord(cm.days) + '</p>' +
+      '<p class="today-title">Пока пройди неделю 0.</p>' +
+      '<div class="today-actions"><a class="btn" href="#week0">Неделя 0</a><a class="btn btn-ghost" href="#m1">Посмотреть месяц 1</a></div></div>';
+  } else if(cm.phase === "done"){
+    html = '<div class="today-main"><p class="eyebrow">Год пройден</p>' +
+      '<p class="today-title">Повтори тест Томаса — Килманна и напиши свой кодекс.</p>' +
+      '<div class="today-actions"><a class="btn" href="#results">Итоги</a><a class="btn btn-ghost" href="#codex">Кодекс переговорщика</a></div></div>';
+  } else {
+    var m = MONTHS[cm.n-1], q = QUARTERS[m.q-1], p = monthProgress(cm.n);
+    html = '<div class="today-main"><p class="eyebrow">Сейчас · день ' + (cm.days + 1) + ' из 365</p>' +
+      '<p class="today-title">Месяц ' + cm.n + '. ' + esc(m.title) + '</p>' +
+      '<p class="muted small">Квартал ' + q.roman + ' «' + esc(q.name) + '» · отмечено ' + p.done + ' из ' + p.total + '</p>' +
+      '<div class="today-actions"><a class="btn" href="#m' + cm.n + '">Открыть месяц ' + cm.n + '</a>' +
+      (cm.days < 7 ? '<a class="btn btn-ghost" href="#week0">Неделя 0</a>' : '<a class="btn btn-ghost" href="#calm">Протокол спокойствия</a>') + '</div></div>';
+  }
+  el.innerHTML = html + dateField;
+}
+function renderStats(){
+  var el = $("#stats"); if(!el) return;
+  var books = RES.filter(function(r){ return r.type === "book"; }).map(function(r){ return r.id; });
+  var media = RES.filter(function(r){ return r.type === "video" || r.type === "audio" || r.type === "film"; }).map(function(r){ return r.id; });
+  var prac = []; MONTHS.forEach(function(m){ m.practice.forEach(function(p){ prac.push(p.id); }); });
+  var w0 = WEEK0.map(function(w){ return w.id; });
+  var rows = [ ["Книги", progressOf(books)], ["Видео, подкасты, фильмы", progressOf(media)], ["Практики месяцев", progressOf(prac)], ["Неделя 0", progressOf(w0)] ];
+  el.innerHTML = rows.map(function(r){
+    return '<div class="stat"><span class="stat-n">' + r[1].done + '<span class="stat-of"> / ' + r[1].total + '</span></span><span class="stat-l">' + r[0] + '</span><span class="bar"><span style="width:' + pct(r[1]) + '%"></span></span></div>';
+  }).join("");
+}
+function renderOverviewQuarters(){
+  var el = $("#ov-quarters"); if(!el) return;
+  el.innerHTML = QUARTERS.map(function(q){
+    return '<div class="quarter"><p class="quarter-h"><span class="q-num">' + q.roman + '</span><span><span class="quarter-name">' + esc(q.name) + '</span> <span class="quarter-sub">· ' + esc(q.sub) + '</span></span></p>' +
+      '<ul class="qmonths">' + q.months.map(function(n){
+        var m = MONTHS[n-1], p = monthProgress(n);
+        return '<li><a href="#m' + n + '"><span class="qm-t">' + n + '. ' + esc(m.title) + '</span><span class="qm-c">' + p.done + '/' + p.total + '</span></a></li>';
+      }).join("") + '</ul></div>';
+  }).join("");
+}
+
+/* ---------- DAILY ---------- */
+function renderDaily(){
+  var week0Tools = RES.filter(function(r){ return r.m.indexOf(0) !== -1; });
+  var yearRes = RES.filter(function(r){ return r.year; });
+  $("#tab-daily").innerHTML =
+    '<p class="eyebrow">Система</p><h1>Каждый день</h1>' +
+    '<p class="lead">Переговорщика делает практика: немного теории каждый день и много маленьких реальных разговоров. Около часа в день.</p>' +
+    '<h2 id="routine">Распорядок дня</h2>' +
+    '<div class="table-scroll"><table><thead><tr><th scope="col">Когда</th><th scope="col">Что</th><th scope="col">Время</th></tr></thead><tbody>' +
+      ROUTINE.map(function(r, i){ return '<tr id="rt-' + i + '"><td class="when">' + esc(r.when) + '</td><td>' + esc(r.what) + '</td><td class="t">' + esc(r.t) + '</td></tr>'; }).join("") +
+    '</tbody></table></div>' +
+    '<h2>Раз в неделю</h2><ul class="plain">' + WEEKLY.map(function(w, i){ return '<li id="wk-' + i + '">' + esc(w) + '</li>'; }).join("") + '</ul>' +
+    '<h2>Раз в месяц</h2><ul class="plain">' + MONTHLY.map(function(w, i){ return '<li id="mo-' + i + '">' + esc(w) + '</li>'; }).join("") + '</ul>' +
+    '<h2 id="tools">Три главных инструмента</h2><div class="tools">' +
+      TOOLS.map(function(t, i){
+        return '<div class="tool" id="tool-' + i + '"><h3>' + esc(t.t) + (t.key ? '<span class="key">' + esc(t.key) + '</span>' : "") + '</h3><p>' + esc(t.d) + '</p>' +
+          (t.link ? '<a href="' + t.link + '">Открыть шпаргалку</a>' : "") + '</div>';
+      }).join("") +
+    '</div>' +
+    '<h2 id="week0">Неделя 0: подготовка</h2>' +
+    '<p>Сделай это до первого месяца. Тест и запись голоса повторишь через год, чтобы увидеть рост.</p>' +
+    '<div class="list">' + WEEK0.map(function(w){ return check(w.id, "day", '<span class="row-title">' + esc(w.text) + '</span>'); }).join("") + '</div>' +
+    '<h3>Понадобится</h3><div class="list">' + week0Tools.map(function(r){ return resRow(r, "day"); }).join("") + '</div>' +
+    '<h2 id="year">Весь год</h2>' +
+    defs(YEAR, "yr") +
+    '<h3>Материалы на весь год</h3><div class="list">' + yearRes.map(function(r){ return resRow(r, "day"); }).join("") + '</div>' +
+    '<h2>Темп</h2>' +
+    '<p>Две-три книги в месяц. Большая часть списка есть в аудио на Яндекс Букмейте и ЛитРес. Если не успеваешь, сокращай чтение, но не практику: один реальный разговор с разбором полезнее главы книги.</p>';
+}
+
+/* ---------- MONTHS ---------- */
+var selMonth = (function(){
+  var v = parseInt(lsGet("month"), 10);
+  if(v >= 1 && v <= 12) return v;
+  var cm = currentMonth();
+  return cm && cm.phase === "active" ? cm.n : 1;
+})();
+function renderMonthsTab(){
+  $("#tab-months").innerHTML =
+    '<div class="narrow"><p class="eyebrow">Четыре квартала по три месяца</p><h1>12 месяцев</h1>' +
+    '<p class="lead">Выбери месяц. Полоска в каждой клетке показывает, сколько отмечено.</p></div>' +
+    '<div class="strip" id="strip"></div><div id="month-detail" class="narrow"></div>';
+  renderStrip(); renderMonth();
+}
+function renderStrip(){
+  var el = $("#strip"); if(!el) return;
+  var cm = currentMonth(); var now = cm && cm.phase === "active" ? cm.n : null;
+  el.innerHTML = QUARTERS.map(function(q){
+    return '<div class="q"><p class="q-label"><span class="q-num">' + q.roman + '</span><span>' + esc(q.name) + '</span></p><div class="q-cells">' +
+      q.months.map(function(n){
+        var m = MONTHS[n-1], p = monthProgress(n), sel = n === selMonth;
+        return '<a class="cell' + (sel ? " is-sel" : "") + '" href="#m' + n + '"' + (sel ? ' aria-current="true"' : "") + ' aria-label="Месяц ' + n + ': ' + esc(m.short) + ', отмечено ' + p.done + ' из ' + p.total + '">' +
+          '<span class="cell-n">' + pad2(n) + '</span><span class="cell-t">' + esc(m.short) + '</span><span class="bar"><span style="width:' + pct(p) + '%"></span></span>' +
+          (n === now ? '<span class="now">сейчас</span>' : "") + '</a>';
+      }).join("") + '</div></div>';
+  }).join("");
+}
+function renderMonth(){
+  var n = selMonth, m = MONTHS[n-1], q = QUARTERS[m.q-1];
+  var rs = RES.filter(function(r){ return r.m.indexOf(n) !== -1; });
+  var books = rs.filter(function(r){ return r.type === "book"; });
+  var media = rs.filter(function(r){ return r.type === "video" || r.type === "audio" || r.type === "film"; });
+  var tools = rs.filter(function(r){ return r.type === "tool"; });
+  var prev = n > 1 ? MONTHS[n-2] : null, next = n < 12 ? MONTHS[n] : null;
+  var list = function(arr){ return '<div class="list">' + arr.map(function(r){ return resRow(r, "mon"); }).join("") + '</div>'; };
+  $("#month-detail").innerHTML =
+    '<p class="eyebrow">Квартал ' + q.roman + ' · ' + esc(q.name) + '</p>' +
+    '<h2 class="month-title" id="month-title">Месяц ' + n + '. ' + esc(m.title) + '</h2>' +
+    '<p class="muted" id="month-prog"></p>' +
+    '<h3>Читать</h3>' + list(books) +
+    '<h3>Смотреть и слушать</h3>' + list(media) +
+    (tools.length ? '<h3>Сервисы</h3>' + list(tools) : "") +
+    '<h3>Практика</h3><div class="list">' + m.practice.map(function(p){ return check(p.id, "mon", '<span class="row-title">' + esc(p.text) + '</span>'); }).join("") + '</div>' +
+    '<div class="understand"><p class="eyebrow">Понять</p><p class="u">' + esc(m.understand) + '</p></div>' +
+    '<nav class="month-nav" aria-label="Соседние месяцы">' +
+      (prev ? '<a href="#m' + (n-1) + '">← Месяц ' + (n-1) + '. ' + esc(prev.short) + '</a>' : '<span></span>') +
+      (next ? '<a href="#m' + (n+1) + '">Месяц ' + (n+1) + '. ' + esc(next.short) + ' →</a>' : '<a href="#results">Итоги года →</a>') +
+    '</nav>';
+  updateMonthProg();
+}
+function updateMonthProg(){
+  var el = $("#month-prog"); if(!el) return;
+  var p = monthProgress(selMonth);
+  el.textContent = p.done === p.total ? "Всё отмечено: " + p.total + " из " + p.total : "Отмечено " + p.done + " из " + p.total;
+}
+
+/* ---------- LIBRARY ---------- */
+var FILTERS = [ ["all","Всё"], ["book","Книги"], ["video","Видео и лекции"], ["audio","Подкасты"], ["film","Фильмы и сериалы"], ["tool","Сервисы и курсы"] ];
+var libType = lsGet("libType") || "all";
+if(!FILTERS.some(function(f){ return f[0] === libType; })) libType = "all";
+var libHide = lsGet("libHide") === "1";
+function groupKey(r){ var ms = r.m.slice().sort(function(a,b){ return a-b; }); return ms.length ? ms[0] : 13; }
+function groupLabel(k){
+  if(k === 0) return '<a href="#week0">Неделя 0 · подготовка</a>';
+  if(k === 13) return '<a href="#year">Весь год</a>';
+  return '<a href="#m' + k + '">Месяц ' + k + ' · ' + esc(MONTHS[k-1].short) + '</a>';
+}
+function renderLibrary(){
+  var groups = {};
+  RES.forEach(function(r){ var k = groupKey(r); (groups[k] = groups[k] || []).push(r); });
+  var keys = Object.keys(groups).map(Number).sort(function(a,b){ return a-b; });
+  $("#tab-library").innerHTML =
+    '<div class="narrow"><p class="eyebrow">Всё в одном списке</p><h1>Библиотека</h1>' +
+    '<p class="lead">Книги, лекции, подкасты, фильмы и курсы, разложенные по месяцам. Отметки здесь и в месяцах общие.</p></div>' +
+    '<div class="lib-tools"><div class="fchips" role="group" aria-label="Тип материала">' +
+      FILTERS.map(function(f){
+        var c = f[0] === "all" ? RES.length : RES.filter(function(r){ return r.type === f[0]; }).length;
+        return '<button type="button" class="fchip" data-type="' + f[0] + '" aria-pressed="' + (f[0] === libType) + '">' + f[1] + '<span class="c">' + c + '</span></button>';
+      }).join("") +
+    '</div><label class="toggle" for="lib-hide-done"><input type="checkbox" id="lib-hide-done"' + (libHide ? " checked" : "") + '> Скрыть отмеченное</label></div>' +
+    '<p class="muted small" id="lib-count"></p>' +
+    '<div id="lib-list">' + keys.map(function(k){
+      return '<div class="lib-group"><h3 class="group-h">' + groupLabel(k) + '</h3><div class="list">' + groups[k].map(function(r){ return resRow(r, "lib"); }).join("") + '</div></div>';
+    }).join("") + '</div>' +
+    '<p class="empty" id="lib-empty" hidden>Здесь всё отмечено. Сними галочку «Скрыть отмеченное», чтобы снова увидеть список.</p>';
+  applyLibFilter();
+}
+function applyLibFilter(){
+  var list = $("#lib-list"); if(!list) return;
+  var shown = 0, total = 0;
+  $$(".row", list).forEach(function(row){
+    var r = byId[row.dataset.id];
+    var typeOk = libType === "all" || r.type === libType;
+    var vis = typeOk && !(libHide && state.done[r.id]);
+    row.hidden = !vis;
+    if(typeOk) total++;
+    if(vis) shown++;
+  });
+  $$(".lib-group", list).forEach(function(g){ g.hidden = !g.querySelector(".row:not([hidden])"); });
+  var c = $("#lib-count");
+  if(c) c.textContent = shown === total ? "Показано: " + shown : "Показано " + shown + " из " + total;
+  var e = $("#lib-empty"); if(e) e.hidden = shown > 0;
+  $$(".fchip").forEach(function(b){ b.setAttribute("aria-pressed", String(b.dataset.type === libType)); });
+}
+
+/* ---------- NOTES ---------- */
+function renderNotes(){
+  $("#tab-notes").innerHTML =
+    '<p class="eyebrow">Перед разговором</p><h1>Шпаргалки</h1>' +
+    '<p class="lead">Открывай перед важным разговором и вечером, когда разбираешь день. Лист подготовки и фразы стоит выучить почти наизусть.</p>' +
+    '<nav class="subnav" aria-label="Шпаргалки"><a href="#laws">15 законов</a><a href="#prep">Лист подготовки</a><a href="#calm">Протокол спокойствия</a><a href="#phrases">Фразы</a><a href="#tricks">Уловки и ответы</a><a href="#bargain">Торг</a><a href="#voss">Техники Восса</a><a href="#harvard">Гарвардский метод</a></nav>' +
+    '<h2 id="laws">15 законов переговоров</h2>' + numbered(LAWS, "law") +
+    '<h2 id="prep">Лист подготовки</h2>' +
+    '<p class="muted">Ответь письменно перед любыми важными переговорами. Хватает 15 минут.</p>' + numbered(PREP, "prep") +
+    '<h2 id="calm">Протокол спокойствия</h2>' +
+    '<p class="muted">Что делать в ту минуту, когда на тебя давят, хамят или тебя задели.</p>' + numbered(CALM, "calm") +
+    '<h2 id="phrases">Фразы на все случаи</h2>' +
+    '<p class="muted">Короткие, без оправданий. Говори спокойно и медленно, а после фразы молчи.</p>' +
+    PHRASES.map(function(g, gi){ return '<h3>' + esc(g.t) + '</h3><ul class="phrases">' + g.items.map(function(it, i){ return '<li id="phr-' + gi + '-' + i + '">' + esc(it) + '</li>'; }).join("") + '</ul>'; }).join("") +
+    '<h2 id="tricks">Уловки в споре и как отвечать</h2>' +
+    '<p class="muted">Уловку достаточно спокойно назвать. Не злись и не оправдывайся.</p>' +
+    '<dl class="defs">' + TRICKS.map(function(x, i){
+      return '<div class="def" id="trick-' + i + '"><dt>' + esc(x.t) + '</dt><dd>' + esc(x.what) + '<span class="ans"><b>Ответ:</b> ' + esc(x.ans) + '</span></dd></div>';
+    }).join("") + '</dl>' +
+    '<h2 id="bargain">Торг</h2>' + defs(BARGAIN, "barg") +
+    '<h2 id="voss">Техники Криса Восса</h2>' + defs(VOSS, "voss") +
+    '<h2 id="harvard">Гарвардский метод</h2>' +
+    '<p class="muted">Из книги «Переговоры без поражения» и книг Уильяма Юри.</p>' + defs(HARVARD, "harv");
+}
+
+/* ---------- RESULTS ---------- */
+function renderResults(){
+  $("#tab-results").innerHTML =
+    '<p class="eyebrow">Через год</p><h1>Итоги</h1>' +
+    '<p class="lead">Как понять, что ты вырос, чего избегать по дороге и чем закончить год.</p>' +
+    '<h2 id="growth">Признаки роста</h2><p class="muted">Отмечай, когда это станет правдой.</p>' +
+    '<div class="list">' + METRICS.map(function(x){ return check(x.id, "res", '<span class="row-title">' + esc(x.text) + '</span>'); }).join("") + '</div>' +
+    '<h2 id="traps">Ловушки</h2>' + defs(TRAPS, "trap") +
+    '<h2 id="codex">Кодекс переговорщика</h2>' +
+    '<p>Главный итог года: одна-две страницы о том, как ты ведёшь переговоры. Ответь письменно на эти вопросы и перечитывай перед большими разговорами.</p>' +
+    '<ul class="plain">' + CODEX.map(function(c, i){ return '<li id="cdx-' + i + '">' + esc(c) + '</li>'; }).join("") + '</ul>';
+}
+
+/* ---------- SEARCH ---------- */
+var INDEX = [];
+function addIdx(kind, title, ctx, text, go){ INDEX.push({ i:INDEX.length, kind:kind, title:title, ctx:ctx, text:norm(title + " " + (ctx || "") + " " + (text || "")), go:go }); }
+function buildIndex(){
+  RES.forEach(function(r){
+    addIdx(TYPE[r.type], r.title, [r.by, monthsLabel(r)].filter(Boolean).join(" · "), (r.note || "") + " " + TYPE_WORDS[r.type], function(){ goRes(r); });
+  });
+  MONTHS.forEach(function(m){
+    var q = QUARTERS[m.q-1];
+    addIdx("Месяц", "Месяц " + m.n + ". " + m.title, "Квартал " + q.roman + " · " + q.name, m.short + " " + m.understand + " месяц", function(){ goto("m" + m.n); });
+    m.practice.forEach(function(p){ addIdx("Практика", p.text, "Месяц " + m.n + " · " + m.short, "практика упражнение", function(){ goto("m" + m.n, "mon-row-" + p.id); }); });
+    addIdx("Понять", m.understand, "Месяц " + m.n + " · " + m.short, "понять мысль", function(){ goto("m" + m.n); });
+  });
+  WEEK0.forEach(function(w){ addIdx("Неделя 0", w.text, "Подготовка", "неделя 0 подготовка старт", function(){ goto("week0", "day-row-" + w.id); }); });
+  ROUTINE.forEach(function(r, i){ addIdx("Распорядок", r.what, r.when + " · " + r.t, "каждый день распорядок", function(){ goto("daily", "rt-" + i); }); });
+  WEEKLY.forEach(function(w, i){ addIdx("Раз в неделю", w, "Каждый день", "неделя", function(){ goto("daily", "wk-" + i); }); });
+  MONTHLY.forEach(function(w, i){ addIdx("Раз в месяц", w, "Каждый день", "месяц", function(){ goto("daily", "mo-" + i); }); });
+  TOOLS.forEach(function(t, i){ addIdx("Инструмент", t.t, "Три главных инструмента", t.d + " " + t.words, function(){ goto("daily", "tool-" + i); }); });
+  YEAR.forEach(function(y, i){ addIdx("Весь год", y.t, y.d, "весь год", function(){ goto("year", "yr-" + i); }); });
+  LAWS.forEach(function(l, i){ addIdx("Закон " + (i+1), l, "Шпаргалки · 15 законов", "закон", function(){ goto("laws", "law-" + i); }); });
+  PREP.forEach(function(l, i){ addIdx("Подготовка", l, "Шпаргалки · лист подготовки", "подготовка лист вопрос", function(){ goto("prep", "prep-" + i); }); });
+  CALM.forEach(function(l, i){ addIdx("Спокойствие", l, "Шпаргалки · протокол спокойствия", "спокойствие хладнокровие злость давление", function(){ goto("calm", "calm-" + i); }); });
+  PHRASES.forEach(function(g, gi){ g.items.forEach(function(it, i){ addIdx("Фраза", it, "Фразы · " + g.t, "фраза ответ сказать", function(){ goto("phrases", "phr-" + gi + "-" + i); }); }); });
+  TRICKS.forEach(function(x, i){ addIdx("Уловка", x.t, x.what, x.ans + " уловка спор манипуляция ответ", function(){ goto("tricks", "trick-" + i); }); });
+  BARGAIN.forEach(function(x, i){ addIdx("Торг", x.t, x.d, "торг цена уступка якорь", function(){ goto("bargain", "barg-" + i); }); });
+  VOSS.forEach(function(x, i){ addIdx("Восс", x.t, x.d, "восс техника", function(){ goto("voss", "voss-" + i); }); });
+  HARVARD.forEach(function(x, i){ addIdx("Гарвард", x.t, x.d, "гарвардский метод юри фишер", function(){ goto("harvard", "harv-" + i); }); });
+  HONEST.forEach(function(h, i){ addIdx("Честно", h, "Обзор · сначала честно", "реалистично ожидания", function(){ goto("overview", "hon-" + i); }); });
+  QUAL_MINE.forEach(function(x, i){ addIdx("Качество", x.t, x.d, "качество", function(){ goto("overview", "qm-" + i); }); });
+  QUAL_ADDED.forEach(function(x, i){ addIdx("Качество", x.t, x.d, "качество", function(){ goto("overview", "qa-" + i); }); });
+  METRICS.forEach(function(x){ addIdx("Итоги", x.text, "Признаки роста", "итоги рост", function(){ goto("results", "res-row-" + x.id); }); });
+  TRAPS.forEach(function(x, i){ addIdx("Ловушка", x.t, x.d, "ловушка ошибка", function(){ goto("traps", "trap-" + i); }); });
+  addIdx("Итоги", "Кодекс переговорщика", "Главный итог года", "кодекс итог правила " + CODEX.join(" "), function(){ goto("codex"); });
+  addIdx("Перенос", "Перенос прогресса на другое устройство", "Обзор", "код синхронизация телефон компьютер устройство перенести прогресс", function(){ goto("transfer"); });
+}
+function doSearch(){
+  var q = norm($("#q").value).trim();
+  var box = $("#tab-search");
+  if(!q){ box.hidden = true; if(currentTab) $("#tab-" + currentTab).hidden = false; return; }
+  var toks = q.split(/\s+/).filter(Boolean);
+  var hits = INDEX.filter(function(it){ return toks.every(function(t){ return it.text.indexOf(t) !== -1; }); });
+  TABS.forEach(function(t){ $("#tab-" + t).hidden = true; });
+  box.hidden = false;
+  box.innerHTML = '<div class="narrow"><p class="eyebrow">Поиск</p><h1>' + (hits.length ? "Найдено: " + hits.length : "Ничего не найдено") + '</h1>' +
+    (hits.length
+      ? '<div class="hits">' + hits.slice(0, 80).map(function(h){
+          return '<button type="button" class="hit" data-hit="' + h.i + '"><span class="chip">' + esc(h.kind) + '</span><span class="hit-main"><span class="hit-t">' + esc(h.title) + '</span>' + (h.ctx ? '<span class="hit-c">' + esc(h.ctx) + '</span>' : "") + '</span></button>';
+        }).join("") + '</div>'
+      : '<p class="muted">Попробуй другое слово, например «давление», «торг», «Восс» или «фильм».</p>') + '</div>';
+}
+function clearSearch(){
+  var input = $("#q");
+  if(input.value) input.value = "";
+  $("#tab-search").hidden = true;
+}
+
+/* ---------- ROUTER ---------- */
+var TABS = ["overview","daily","months","library","notes","results"];
+var ANCHOR_TAB = { transfer:"overview", honest:"overview", qualities:"overview",
+  laws:"notes", prep:"notes", calm:"notes", phrases:"notes", tricks:"notes", bargain:"notes", voss:"notes", harvard:"notes",
+  week0:"daily", year:"daily", routine:"daily", tools:"daily",
+  traps:"results", codex:"results", growth:"results" };
+var currentTab = null, pendingScroll = null;
+
+function showTab(tab){
+  currentTab = tab; lsSet("tab", tab);
+  TABS.forEach(function(t){ $("#tab-" + t).hidden = t !== tab; });
+  $("#tab-search").hidden = true;
+  $$(".tabs a").forEach(function(a){
+    if(a.dataset.tab === tab) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+  });
+  var nav = $(".tabs"), act = $('.tabs a[data-tab="' + tab + '"]');
+  if(nav && act){
+    var l = act.offsetLeft, w = act.offsetWidth;
+    if(l < nav.scrollLeft || l + w > nav.scrollLeft + nav.clientWidth) nav.scrollLeft = Math.max(0, l - 16);
+  }
+}
+function route(){
+  var h = (location.hash || "").slice(1);
+  if(h.indexOf("sync=") === 0){
+    var code = h.slice(5);
+    try{ code = decodeURIComponent(code); }catch(e){}
+    try{ history.replaceState(null, "", location.pathname + location.search + "#transfer"); }catch(e){}
+    clearSearch(); showTab("overview");
+    var inp = $("#xfer-input"); if(inp) inp.value = code;
+    previewImport(code);
+    requestAnimationFrame(function(){ scrollToId("transfer", false); });
+    return;
+  }
+  var tab = null, month = null, anchor = null;
+  if(TABS.indexOf(h) !== -1) tab = h;
+  else {
+    var mm = /^m([1-9]|1[0-2])$/.exec(h);
+    if(mm){ tab = "months"; month = parseInt(mm[1], 10); }
+    else if(ANCHOR_TAB[h]){ tab = ANCHOR_TAB[h]; anchor = h; }
+  }
+  if(!tab){ var saved = lsGet("tab"); tab = TABS.indexOf(saved) !== -1 ? saved : "overview"; }
+  clearSearch();
+  var changed = tab !== currentTab;
+  showTab(tab);
+  var monthChanged = false;
+  if(month && month !== selMonth){
+    selMonth = month; lsSet("month", String(month)); monthChanged = true;
+    renderStrip(); renderMonth();
+  }
+  var target = pendingScroll; pendingScroll = null;
+  if(!target && anchor) target = { id:anchor, flash:false };
+  if(target){
+    requestAnimationFrame(function(){ scrollToId(target.id, target.flash); });
+  } else if(changed){
+    window.scrollTo(0, 0);
+  } else if(monthChanged){
+    var t = $("#month-title");
+    if(t && t.getBoundingClientRect().top < 0) scrollToId("month-title", false);
+  }
+}
+function goto(token, elId){
+  pendingScroll = elId ? { id:elId, flash:true } : null;
+  if(location.hash === "#" + token) route(); else location.hash = token;
+}
+function goRes(r){
+  libType = "all"; libHide = false; lsSet("libType", "all"); lsSet("libHide", "0");
+  var hd = $("#lib-hide-done"); if(hd) hd.checked = false;
+  applyLibFilter();
+  goto("library", "lib-row-" + r.id);
+}
+function scrollToId(id, flash){
+  var el = document.getElementById(id); if(!el) return;
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  el.scrollIntoView({ block: flash ? "center" : "start", behavior: reduce ? "auto" : "smooth" });
+  if(flash){
+    el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+    setTimeout(function(){ el.classList.remove("flash"); }, 2300);
+  }
+}
+
+/* ---------- PROGRESS + SYNC ---------- */
+var dbRef = null, remoteReady = false, writing = false, again = false, wtimer = null, retried = false;
+var sessionEdits = {}, startEdited = false;
+
+function setSync(kind){
+  var el = $("#sync"); if(!el) return;
+  el.textContent = {
+    pending:"Подключаю сохранение отметок…",
+    cloud:"Отметки сохраняются в твоём аккаунте и видны на всех устройствах.",
+    local:"Отметки сохраняются только в этом браузере.",
+    error:"Не удалось сохранить в аккаунт. Отметки пока хранятся в этом браузере."
+  }[kind] || "";
+}
+function persist(){
+  lsSet("state", JSON.stringify({ done:state.done, start:state.start }));
+  if(dbRef && remoteReady){ clearTimeout(wtimer); wtimer = setTimeout(flush, 700); }
+}
+function flush(){
+  wtimer = null;
+  if(!dbRef) return;
+  if(writing){ again = true; return; }
+  writing = true;
+  dbRef.set({ done:state.done, start:state.start || null }).then(function(){
+    retried = false; setSync("cloud");
+  }, function(e){
+    if(e && e.code === "unavailable" && !retried){ retried = true; setTimeout(flush, 800 + Math.random() * 1200); }
+    else setSync("error");
+  }).then(function(){
+    writing = false;
+    if(again){ again = false; flush(); }
+  });
+}
+function refreshAll(){
+  $$("input[data-item]").forEach(function(c){ c.checked = !!state.done[c.dataset.item]; });
+  renderToday(); renderStats(); renderOverviewQuarters(); renderStrip(); updateMonthProg(); applyLibFilter(); renderXfer();
+}
+function toggle(id, val){
+  if(val) state.done[id] = 1; else delete state.done[id];
+  if(!remoteReady) sessionEdits[id] = val;
+  $$('input[data-item="' + id + '"]').forEach(function(c){ c.checked = val; });
+  renderToday(); renderStats(); renderOverviewQuarters(); renderStrip(); updateMonthProg(); applyLibFilter(); renderXfer();
+  persist();
+}
+function setStart(v){
+  state.start = v || null;
+  if(!remoteReady) startEdited = true;
+  var cm = currentMonth();
+  if(cm && cm.phase === "active" && !lsGet("month")){ selMonth = cm.n; renderMonth(); }
+  renderToday(); renderStrip(); renderXfer();
+  persist();
+}
+function applyRemote(d){
+  state = { done: Object.assign({}, (d && typeof d.done === "object" && d.done) || {}), start: d && typeof d.start === "string" ? d.start : null };
+}
+function initRemote(){
+  var c = window.claude;
+  if(!c || typeof c.use !== "function"){ setSync("local"); return; }
+  Promise.all([c.use("db"), c.use("user")]).then(function(res){
+    var db = res[0], user = res[1];
+    if(!db || !user){ setSync("local"); return null; }
+    return user.id().then(function(uid){
+      if(!uid){ setSync("local"); return; }
+      try{ dbRef = db.doc("data/users/" + uid + "/progress"); }catch(e){ dbRef = null; setSync("local"); return; }
+      dbRef.onSnapshot(function(snap){
+        if(snap.metadata && snap.metadata.hasPendingWrites) return;
+        if(!remoteReady){
+          if(snap.metadata && snap.metadata.fromCache) return;
+          remoteReady = true;
+          var edited = Object.keys(sessionEdits).length > 0 || startEdited;
+          if(snap.exists){
+            var local = state;
+            applyRemote(snap.data());
+            Object.keys(sessionEdits).forEach(function(id){ if(sessionEdits[id]) state.done[id] = 1; else delete state.done[id]; });
+            if(startEdited) state.start = local.start;
+            lsSet("state", JSON.stringify({ done:state.done, start:state.start }));
+            refreshAll(); setSync("cloud");
+            if(edited) flush();
+          } else {
+            setSync("cloud");
+            if(Object.keys(state.done).length || state.start) flush();
+          }
+          return;
+        }
+        if(writing || wtimer || !snap.exists) return;
+        applyRemote(snap.data());
+        lsSet("state", JSON.stringify({ done:state.done, start:state.start }));
+        refreshAll();
+      }, function(err){
+        dbRef = null; remoteReady = false;
+        setSync(err && err.code === "revoked" ? "local" : "error");
+      });
+    });
+  }).catch(function(){ setSync("local"); });
+}
+
+/* ---------- events ---------- */
+document.addEventListener("change", function(e){
+  var t = e.target;
+  if(t.matches && t.matches("input[data-item]")){ toggle(t.dataset.item, t.checked); return; }
+  if(t.id === "start-date"){ setStart(t.value); return; }
+  if(t.id === "lib-hide-done"){ libHide = t.checked; lsSet("libHide", libHide ? "1" : "0"); applyLibFilter(); }
+});
+document.addEventListener("click", function(e){
+  var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+  if(a && a.getAttribute("href") === location.hash){ e.preventDefault(); route(); return; }
+  var t = e.target.closest ? e.target.closest("[data-act], .fchip, .hit") : null;
+  if(!t) return;
+  if(t.dataset.act === "start-today"){ setStart(todayISO()); return; }
+  if(t.dataset.act === "copy-code"){
+    var codeEl = $("#xfer-code");
+    copyText(codeEl.value, function(){ codeEl.focus(); codeEl.select(); $("#xfer-msg").textContent = "Не получилось скопировать автоматически. Код выделен: скопируй его вручную."; });
+    return;
+  }
+  if(t.dataset.act === "copy-link"){
+    var link = syncLink();
+    copyText(link, function(){ $("#xfer-msg").textContent = "Не получилось скопировать автоматически. Скопируй ссылку вручную: " + link; });
+    return;
+  }
+  if(t.dataset.act === "check-code"){ previewImport($("#xfer-input").value); return; }
+  if(t.dataset.act === "apply-import"){ applyImport(); return; }
+  if(t.dataset.act === "cancel-import"){ pendingImport = null; $("#xfer-confirm").hidden = true; $("#xfer-msg").textContent = ""; return; }
+  if(t.classList.contains("fchip")){ libType = t.dataset.type; lsSet("libType", libType); applyLibFilter(); return; }
+  if(t.classList.contains("hit")){
+    var it = INDEX[parseInt(t.dataset.hit, 10)];
+    clearSearch(); $("#q").blur();
+    if(it) it.go();
+  }
+});
+$("#q").addEventListener("input", doSearch);
+$("#q").addEventListener("keydown", function(e){
+  if(e.key === "Escape"){ clearSearch(); if(currentTab) $("#tab-" + currentTab).hidden = false; e.target.blur(); }
+  if(e.key === "Enter"){ var first = $("#tab-search .hit"); if(first) first.click(); }
+});
+document.addEventListener("keydown", function(e){
+  if(e.key === "Enter" && e.target && e.target.id === "xfer-input"){ e.preventDefault(); previewImport(e.target.value); return; }
+  if(e.key !== "/" || e.metaKey || e.ctrlKey || e.altKey) return;
+  var a = document.activeElement;
+  if(a && (a.tagName === "INPUT" || a.tagName === "TEXTAREA" || a.isContentEditable)) return;
+  e.preventDefault(); $("#q").focus();
+});
+window.addEventListener("hashchange", route);
+
+/* ---------- init ---------- */
+renderOverview(); renderToday(); renderStats(); renderOverviewQuarters(); renderXfer();
+renderDaily(); renderMonthsTab(); renderLibrary(); renderNotes(); renderResults();
+buildIndex();
+route();
+setSync("pending");
+initRemote();
+setTimeout(function(){ if(!remoteReady && $("#sync").textContent.indexOf("Подключаю") === 0) setSync("local"); }, 12000);
+})();
+</script>
+</body>
+</html>

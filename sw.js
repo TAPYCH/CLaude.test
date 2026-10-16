@@ -96,8 +96,9 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
-  // Standalone pages published next to the game (wisdom/) are not part of it: let the network serve them.
-  if (new URL(req.url).pathname.includes('/wisdom/')) return;
+  // Standalone pages published next to the game (wisdom/, negotiation/) are not part of it: let the network serve them.
+  const path = new URL(req.url).pathname;
+  if (path.includes('/wisdom/') || path.includes('/negotiation/')) return;
   e.respondWith(
     caches.match(req, { ignoreSearch: true }).then(
       (hit) =>
