@@ -96,6 +96,8 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
+  // A standalone page published next to the game (citadel/) is not part of it: let the network serve it.
+  if (new URL(req.url).pathname.includes('/citadel/')) return;
   e.respondWith(
     caches.match(req, { ignoreSearch: true }).then(
       (hit) =>
